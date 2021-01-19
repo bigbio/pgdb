@@ -1,6 +1,6 @@
 # ![nf-core/pgdb](docs/images/nf-core-pgdb_logo.png)
 
-**The ProteoGenomics database generation workflow (pgdb) use the pypgatk and nextflow to create different protein databases for ProteoGenomics data analysis.**.
+The ProteoGenomics database generation workflow (**pgdb**) use the [pypgatk](https://github.com/bigbio/py-pgatk) and [nextflow](https://www.nextflow.io/) to create different protein databases for ProteoGenomics data analysis.
 
 [![GitHub Actions CI Status](https://github.com/nf-core/pgdb/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/pgdb/actions)
 [![GitHub Actions Linting Status](https://github.com/nf-core/pgdb/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/pgdb/actions)
@@ -36,7 +36,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
     <!-- TODO nf-core: Update the example "typical command" below used to run the pipeline -->
 
     ```bash
-    nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --input '*_R{1,2}.fastq.gz' --genome GRCh37
+    nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --ensembl_name homo_sapines --ensembl false
     ```
 
 See [usage docs](https://nf-co.re/pgdb/usage) for all of the available options when running the pipeline.
@@ -45,10 +45,12 @@ See [usage docs](https://nf-co.re/pgdb/usage) for all of the available options w
 
 By default, the pipeline currently performs the following:
 
-<!-- TODO nf-core: Fill in short bullet-pointed list of default steps of pipeline -->
+![ProteoGenomics Database](/docs/images/pgdb-databases.png)
 
-* Sequencing quality control (`FastQC`)
-* Overall pipeline run summaries (`MultiQC`)
+* Download protein databases from ENSEMBL
+* Translate from Genomics Variant databases into ProteoGenomics Databases (`COSMIC`, `GNOMAD`)
+* Add to a Reference proteomics database, non-coding RNAs + pseudogenes.
+* Compute Decoy for a proteogenomics databases
 
 ## Documentation
 
