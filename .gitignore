@@ -8,4 +8,3 @@ testing/
 testing*
 *.pyc
 .idea/
-.DS_Store
