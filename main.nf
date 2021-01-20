@@ -4,7 +4,7 @@
 ========================================================================================
                          nf-core/pgdb
 ========================================================================================
- nf-core/pgdb Analysis Pipeline.
+ nf-core/pgdb Analysensembl_downloader_configis Pipeline.
  #### Homepage / Documentation
  https://github.com/nf-core/pgdb
 ----------------------------------------------------------------------------------------
@@ -126,7 +126,7 @@ if (workflow.profile.contains('awsbatch')) {
 // Stage config files
 ch_output_docs = file("$baseDir/docs/output.md", checkIfExists: true)
 ch_output_docs_images = file("$baseDir/docs/images/", checkIfExists: true)
-ensembl_downloader_config = file(params.ensembl_downloader_config)
+ensembl_downloader_config = file(params.ensembl_downloader_config, checkIfExists: true)
 ensembl_config = file(params.ensembl_config)
 cosmic_config = file(params.cosmic_config)
 cbioportal_config = file(params.cbioportal_config)
