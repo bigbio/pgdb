@@ -4,7 +4,7 @@
 ========================================================================================
                          nf-core/pgdb
 ========================================================================================
- nf-core/proteomicslfq Analysis Pipeline.
+ nf-core/pgdb Analysensembl_downloader_configis Pipeline.
  #### Homepage / Documentation
  https://github.com/nf-core/pgdb
 ----------------------------------------------------------------------------------------
@@ -126,7 +126,7 @@ if (workflow.profile.contains('awsbatch')) {
 // Stage config files
 ch_output_docs = file("$baseDir/docs/output.md", checkIfExists: true)
 ch_output_docs_images = file("$baseDir/docs/images/", checkIfExists: true)
-ensembl_downloader_config = file(params.ensembl_downloader_config)
+ensembl_downloader_config = file(params.ensembl_downloader_config, checkIfExists: true)
 ensembl_config = file(params.ensembl_config)
 cosmic_config = file(params.cosmic_config)
 cbioportal_config = file(params.cbioportal_config)
@@ -148,6 +148,7 @@ if ((params.cosmic || params.cosmic_celllines) && (params.cosmic_user_name=="" |
 
 // Pipeline OS-specific commands
 ZCAT = (System.properties['os.name'] == 'Mac OS X' ? 'gzcat' : 'zcat')
+
 
 /**
  * Download data from ensembl for the particular species.
@@ -247,7 +248,7 @@ process add_ncrna{
 
    script:
    """
-   pypgatk_cli.py dnaseq-to-proteindb --config_file "${ensembl_config}" --input_fasta ${x} --output_proteindb ncRNAs_proteinDB.fa --include_biotypes "${biotypes['ncRNA']}" --skip_including_all_cds --var_prefix ncRNA_
+   pypgatk_cli.py dnaseq-to-proteindb --config_file "${ensembl_config}" --input_fasta ${x} --output_proteindb ncRNAs_proteinDB.fa --include_biotypes "${params.biotypes['ncRNA']}" --skip_including_all_cds --var_prefix ncRNA_
    """
 }
 
@@ -272,7 +273,7 @@ process add_pseudogenes {
 
    script:
    """
-   pypgatk_cli.py dnaseq-to-proteindb --config_file "${ensembl_config}" --input_fasta "${x}" --output_proteindb pseudogenes_proteinDB.fa --include_biotypes "${biotypes['pseudogene']}" --skip_including_all_cds --var_prefix pseudo_
+   pypgatk_cli.py dnaseq-to-proteindb --config_file "${ensembl_config}" --input_fasta "${x}" --output_proteindb pseudogenes_proteinDB.fa --include_biotypes "${params.biotypes['pseudogene']}" --skip_including_all_cds --var_prefix pseudo_
    """
 }
 
@@ -297,7 +298,7 @@ process add_altorfs {
 
    script:
    """
-   pypgatk_cli.py dnaseq-to-proteindb --config_file "${ensembl_config}" --input_fasta "${x}" --output_proteindb altorfs_proteinDB.fa --include_biotypes "${biotypes['protein_coding']}'" --skip_including_all_cds --var_prefix altorf_
+   pypgatk_cli.py dnaseq-to-proteindb --config_file "${ensembl_config}" --input_fasta "${x}" --output_proteindb altorfs_proteinDB.fa --include_biotypes "${params.biotypes['protein_coding']}'" --skip_including_all_cds --var_prefix altorf_
    """
 }
 
@@ -485,7 +486,7 @@ process ensembl_vcf_proteinDB {
 
    script:
    """
-   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --include_biotypes "${biotypes['protein_coding']}" --input_fasta ${f} --gene_annotations_gtf ${g} --vep_annotated_vcf ${v} --output_proteindb "${v}_proteinDB.fa"  --var_prefix ensvar
+   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --include_biotypes "${params.biotypes['protein_coding']}" --input_fasta ${f} --gene_annotations_gtf ${g} --vep_annotated_vcf ${v} --output_proteindb "${v}_proteinDB.fa"  --var_prefix ensvar
    """
 }
 
@@ -714,6 +715,82 @@ if (params.decoy) {
     proteindb_result.subscribe { results -> results.copyTo("${params.result_file}") }
 }
 
+
+//--------------------------------------------------------------- //
+//---------------------- Nextflow specifics --------------------- //
+//--------------------------------------------------------------- //
+
+
+// Header log info
+log.info nfcoreHeader()
+def summary = [:]
+if (workflow.revision) summary['Pipeline Release'] = workflow.revision
+summary['Run Name']         = custom_runName ?: workflow.runName
+summary['Max Resources']    = "$params.max_memory memory, $params.max_cpus cpus, $params.max_time time per job"
+if (workflow.containerEngine) summary['Container'] = "$workflow.containerEngine - $workflow.container"
+summary['Output dir']       = params.outdir
+summary['Launch dir']       = workflow.launchDir
+summary['Working dir']      = workflow.workDir
+summary['Script dir']       = workflow.projectDir
+summary['User']             = workflow.userName
+if (workflow.profile.contains('awsbatch')) {
+    summary['AWS Region']   = params.awsregion
+    summary['AWS Queue']    = params.awsqueue
+    summary['AWS CLI']      = params.awscli
+}
+summary['Config Profile'] = workflow.profile
+if (params.config_profile_description) summary['Config Profile Description'] = params.config_profile_description
+if (params.config_profile_contact)     summary['Config Profile Contact']     = params.config_profile_contact
+if (params.config_profile_url)         summary['Config Profile URL']         = params.config_profile_url
+summary['Config Files'] = workflow.configFiles.join(', ')
+if (params.email || params.email_on_fail) {
+    summary['E-mail Address']    = params.email
+    summary['E-mail on failure'] = params.email_on_fail
+}
+log.info summary.collect { k,v -> "${k.padRight(18)}: $v" }.join("\n")
+log.info "-\033[2m--------------------------------------------------\033[0m-"
+
+// Check the hostnames against configured profiles
+checkHostname()
+
+Channel.from(summary.collect{ [it.key, it.value] })
+    .map { k,v -> "<dt>$k</dt><dd><samp>${v ?: '<span style=\"color:#999999;\">N/A</a>'}</samp></dd>" }
+    .reduce { a, b -> return [a, b].join("\n            ") }
+    .map { x -> """
+    id: 'nf-core-proteomicslfq-summary'
+    description: " - this information is collected when the pipeline is started."
+    section_name: 'nf-core/proteomicslfq Workflow Summary'
+    section_href: 'https://github.com/nf-core/proteomicslfq'
+    plot_type: 'html'
+    data: |
+        <dl class=\"dl-horizontal\">
+            $x
+        </dl>
+    """.stripIndent() }
+    .set { ch_workflow_summary }
+
+/*
+ * Parse software version numbers
+ */
+process get_software_versions {
+    publishDir "${params.outdir}/pipeline_info", mode: params.publish_dir_mode,
+        saveAs: { filename ->
+                      if (filename.indexOf(".csv") > 0) filename
+                      else null
+                }
+
+    output:
+    file 'software_versions_mqc.yaml' into ch_software_versions_yaml
+    file "software_versions.csv"
+
+    script:
+    """
+    echo $workflow.manifest.version > v_pipeline.txt
+    echo $workflow.nextflow.version > v_nextflow.txt
+    scrape_software_versions.py &> software_versions_mqc.yaml
+    """
+}
+
 /*
  * STEP 3 - Output Description HTML
  */
@@ -769,18 +846,18 @@ workflow.onComplete {
 
     // TODO nf-core: If not using MultiQC, strip out this code (including params.max_multiqc_email_size)
     // On success try attach the multiqc report
-    def mqc_report = null
-    try {
-        if (workflow.success) {
-            mqc_report = ch_multiqc_report.getVal()
-            if (mqc_report.getClass() == ArrayList) {
-                log.warn "[nf-core/pgdb] Found multiple reports from process 'multiqc', will use only one"
-                mqc_report = mqc_report[0]
-            }
-        }
-    } catch (all) {
-        log.warn "[nf-core/pgdb] Could not attach MultiQC report to summary email"
-    }
+    //def mqc_report = null
+    //try {
+    //    if (workflow.success) {
+    //        mqc_report = ch_multiqc_report.getVal()
+    //        if (mqc_report.getClass() == ArrayList) {
+    //            log.warn "[nf-core/pgdb] Found multiple reports from process 'multiqc', will use only one"
+    //            mqc_report = mqc_report[0]
+    //        }
+    //    }
+    //} catch (all) {
+    //    log.warn "[nf-core/pgdb] Could not attach MultiQC report to summary email"
+    //}
 
     // Check if we are only sending emails on failure
     email_address = params.email
