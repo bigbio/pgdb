@@ -149,6 +149,7 @@ if ((params.cosmic || params.cosmic_celllines) && (params.cosmic_user_name=="" |
 // Pipeline OS-specific commands
 ZCAT = (System.properties['os.name'] == 'Mac OS X' ? 'gzcat' : 'zcat')
 
+
 /**
  * Download data from ensembl for the particular species.
  */
@@ -714,6 +715,82 @@ if (params.decoy) {
     proteindb_result.subscribe { results -> results.copyTo("${params.result_file}") }
 }
 
+
+//--------------------------------------------------------------- //
+//---------------------- Nextflow specifics --------------------- //
+//--------------------------------------------------------------- //
+
+
+// Header log info
+log.info nfcoreHeader()
+def summary = [:]
+if (workflow.revision) summary['Pipeline Release'] = workflow.revision
+summary['Run Name']         = custom_runName ?: workflow.runName
+summary['Max Resources']    = "$params.max_memory memory, $params.max_cpus cpus, $params.max_time time per job"
+if (workflow.containerEngine) summary['Container'] = "$workflow.containerEngine - $workflow.container"
+summary['Output dir']       = params.outdir
+summary['Launch dir']       = workflow.launchDir
+summary['Working dir']      = workflow.workDir
+summary['Script dir']       = workflow.projectDir
+summary['User']             = workflow.userName
+if (workflow.profile.contains('awsbatch')) {
+    summary['AWS Region']   = params.awsregion
+    summary['AWS Queue']    = params.awsqueue
+    summary['AWS CLI']      = params.awscli
+}
+summary['Config Profile'] = workflow.profile
+if (params.config_profile_description) summary['Config Profile Description'] = params.config_profile_description
+if (params.config_profile_contact)     summary['Config Profile Contact']     = params.config_profile_contact
+if (params.config_profile_url)         summary['Config Profile URL']         = params.config_profile_url
+summary['Config Files'] = workflow.configFiles.join(', ')
+if (params.email || params.email_on_fail) {
+    summary['E-mail Address']    = params.email
+    summary['E-mail on failure'] = params.email_on_fail
+}
+log.info summary.collect { k,v -> "${k.padRight(18)}: $v" }.join("\n")
+log.info "-\033[2m--------------------------------------------------\033[0m-"
+
+// Check the hostnames against configured profiles
+checkHostname()
+
+Channel.from(summary.collect{ [it.key, it.value] })
+    .map { k,v -> "<dt>$k</dt><dd><samp>${v ?: '<span style=\"color:#999999;\">N/A</a>'}</samp></dd>" }
+    .reduce { a, b -> return [a, b].join("\n            ") }
+    .map { x -> """
+    id: 'nf-core-proteomicslfq-summary'
+    description: " - this information is collected when the pipeline is started."
+    section_name: 'nf-core/proteomicslfq Workflow Summary'
+    section_href: 'https://github.com/nf-core/proteomicslfq'
+    plot_type: 'html'
+    data: |
+        <dl class=\"dl-horizontal\">
+            $x
+        </dl>
+    """.stripIndent() }
+    .set { ch_workflow_summary }
+
+/*
+ * Parse software version numbers
+ */
+process get_software_versions {
+    publishDir "${params.outdir}/pipeline_info", mode: params.publish_dir_mode,
+        saveAs: { filename ->
+                      if (filename.indexOf(".csv") > 0) filename
+                      else null
+                }
+
+    output:
+    file 'software_versions_mqc.yaml' into ch_software_versions_yaml
+    file "software_versions.csv"
+
+    script:
+    """
+    echo $workflow.manifest.version > v_pipeline.txt
+    echo $workflow.nextflow.version > v_nextflow.txt
+    scrape_software_versions.py &> software_versions_mqc.yaml
+    """
+}
+
 /*
  * STEP 3 - Output Description HTML
  */
@@ -769,18 +846,18 @@ workflow.onComplete {
 
     // TODO nf-core: If not using MultiQC, strip out this code (including params.max_multiqc_email_size)
     // On success try attach the multiqc report
-    def mqc_report = null
-    try {
-        if (workflow.success) {
-            mqc_report = ch_multiqc_report.getVal()
-            if (mqc_report.getClass() == ArrayList) {
-                log.warn "[nf-core/pgdb] Found multiple reports from process 'multiqc', will use only one"
-                mqc_report = mqc_report[0]
-            }
-        }
-    } catch (all) {
-        log.warn "[nf-core/pgdb] Could not attach MultiQC report to summary email"
-    }
+    //def mqc_report = null
+    //try {
+    //    if (workflow.success) {
+    //        mqc_report = ch_multiqc_report.getVal()
+    //        if (mqc_report.getClass() == ArrayList) {
+    //            log.warn "[nf-core/pgdb] Found multiple reports from process 'multiqc', will use only one"
+    //            mqc_report = mqc_report[0]
+    //        }
+    //    }
+    //} catch (all) {
+    //    log.warn "[nf-core/pgdb] Could not attach MultiQC report to summary email"
+    //}
 
     // Check if we are only sending emails on failure
     email_address = params.email
