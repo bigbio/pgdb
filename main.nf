@@ -76,6 +76,7 @@ def helpMessage() {
       --gencode_url                      URL for downloading GENCODE datafiles: gencode.v19.pc_transcripts.fa.gz and
                                          gencode.v19.annotation.gtf.gz
       --gnomad_file_url                  URL for downloading gnomAD VCF file(s)
+      --split_by_filter_column           Split by tissue the cosmic protein database.
 
 
     Output parameters:
@@ -132,6 +133,7 @@ cosmic_config = file(params.cosmic_config)
 cbioportal_config = file(params.cbioportal_config)
 protein_decoy_config = file(params.protein_decoy_config)
 
+split_by_filter_column = ""
 if (params.split_by_filter_column){
         split_by_filter_column = "--split_by_filter_column"
 }
