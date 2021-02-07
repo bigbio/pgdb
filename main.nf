@@ -314,7 +314,7 @@ merged_databases = merged_databases.mix(optional_altorfs)
 process cosmic_download {
 
 	  when:
-  	  params.cosmic
+  	  params.cosmic || params.cosmic_celllines
 
 	  input:
 	  file cosmic_config
@@ -334,7 +334,7 @@ process cosmic_download {
 process gunzip_cosmic_files{
 
    when:
-    params.cosmic
+    params.cosmic || params.cosmic_celllines
 
    input:
    file(data_file) from cosmic_files
@@ -359,7 +359,7 @@ process cosmic_proteindb{
 	  publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
 	  when:
-  	 params.cosmic
+  	  params.cosmic
 
 	  input:
 	  file g from cosmic_genes
