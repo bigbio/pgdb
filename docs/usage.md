@@ -13,7 +13,7 @@
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run nf-core/pgdb --input '*_R{1,2}.fastq.gz' -profile docker
+nextflow run nf-core/pgdb --taxonomy 9606 --altorfs true -profile docker
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
