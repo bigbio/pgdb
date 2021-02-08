@@ -13,7 +13,7 @@
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run nf-core/pgdb --input '*_R{1,2}.fastq.gz' -profile docker
+nextflow run nf-core/pgdb --taxonomy 9606 --altorfs true -profile docker
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
@@ -26,6 +26,10 @@ results         # Finished results (configurable, see below)
 .nextflow_log   # Log file from Nextflow
 # Other nextflow hidden files, eg. history of pipeline runs and old logs.
 ```
+
+## Pipeline full documentation and examples
+
+The full documentation of the pipeline can be found [here](https://pgatk.readthedocs.io/) including examples to generate databases from COSMIC or cBioportal.
 
 ### Updating the pipeline
 

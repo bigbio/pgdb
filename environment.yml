@@ -11,7 +11,7 @@ dependencies:
   - conda-forge::pymdown-extensions=8.1
   - conda-forge::pygments=2.7.4
   # All the dependencies of the pipeline.
-  - bioconda::pypgatk=0.0.10
+  - bioconda::pypgatk=0.0.11
   - conda-forge::coreutils=8.31
   - conda-forge::git-lfs=2.13.2
   - conda-forge::git=2.30.0
