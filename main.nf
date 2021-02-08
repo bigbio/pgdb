@@ -18,7 +18,7 @@ def helpMessage() {
 
     The typical command for running the pipeline is as follows:
 
-    nextflow run nf-core/pgdb --ensembl_name homo_sapines --ensembl false --gnomad false --cosmic false --cosmic_celllines false --cbioportal false
+    nextflow run nf-core/pgdb --ensembl_name homo_sapiens --ncrna false --pseudogenes false --altorfs false --ensembl false --gnomad false --cosmic false --cosmic_celllines false --cbioportal false --decoy false --add_reference true
 
     Main arguments:
       --final_database_protein           Output file name for the final database protein fasta file under the outdir/ directory.
@@ -58,7 +58,7 @@ def helpMessage() {
       --cosmic_tissue_type               Specify a tissue type to limit the COSMIC mutations to a particular caner type
                                          (by default all tumor types are used)
 
-	    --cosmic_cellline_name             Specify a sample name to limit the COSMIC cell line mutations to
+      --cosmic_cellline_name             Specify a sample name to limit the COSMIC cell line mutations to
                                          a particular  cell line (by default all cell lines are used)
 
       --cbioportal_tissue_type           Specify a tissue type to limit the cBioPortal mutations to
@@ -186,7 +186,7 @@ process gunzip_ensembl_files{
    file '*.pep.all.fa' into ensembl_protein_database_sub
    file '*cdna.all.fa' into ensembl_cdna_database, ensembl_cdna_database_sub
    file '*ncrna.fa' into ensembl_ncrna_database, ensembl_ncrna_database_sub
-	 file '*.gtf' into gtf
+   file '*.gtf' into gtf
 
    script:
    """
@@ -706,7 +706,7 @@ process decoy {
    script:
    """
    pypgatk_cli.py generate-decoy --config_file ${protein_decoy_config} --input $f --decoy_prefix "${params.decoy_prefix}" --output "${params.decoy_prefix}${params.final_database_protein}"
-	 """
+   """
 }
 
 /** Write the final results to S3 bucket**/
