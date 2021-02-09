@@ -681,12 +681,11 @@ process merge_proteindbs {
    file("proteindb*") from merged_databases.collect()
 
    output:
-   file "${params.final_database_protein}" into protiendbs
-   file "${params.final_database_protein}" into to_clean_database
+   file 'merged_databases.fa' into to_clean_ch
 
    script:
    """
-   cat proteindb* > ${params.final_database_protein}
+   cat proteindb* > merged_databases.fa
    """
 }
 
@@ -706,19 +705,19 @@ process clean_protein_database {
      params.clean_database
 
    input:
-   file file from to_clean_database
+   file file from to_clean_ch
    file e from ensembl_config
 
    output:
-   file "${params.final_database_protein}" into clean_database
+   file 'database_clean.fa' into clean_database_sh
 
    script:
    """
-   pypgatk_cli.py ensembl-check -in "${file}" --config_file "${e}" -out ${params.final_database_protein} --num_aa "${params.minimum_aa}" "${stop_codons}"
+   pypgatk_cli.py ensembl-check -in "${file}" --config_file "${e}" -out database_clean.fa --num_aa "${params.minimum_aa}" "${stop_codons}"
    """
 }
 
-to_protein_decoy = params.clean_database ? clean_database : to_clean_database
+to_protein_decoy_ch = params.clean_database ? clean_database_sh : to_clean_ch
 
 /**
  * Create the decoy database using DecoyPYrat
@@ -732,23 +731,23 @@ process decoy {
     params.decoy
 
    input:
-   file f from to_protein_decoy
+   file f from to_protein_decoy_ch
    file protein_decoy_config
 
    output:
-   file "${params.decoy_prefix}${params.final_database_protein}" into fasta_decoy_db
+   file 'decoy_database.fa' into fasta_decoy_db_ch
 
    script:
    """
-   pypgatk_cli.py generate-decoy --config_file ${protein_decoy_config} --input $f --decoy_prefix "${params.decoy_prefix}" --output "${params.decoy_prefix}${params.final_database_protein}"
+   pypgatk_cli.py generate-decoy --config_file ${protein_decoy_config} --input $f --decoy_prefix "${params.decoy_prefix}" --output decoy_database.fa
    """
 }
 
-result_database = params.decoy ? fasta_decoy_db: to_protein_decoy
+result_database_ch = params.decoy ? fasta_decoy_db_ch: to_protein_decoy_ch
 
 /** Write the final results to S3 bucket**/
 
-result_database.subscribe { results -> results.copyTo("${params.result_file}")}
+result_database_ch.subscribe { results -> results.copyTo("${params.result_file}")}
 
 
 //--------------------------------------------------------------- //
