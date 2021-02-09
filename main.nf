@@ -81,8 +81,6 @@ def helpMessage() {
       --gencode_url                      URL for downloading GENCODE datafiles: gencode.v19.pc_transcripts.fa.gz and
                                          gencode.v19.annotation.gtf.gz
       --gnomad_file_url                  URL for downloading gnomAD VCF file(s)
-      --split_by_filter_column           Split by tissue the cosmic protein database.
-
 
     Output parameters:
       --decoy_prefix                     String to be used as prefix for the generated decoy sequences
@@ -137,11 +135,6 @@ ensembl_config = file(params.ensembl_config)
 cosmic_config = file(params.cosmic_config)
 cbioportal_config = file(params.cbioportal_config)
 protein_decoy_config = file(params.protein_decoy_config)
-
-split_by_filter_column = ""
-if (params.split_by_filter_column){
-        split_by_filter_column = "--split_by_filter_column"
-}
 
 af_field = params.af_field
 if (params.ensembl_name == "homo_sapiens"){
@@ -376,7 +369,7 @@ process cosmic_proteindb{
 
 	  script:
 	  """
-	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} --filter_column 'Primary site' --accepted_values ${params.cosmic_tissue_type} ${split_by_filter_column} --output_db cosmic_proteinDB.fa
+	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} --filter_column 'Histology subtype 1' --accepted_values ${params.cosmic_tissue_type} --output_db cosmic_proteinDB.fa
 	  """
 }
 
@@ -402,7 +395,7 @@ process cosmic_celllines_proteindb{
 
 	  script:
 	  """
-	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} --filter_column 'Sample name' --accepted_values ${params.cosmic_cellline_name} ${split_by_filter_column} --output_db cosmic_celllines_proteinDB.fa
+	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} --filter_column 'Sample name' --accepted_values ${params.cosmic_cellline_name} --output_db cosmic_celllines_proteinDB.fa
 	  """
 }
 
@@ -664,7 +657,7 @@ process cds_GRCh37_download{
 
    script:
    """
-   pypgatk_cli.py cbioportal-to-proteindb --config_file "${cbioportal_config}" --input_mutation ${m} --input_cds ${g} --clinical_sample_file ${s} --filter_column 'Tumor_Sample_Barcode' --accepted_values ${params.cbioportal_tissue_type} ${split_by_filter_column} --output_db cbioPortal_proteinDB.fa
+   pypgatk_cli.py cbioportal-to-proteindb --config_file "${cbioportal_config}" --input_mutation ${m} --input_cds ${g} --clinical_sample_file ${s} --filter_column 'Tumor_Sample_Barcode' --accepted_values ${params.cbioportal_tissue_type} --output_db cbioPortal_proteinDB.fa
    """
 }
 

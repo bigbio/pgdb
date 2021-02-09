@@ -17,7 +17,7 @@ cosmic_data:
     loglevel: DEBUG
 proteindb:
    filter_info:
-      filter_column: 'Primary site'
+      filter_column: 'Histology subtype 1'
       accepted_values: 'all'
       split_by_filter_column: False
       clinical_sample_file: ''
