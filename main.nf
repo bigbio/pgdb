@@ -369,7 +369,7 @@ process cosmic_proteindb{
 
 	  script:
 	  """
-	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} --filter_column 'Primary site' --accepted_values ${params.cosmic_tissue_type} --output_db cosmic_proteinDB.fa
+	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} --filter_column 'Histology subtype 1' --accepted_values ${params.cosmic_tissue_type} --output_db cosmic_proteinDB.fa
 	  """
 }
 
