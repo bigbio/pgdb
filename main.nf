@@ -34,7 +34,12 @@ def helpMessage() {
       --ensembl                          Download ENSEMBL variants and generate protein database [true | false] (default: false)
       --gnomad                           Download gnomAD files and generate protein database [true | false] (default: false)
       --decoy                            Append the decoy proteins to the database [true | false] (default: false)
-      --add_reference                    Add the reference proteome to the file [true | false ] (default: false)
+      --add_reference                    Add the reference proteome to the file [true | false ] (default: true)
+
+    Clean database:
+      --clean_database                   Clean the database for stop codons, short protein sequences, (default: false)
+      --minimum_aa                       Minimum number of AminoAcids for a protein to be included in the database (default: 6)
+      --add_stop_codons                  If an stop codons is found, create two proteins from it (default: true)
 
     Configuration files:                 By default all config files are located in the configs directory.
       --ensembl_downloader_config        Path to configuration file for ENSEMBL download parameters
@@ -677,13 +682,43 @@ process merge_proteindbs {
 
    output:
    file "${params.final_database_protein}" into protiendbs
-   file "${params.final_database_protein}" into proteindb_result
+   file "${params.final_database_protein}" into to_clean_database
 
    script:
    """
    cat proteindb* > ${params.final_database_protein}
    """
 }
+
+stop_codons = ''
+if (params.add_stop_codons){
+	stop_codons = "--add_stop_codons"
+}
+
+/**
+ * clean the database for stop codons, and unwanted AA like: *, also remove proteins with less than 6 AA
+ */
+process clean_protein_database {
+
+   publishDir "${params.outdir}", mode: 'copy', overwrite: true
+
+   when:
+     params.clean_database
+
+   input:
+   file file from to_clean_database
+   file e from ensembl_config
+
+   output:
+   file "${params.final_database_protein}" into clean_database
+
+   script:
+   """
+   pypgatk_cli.py ensembl-check -in "${file}" --config_file "${e}" -out ${params.final_database_protein} --num_aa "${params.minimum_aa}" "${stop_codons}"
+   """
+}
+
+to_protein_decoy = params.clean_database ? clean_database : to_clean_database
 
 /**
  * Create the decoy database using DecoyPYrat
@@ -697,7 +732,7 @@ process decoy {
     params.decoy
 
    input:
-   file f from protiendbs
+   file f from to_protein_decoy
    file protein_decoy_config
 
    output:
@@ -709,13 +744,11 @@ process decoy {
 	 """
 }
 
+result_database = params.decoy ? fasta_decoy_db: to_protein_decoy
+
 /** Write the final results to S3 bucket**/
 
-if (params.decoy) {
-    fasta_decoy_db.subscribe { results -> results.copyTo("${params.result_file}")}
-} else {
-    proteindb_result.subscribe { results -> results.copyTo("${params.result_file}") }
-}
+result_database.subscribe { results -> results.copyTo("${params.result_file}")}
 
 
 //--------------------------------------------------------------- //
