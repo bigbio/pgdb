@@ -60,7 +60,7 @@ def helpMessage() {
       --ensembl_name                     Ensembl Name is used to find the specific name in ENSEMBL for the taxonomy for download
                                          The list can be found here: configs/ensembl_species.txt
 
-      --cosmic_tissue_type               Specify a tissue type to limit the COSMIC mutations to a particular caner type
+      --cosmic_cancer_type               Specify a tissue type to limit the COSMIC mutations to a particular caner type
                                          (by default all tumor types are used)
 
       --cosmic_cellline_name             Specify a sample name to limit the COSMIC cell line mutations to
@@ -369,7 +369,7 @@ process cosmic_proteindb{
 
 	  script:
 	  """
-	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} --filter_column 'Histology subtype 1' --accepted_values ${params.cosmic_tissue_type} --output_db cosmic_proteinDB.fa
+	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} --filter_column 'Histology subtype 1' --accepted_values ${params.cosmic_cancer_type} --output_db cosmic_proteinDB.fa
 	  """
 }
 
