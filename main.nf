@@ -318,35 +318,16 @@ process cosmic_download {
 	  file cosmic_config
 
 	  output:
-	  file "database_cosmic/*.gz" into cosmic_files
+    file "database_cosmic/All_COSMIC_Genes.fasta" into cosmic_genes
+    file "database_cosmic/CosmicMutantExport.tsv" into cosmic_mutations
+    file "database_cosmic/All_CellLines_Genes.fasta" into cosmic_celllines_genes
+    file "database_cosmic/CosmicCLP_MutantExport.tsv" into cosmic_celllines_mutations
 
 	  script:
 	  """
 	  pypgatk_cli.py cosmic-downloader --config_file "${cosmic_config}" --username ${params.cosmic_user_name} --password ${params.cosmic_password}
+    gunzip -d -f database_cosmic/*.gz
 	  """
-}
-
-/**
- * Decompress the data downloaded from COSMIC
- */
-process gunzip_cosmic_files{
-
-   when:
-    params.cosmic || params.cosmic_celllines
-
-   input:
-   file(data_file) from cosmic_files
-
-   output:
-   file "All_COSMIC_Genes.fasta" into cosmic_genes
-   file "CosmicMutantExport.tsv" into cosmic_mutations
-   file "All_CellLines_Genes.fasta" into cosmic_celllines_genes
-   file "CosmicCLP_MutantExport.tsv" into cosmic_celllines_mutations
-
-   script:
-   """
-   gunzip -d -f ${data_file}
-   """
 }
 
 /**
