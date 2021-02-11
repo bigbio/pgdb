@@ -713,7 +713,7 @@ process decoy {
 
    script:
    """
-   pypgatk_cli.py generate-decoy --config_file ${protein_decoy_config} --input $f --decoy_prefix "${params.decoy_prefix}" --output decoy_database.fa
+   pypgatk_cli.py generate-decoy --config_file ${protein_decoy_config} --input_database $f --decoy_prefix "${params.decoy_prefix}" --output_database decoy_database.fa
    """
 }
 
@@ -721,7 +721,7 @@ result_database_ch = params.decoy ? fasta_decoy_db_ch: to_protein_decoy_ch
 
 /** Write the final results to S3 bucket**/
 
-result_database_ch.subscribe { results -> results.copyTo("${params.result_file}")}
+result_database_ch.subscribe { results -> results.copyTo("${params.outdir}/${params.final_database_protein}")}
 
 
 //--------------------------------------------------------------- //
