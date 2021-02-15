@@ -622,10 +622,10 @@ process cds_GRCh37_download{
         """
     else
         """
-        pypgatk_cli.py cbioportal-downloader -d "${params.cbioportal_study_id}"
-        tar -xzvf database_cbioportal/"${params.cbioportal_study_id}".tar.gz
-        cat "${params.cbioportal_study_id}"/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
-        cat "${params.cbioportal_study_id}"/data_clinical_sample.txt > cbioportal_allstudies_data_clinical_sample.txt
+        pypgatk_cli.py cbioportal-downloader --config_file "${cbioportal_config}" -d "${params.cbioportal_study_id}"
+        tar -xzvf database_cbioportal/${params.cbioportal_study_id}.tar.gz
+        cat ${params.cbioportal_study_id}/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
+        cat ${params.cbioportal_study_id}/data_clinical_sample.txt | awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; for(i=1;i<=NF;i++){if(\$i=="CANCER_TYPE_DETAILED") j=1; if(\$i=="CANCER_TYPE") s=1;} if(j==1 && s==0){gsub("CANCER_TYPE_DETAILED", "CANCER_TYPE");} print;}' > cbioportal_allstudies_data_clinical_sample.txt
         """
  }
 
@@ -650,7 +650,7 @@ process cds_GRCh37_download{
 
    script:
    """
-   pypgatk_cli.py cbioportal-to-proteindb --config_file "${cbioportal_config}" --input_mutation ${m} --input_cds ${g} --clinical_sample_file ${s} --filter_column 'Tumor_Sample_Barcode' --accepted_values ${params.cbioportal_tissue_type} --output_db cbioPortal_proteinDB.fa
+   pypgatk_cli.py cbioportal-to-proteindb --config_file ${cbioportal_config} --input_mutation ${m} --input_cds ${g} --clinical_sample_file ${s} --filter_column 'Tumor_Sample_Barcode' --accepted_values ${params.cbioportal_tissue_type} --output_db cbioPortal_proteinDB.fa
    """
 }
 
