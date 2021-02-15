@@ -66,8 +66,10 @@ def helpMessage() {
       --cosmic_cellline_name             Specify a sample name to limit the COSMIC cell line mutations to
                                          a particular  cell line (by default all cell lines are used)
 
-      --cbioportal_tissue_type           Specify a tissue type to limit the cBioPortal mutations to
+      --cbioportal_accepted_values       Specify a tissue type to limit the cBioPortal mutations to
                                          a particular caner type (by default all tumor types are used)
+      --cbioportal_filter_column         Specify a column from the clincal sample file to be used for filterring records
+                                         Only values listed in cbioportal_accepted_values parameter are included, default is CANCER_TYPE
       --af_field                         Allele frequency identifier string in VCF Info column, if no AF info is given set it to empty.
                                          For human VCF files from ENSEMBL the default is set to MAF
 
@@ -650,7 +652,7 @@ process cds_GRCh37_download{
 
    script:
    """
-   pypgatk_cli.py cbioportal-to-proteindb --config_file ${cbioportal_config} --input_mutation ${m} --input_cds ${g} --clinical_sample_file ${s} --filter_column 'Tumor_Sample_Barcode' --accepted_values ${params.cbioportal_tissue_type} --output_db cbioPortal_proteinDB.fa
+   pypgatk_cli.py cbioportal-to-proteindb --config_file ${cbioportal_config} --input_mutation ${m} --input_cds ${g} --clinical_sample_file ${s} --filter_column ${params.cbioportal_filter_column} --accepted_values ${params.cbioportal_accepted_values} --output_db cbioPortal_proteinDB.fa
    """
 }
 
