@@ -66,8 +66,10 @@ def helpMessage() {
       --cosmic_cellline_name             Specify a sample name to limit the COSMIC cell line mutations to
                                          a particular  cell line (by default all cell lines are used)
 
-      --cbioportal_tissue_type           Specify a tissue type to limit the cBioPortal mutations to
+      --cbioportal_accepted_values       Specify a tissue type to limit the cBioPortal mutations to
                                          a particular caner type (by default all tumor types are used)
+      --cbioportal_filter_column         Specify a column from the clincal sample file to be used for filterring records
+                                         Only values listed in cbioportal_accepted_values parameter are included, default is CANCER_TYPE
       --af_field                         Allele frequency identifier string in VCF Info column, if no AF info is given set it to empty.
                                          For human VCF files from ENSEMBL the default is set to MAF
 
@@ -77,6 +79,8 @@ def helpMessage() {
                                          In order to be able to download COSMIC data, the user should
                                          provide a user and password. Please first register in COSMIC
                                          database (https://cancer.sanger.ac.uk/cosmic/register).
+      --cbioportal_study_id              Download mutations from a specific study in cbiportal
+                                         default is all which downloads mutations from all studies
 
       --gencode_url                      URL for downloading GENCODE datafiles: gencode.v19.pc_transcripts.fa.gz and
                                          gencode.v19.annotation.gtf.gz
@@ -135,6 +139,8 @@ ensembl_config = file(params.ensembl_config)
 cosmic_config = file(params.cosmic_config)
 cbioportal_config = file(params.cbioportal_config)
 protein_decoy_config = file(params.protein_decoy_config)
+
+params.cbioportal_study_id = "all"
 
 af_field = params.af_field
 if (params.ensembl_name == "homo_sapiens"){
@@ -597,24 +603,32 @@ process cds_GRCh37_download{
 */
  process download_all_cbioportal {
 
-   when:
-	 params.cbioportal
+    when:
+         params.cbioportal
 
    output:
  	 file('cbioportal_allstudies_data_mutations_mskcc.txt') into cbio_mutations
  	 file('cbioportal_allstudies_data_clinical_sample.txt') into cbio_samples
-
+   
    script:
-   """
-   git clone https://github.com/cBioPortal/datahub.git
-   cd datahub
-   git lfs install --local --skip-smudge
-   git lfs pull -I public --include "data*clinical*sample.txt"
-   git lfs pull -I public --include "data_mutations_mskcc.txt"
-   cd ..
-   cat datahub/public/*/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
-   cat datahub/public/*/*data*clinical*sample.txt | awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; for(i=1;i<=NF;i++){if(\$i=="CANCER_TYPE_DETAILED") j=1; if(\$i=="CANCER_TYPE") s=1;} if(j==1 && s==0){gsub("CANCER_TYPE_DETAILED", "CANCER_TYPE");} print;}' > cbioportal_allstudies_data_clinical_sample.txt
-   """
+   if (params.cbioportal_study_id == "all")
+        """
+        git clone https://github.com/cBioPortal/datahub.git
+        cd datahub
+        git lfs install --local --skip-smudge
+        git lfs pull -I public --include "data*clinical*sample.txt"
+        git lfs pull -I public --include "data_mutations_mskcc.txt"
+        cd ..
+        cat datahub/public/*/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
+        cat datahub/public/*/*data*clinical*sample.txt | awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; for(i=1;i<=NF;i++){if(\$i=="CANCER_TYPE_DETAILED") j=1; if(\$i=="CANCER_TYPE") s=1;} if(j==1 && s==0){gsub("CANCER_TYPE_DETAILED", "CANCER_TYPE");} print;}' > cbioportal_allstudies_data_clinical_sample.txt
+        """
+    else
+        """
+        pypgatk_cli.py cbioportal-downloader --config_file "${cbioportal_config}" -d "${params.cbioportal_study_id}"
+        tar -xzvf database_cbioportal/${params.cbioportal_study_id}.tar.gz
+        cat ${params.cbioportal_study_id}/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
+        cat ${params.cbioportal_study_id}/data_clinical_sample.txt | awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; for(i=1;i<=NF;i++){if(\$i=="CANCER_TYPE_DETAILED") j=1; if(\$i=="CANCER_TYPE") s=1;} if(j==1 && s==0){gsub("CANCER_TYPE_DETAILED", "CANCER_TYPE");} print;}' > cbioportal_allstudies_data_clinical_sample.txt
+        """
  }
 
 /**
@@ -638,7 +652,7 @@ process cds_GRCh37_download{
 
    script:
    """
-   pypgatk_cli.py cbioportal-to-proteindb --config_file "${cbioportal_config}" --input_mutation ${m} --input_cds ${g} --clinical_sample_file ${s} --filter_column 'Tumor_Sample_Barcode' --accepted_values ${params.cbioportal_tissue_type} --output_db cbioPortal_proteinDB.fa
+   pypgatk_cli.py cbioportal-to-proteindb --config_file ${cbioportal_config} --input_mutation ${m} --input_cds ${g} --clinical_sample_file ${s} --filter_column ${params.cbioportal_filter_column} --accepted_values ${params.cbioportal_accepted_values} --output_db cbioPortal_proteinDB.fa
    """
 }
 
