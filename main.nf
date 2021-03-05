@@ -89,7 +89,11 @@ def helpMessage() {
                                          gencode.v19.annotation.gtf.gz
       --gnomad_file_url                  URL for downloading gnomAD VCF file(s)
  
-      --vcf_file                         VCD file path to be translate
+      --vcf_file                         VCF file path to be translated
+                                         Generate variants proteins by modifying sequences of affected transcripts.
+                                         In case of already annotated variatnes it only considers variants within 
+                                         potential coding regions of the transcript (CDSs & stop codons for protein-coding genes, exons for non-protein coding genes)
+                                         In case of not annotated variants, it considers all variants overlapping CDSs
 
     Output parameters:
       --decoy_prefix                     String to be used as prefix for the generated decoy sequences
@@ -195,6 +199,7 @@ process gunzip_ensembl_files{
    file '*.pep.all.fa' into ensembl_protein_database_sub
    file '*cdna.all.fa' into ensembl_cdna_database, ensembl_cdna_database_sub
    file '*ncrna.fa' into ensembl_ncrna_database, ensembl_ncrna_database_sub
+   file '*.dna.*.fa' into genome_fasta
    file '*.gtf' into gtf
 
    script:
@@ -478,7 +483,7 @@ process ensembl_vcf_proteinDB {
 
    script:
    """
-   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --include_biotypes "${params.biotypes['protein_coding']}" --input_fasta ${f} --gene_annotations_gtf ${g} --vep_annotated_vcf ${v} --output_proteindb "${v}_proteinDB.fa"  --var_prefix ensvar
+   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf ${v} --output_proteindb "${v}_proteinDB.fa"  --var_prefix ensvar --annotation_field_name 'CSQ'
    """
 }
 
@@ -493,6 +498,25 @@ merged_databases = merged_databases.mix(proteinDB_vcf_final)
 /**
  * Generate protein databse for a given VCF
  */
+process gtf2fasta {
+   label 'process_medium'
+   label 'process_single_thread'
+
+   when:
+   params.vcf
+
+   input:
+   file g from gtf
+   file f from genome_fasta
+
+   output:
+   file "transcripts.fa" into gtf_transcripts_fasta
+
+   script:
+   """
+   gffread -w transcripts.fa -g ${f} ${g}
+   """
+}
 process vcf_proteinDB {
 
    label 'process_medium'
@@ -503,7 +527,7 @@ process vcf_proteinDB {
 
    input:
    file v from params.vcf_file
-   file f from total_cdnas
+   file f from gtf_transcripts_fasta
    file g from gtf
    file e from ensembl_config
 
@@ -512,7 +536,7 @@ process vcf_proteinDB {
 
    script:
    """
-   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --include_biotypes "${params.biotypes['protein_coding']}" --input_fasta ${f} --gene_annotations_gtf ${g} --vep_annotated_vcf ${v} --output_proteindb "${v}_proteinDB.fa" --annotation_field_name ''
+   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf ${v} --output_proteindb "${v}_proteinDB.fa" --annotation_field_name ''
    """
 }
 
@@ -603,7 +627,7 @@ process gnomad_proteindb{
 
    script:
    """
-   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --vep_annotated_vcf ${v} --input_fasta ${f} --gene_annotations_gtf ${g} --output_proteindb "${v}_proteinDB.fa" --af_field controls_AF --transcript_index 6 --biotype_str transcript_type --annotation_field_name vep  --var_prefix gnomadvar
+   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --vcf ${v} --input_fasta ${f} --gene_annotations_gtf ${g} --output_proteindb "${v}_proteinDB.fa" --af_field controls_AF --transcript_index 6 --annotation_field_name vep  --var_prefix gnomadvar
    """
 }
 
