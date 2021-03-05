@@ -18,7 +18,7 @@ def helpMessage() {
 
     The typical command for running the pipeline is as follows:
 
-    nextflow run nf-core/pgdb --ensembl_name homo_sapiens --ncrna false --pseudogenes false --altorfs false --ensembl false --gnomad false --cosmic false --cosmic_celllines false --cbioportal false --decoy false --add_reference true
+    nextflow run nf-core/pgdb --ensembl_name homo_sapiens --ncrna false --pseudogenes false --altorfs false --ensembl false --gnomad false --cosmic false --cosmic_celllines false --cbioportal false --decoy false --add_reference true --vcf false
 
     Main arguments:
       --final_database_protein           Output file name for the final database protein fasta file under the outdir/ directory.
@@ -34,6 +34,9 @@ def helpMessage() {
       --ensembl                          Download ENSEMBL variants and generate protein database [true | false] (default: false)
       --gnomad                           Download gnomAD files and generate protein database [true | false] (default: false)
       --decoy                            Append the decoy proteins to the database [true | false] (default: false)
+
+      --vcf                              Enable translation of a given VCF file [true | false ] (default: false)
+
       --add_reference                    Add the reference proteome to the file [true | false ] (default: true)
 
     Clean database:
@@ -85,6 +88,8 @@ def helpMessage() {
       --gencode_url                      URL for downloading GENCODE datafiles: gencode.v19.pc_transcripts.fa.gz and
                                          gencode.v19.annotation.gtf.gz
       --gnomad_file_url                  URL for downloading gnomAD VCF file(s)
+ 
+      --vcf_file                         VCD file path to be translate
 
     Output parameters:
       --decoy_prefix                     String to be used as prefix for the generated decoy sequences
@@ -162,7 +167,7 @@ ZCAT = (System.properties['os.name'] == 'Mac OS X' ? 'gzcat' : 'zcat')
 process ensembl_fasta_download{
 
    when:
-   params.add_reference ||  params.ensembl || params.altorfs || params.ncrna || params.pseudogenes
+   params.add_reference ||  params.ensembl || params.altorfs || params.ncrna || params.pseudogenes || params.vcf
 
    input:
    file ensembl_downloader_config
@@ -483,6 +488,36 @@ proteinDB_vcf
 	.set {proteinDB_vcf_final}
 
 merged_databases = merged_databases.mix(proteinDB_vcf_final)
+
+/****** Custom VCF      *****/
+/**
+ * Generate protein databse for a given VCF
+ */
+process vcf_proteinDB {
+
+   label 'process_medium'
+   label 'process_single_thread'
+
+   when:
+   params.vcf
+
+   input:
+   file v from params.vcf_file
+   file f from total_cdnas
+   file g from gtf
+   file e from ensembl_config
+
+   output:
+   file "${v}_proteinDB.fa" into proteinDB_custom_vcf
+
+   script:
+   """
+   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --include_biotypes "${params.biotypes['protein_coding']}" --input_fasta ${f} --gene_annotations_gtf ${g} --vep_annotated_vcf ${v} --output_proteindb "${v}_proteinDB.fa" --annotation_field_name ''
+   """
+}
+
+merged_databases = merged_databases.mix(proteinDB_custom_vcf)
+
 
 /****** gnomAD variatns *****/
 
