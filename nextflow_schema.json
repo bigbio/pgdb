@@ -357,6 +357,9 @@
         },
         "cbioportal_study_id": {
             "type": "string"
+        },
+        "vcf": {
+            "type": "string"
         }
     }
 }

@@ -97,7 +97,7 @@ def helpMessage() {
 
       --vcf_file                         VCF file path to be translated
                                          Generate variants proteins by modifying sequences of affected transcripts.
-                                         In case of already annotated variatnes it only considers variants within
+                                         In case of already annotated variants it only considers variants within
                                          potential coding regions of the transcript (CDSs & stop codons for protein-coding genes, exons for non-protein coding genes)
                                          In case of not annotated variants, it considers all variants overlapping CDSs
 
