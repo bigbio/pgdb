@@ -260,10 +260,6 @@
             "type": "string",
             "default": "true"
         },
-        "result_file": {
-            "type": "string",
-            "default": "fasta_database.fa"
-        },
         "cosmic_user_name": {
             "type": "string"
         },
@@ -298,15 +294,7 @@
             "type": "string",
             "default": "[protein_coding:'protein_coding,polymorphic_pseudogene,non_stop_decay,nonsense_mediated_decay,IG_C_gene,IG_D_gene,IG_J_gene,IG_V_gene,TR_C_gene,TR_D_gene,TR_J_gene,TR_V_gene,TEC', pseudogene:'pseudogene,IG_C_pseudogene,IG_J_pseudogene,IG_V_pseudogene,IG_pseudogene,TR_V_pseudogene,TR_J_pseudogene,processed_pseudogene,rRNA_pseudogene,transcribed_processed_pseudogene,transcribed_unitary_pseudogene,transcribed_unprocessed_pseudogene,translated_unprocessed_pseudogene,unitary_pseudogene,unprocessed_pseudogene,translated_processed_pseudogene', ncRNA:'lncRNA,Mt_rRNA,Mt_tRNA,miRNA,misc_RNA,rRNA,retained_intron,ribozyme,sRNA,scRNA,scaRNA,snRNA,snoRNA,vaultRNA']"
         },
-        "cosmic_tissue_type": {
-            "type": "string",
-            "default": "all"
-        },
         "cosmic_cellline_name": {
-            "type": "string",
-            "default": "all"
-        },
-        "cbioportal_tissue_type": {
             "type": "string",
             "default": "all"
         },
@@ -346,6 +334,29 @@
         "add_stop_codons": {
             "type": "string",
             "default": "true"
+        },
+        "cosmic_cancer_type": {
+            "type": "string",
+            "default": "all"
+        },
+        "cbioportal_accepted_values": {
+            "type": "string",
+            "default": "all"
+        },
+        "cbioportal_filter_column": {
+            "type": "string",
+            "default": "CANCER_TYPE"
+        },
+        "decoy_method": {
+            "type": "string",
+            "default": "decoypyrat"
+        },
+        "decoy_enzyme": {
+            "type": "string",
+            "default": "Trypsin"
+        },
+        "cbioportal_study_id": {
+            "type": "string"
         }
     }
 }

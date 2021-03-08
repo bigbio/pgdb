@@ -33,7 +33,7 @@ def helpMessage() {
       --cosmic_celllines                 Download COSMIC cell line files and generate protein database [true | false] (default: false)
       --ensembl                          Download ENSEMBL variants and generate protein database [true | false] (default: false)
       --gnomad                           Download gnomAD files and generate protein database [true | false] (default: false)
-      --decoy                            Append the decoy proteins to the database [true | false] (default: false)
+
 
       --vcf                              Enable translation of a given VCF file [true | false ] (default: false)
 
@@ -43,6 +43,12 @@ def helpMessage() {
       --clean_database                   Clean the database for stop codons, short protein sequences, (default: false)
       --minimum_aa                       Minimum number of AminoAcids for a protein to be included in the database (default: 6)
       --add_stop_codons                  If an stop codons is found, create two proteins from it (default: true)
+
+    Decoy generation:
+      --decoy                            Append the decoy proteins to the database [true | false] (default: false)
+      --decoy_prefix                     String to be used as prefix for the generated decoy sequences
+      --decoy_method                     Method used to generate the decoy database ['protein-reverse', 'protein-shuffle', 'decoypyrat'](Default: decoypyrat)
+      --decoy_enzyme                     Enzyme used to generate the decoy (default: Trypsin)
 
     Configuration files:                 By default all config files are located in the configs directory.
       --ensembl_downloader_config        Path to configuration file for ENSEMBL download parameters
@@ -88,15 +94,14 @@ def helpMessage() {
       --gencode_url                      URL for downloading GENCODE datafiles: gencode.v19.pc_transcripts.fa.gz and
                                          gencode.v19.annotation.gtf.gz
       --gnomad_file_url                  URL for downloading gnomAD VCF file(s)
- 
+
       --vcf_file                         VCF file path to be translated
                                          Generate variants proteins by modifying sequences of affected transcripts.
-                                         In case of already annotated variatnes it only considers variants within 
+                                         In case of already annotated variatnes it only considers variants within
                                          potential coding regions of the transcript (CDSs & stop codons for protein-coding genes, exons for non-protein coding genes)
                                          In case of not annotated variants, it considers all variants overlapping CDSs
 
     Output parameters:
-      --decoy_prefix                     String to be used as prefix for the generated decoy sequences
       --publish_dir_mode [str]           Mode for publishing results in the output directory. Available:
                                          symlink, rellink, link, copy, copyNoFollow, move (Default: copy)
       --outdir                           Output folder for the results by default is $baseDir/result
@@ -668,7 +673,7 @@ process cds_GRCh37_download{
    output:
  	 file('cbioportal_allstudies_data_mutations_mskcc.txt') into cbio_mutations
  	 file('cbioportal_allstudies_data_clinical_sample.txt') into cbio_samples
-   
+
    script:
    if (params.cbioportal_study_id == "all")
         """
@@ -768,7 +773,7 @@ to_protein_decoy_ch = params.clean_database ? clean_database_sh : to_clean_ch
 
 /**
  * Create the decoy database using DecoyPYrat
- * Decoy sequences will have "_DECOY" prefix tag to the protein accession.
+ * Decoy sequences will have "DECOY_" prefix tag to the protein accession.
  */
 process decoy {
 
@@ -786,7 +791,7 @@ process decoy {
 
    script:
    """
-   pypgatk_cli.py generate-decoy --config_file ${protein_decoy_config} --input_database $f --decoy_prefix "${params.decoy_prefix}" --output_database decoy_database.fa
+   pypgatk_cli.py generate-decoy --method "${params.decoy_method}" --enzyme "${params.decoy_enzyme}" --config_file ${protein_decoy_config} --input_database $f --decoy_prefix "${params.decoy_prefix}" --output_database decoy_database.fa
    """
 }
 
