@@ -12,7 +12,6 @@ dependencies:
   - conda-forge::pymdown-extensions
   - conda-forge::pygments
   # All the dependencies of the pipeline.
-
   - conda-forge::coreutils
   - conda-forge::git-lfs
   - conda-forge::git
