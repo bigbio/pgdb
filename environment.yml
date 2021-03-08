@@ -6,12 +6,12 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - conda-forge::python
+  - conda-forge::python=3.8.8
   - bioconda::pypgatk=0.0.16
-  - conda-forge::markdown
-  - conda-forge::pymdown-extensions
-  - conda-forge::pygments
+  - conda-forge::markdown=3.3.4
+  - conda-forge::pymdown-extensions=8.1.1
+  - conda-forge::pygments=2.8.0
   # All the dependencies of the pipeline.
-  - conda-forge::coreutils
-  - conda-forge::git-lfs
-  - conda-forge::git
+  - conda-forge::coreutils=8.31
+  - conda-forge::git-lfs=2.13.2
+  - conda-forge::git=2.30.1
