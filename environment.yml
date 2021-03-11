@@ -15,3 +15,4 @@ dependencies:
   - conda-forge::coreutils=8.31
   - conda-forge::git-lfs=2.13.2
   - conda-forge::git=2.30.1
+  - bioconda::gffread=0.12.1

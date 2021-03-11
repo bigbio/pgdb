@@ -204,7 +204,7 @@ process gunzip_ensembl_files{
    file '*.pep.all.fa' into ensembl_protein_database_sub
    file '*cdna.all.fa' into ensembl_cdna_database, ensembl_cdna_database_sub
    file '*ncrna.fa' into ensembl_ncrna_database, ensembl_ncrna_database_sub
-   file '*.dna.*.fa' into genome_fasta
+   file '*.dna*.fa' into genome_fasta
    file '*.gtf' into gtf
 
    script:
@@ -503,9 +503,7 @@ merged_databases = merged_databases.mix(proteinDB_vcf_final)
 /**
  * Generate protein databse for a given VCF
  */
-process gtf2fasta {
-   label 'process_medium'
-   label 'process_single_thread'
+process gtf_to_fasta {
 
    when:
    params.vcf
@@ -524,8 +522,7 @@ process gtf2fasta {
 }
 process vcf_proteinDB {
 
-   label 'process_medium'
-   label 'process_single_thread'
+   publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
    when:
    params.vcf
