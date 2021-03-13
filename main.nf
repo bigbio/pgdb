@@ -535,7 +535,7 @@ process vcf_proteinDB {
    file e from ensembl_config
 
    output:
-   file "${v}_proteinDB.fa" into proteinDB_custom_vcf
+   file "*_proteinDB.fa" into proteinDB_custom_vcf
 
    script:
    """
