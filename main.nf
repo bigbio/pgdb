@@ -539,7 +539,7 @@ process vcf_proteinDB {
 
    script:
    """
-   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf "${params.vcf_file}"" --output_proteindb ""${params.vcf_file.baseName}_proteinDB.fa" --annotation_field_name ''
+   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf "${params.vcf_file}" --output_proteindb "${params.vcf_file.baseName}_proteinDB.fa" --annotation_field_name ''
    """
 }
 
