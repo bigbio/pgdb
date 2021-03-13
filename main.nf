@@ -187,6 +187,7 @@ process ensembl_fasta_download{
    script:
    """
    pypgatk_cli.py ensembl-downloader --config_file ${ensembl_downloader_config} --ensembl_name ${params.ensembl_name} -sv -sc
+   gzip -t database_ensembl/*.gz
    """
 }
 
