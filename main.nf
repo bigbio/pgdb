@@ -521,6 +521,8 @@ process gtf_to_fasta {
    gffread -w transcripts.fa -g ${f} ${g}
    """
 }
+
+vcf_file = Channel.fromPath(params.vcf_file)
 process vcf_proteinDB {
 
    publishDir "${params.outdir}", mode: 'copy', overwrite: true
@@ -529,7 +531,7 @@ process vcf_proteinDB {
    params.vcf
 
    input:
-   file v from params.vcf_file
+   file v from vcf_file
    file f from gtf_transcripts_fasta
    file g from gtf
    file e from ensembl_config
@@ -539,7 +541,7 @@ process vcf_proteinDB {
 
    script:
    """
-   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf "${params.vcf_file}" --output_proteindb "${params.vcf_file.baseName}_proteinDB.fa" --annotation_field_name ''
+   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf ${v} --output_proteindb ${v.baseName}_proteinDB.fa --annotation_field_name ''
    """
 }
 
