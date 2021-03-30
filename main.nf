@@ -542,7 +542,7 @@ process vcf_proteinDB {
 
    script:
    """
-   awk 'BEGIN{FS=OFS="\t"}{if($1=="chrM") $1="MT"; gsub("chr","",$1); print}' ${v} > ${v.baseName}_changedChrNames.vcf
+   awk 'BEGIN{FS=OFS="\t"}{if(\$1=="chrM") \$1="MT"; gsub("chr","",\$1); print}' ${v} > ${v.baseName}_changedChrNames.vcf
    pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf ${v.baseName}_changedChrNames.vcf --output_proteindb ${v.baseName}_proteinDB.fa --annotation_field_name ''
    """
 }
