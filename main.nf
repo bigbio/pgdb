@@ -157,8 +157,9 @@ protein_decoy_config = file(params.protein_decoy_config)
 params.cbioportal_study_id = "all"
 
 af_field = params.af_field
+ensembl_af_field = params.af_field
 if (params.ensembl_name == "homo_sapiens"){
-	af_field = "MAF"
+	ensembl_af_field = "MAF"
 }
 
 // Pipeline checks
@@ -489,7 +490,7 @@ process ensembl_vcf_proteinDB {
 
    script:
    """
-   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf ${v} --output_proteindb "${v}_proteinDB.fa"  --var_prefix ensvar --annotation_field_name 'CSQ'
+   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${ensembl_af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf ${v} --output_proteindb "${v}_proteinDB.fa"  --var_prefix ensvar --annotation_field_name 'CSQ'
    """
 }
 
@@ -541,7 +542,8 @@ process vcf_proteinDB {
 
    script:
    """
-   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf ${v} --output_proteindb ${v.baseName}_proteinDB.fa --annotation_field_name ''
+   awk 'BEGIN{FS=OFS="\t"}{gsub("chr22","X",$1);gsub("chr23","Y",$1);gsub("chr24","MT",$1);gsub("chr","",$1); print}' ${v} > ${v.baseName}_changedChrNames.vcf
+   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf ${v.baseName}_changedChrNames.vcf --output_proteindb ${v.baseName}_proteinDB.fa --annotation_field_name ''
    """
 }
 
