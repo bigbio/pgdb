@@ -195,28 +195,6 @@ process ensembl_fasta_download{
    """
 }
 
-/**
- * Decompress all the data downloaded from ENSEMBL
-process gunzip_ensembl_files{
-
-   publishDir "${params.outdir}", mode: 'copy', overwrite: true
-
-   input:
-   file(fasta_file) from ensembl_fasta_gz_databases
-
-   output:
-   file '*.pep.all.fa' into ensembl_protein_database_sub
-   file '*cdna.all.fa' into ensembl_cdna_database, ensembl_cdna_database_sub
-   file '*ncrna.fa' into ensembl_ncrna_database, ensembl_ncrna_database_sub
-   file '*.dna*.fa' into genome_fasta
-   file '*.gtf' into gtf
-
-   script:
-   """
-   gunzip -d -f ${fasta_file}
-   """
-}
-*/
 process add_reference_proteome{
 
    when:
@@ -418,7 +396,7 @@ process ensembl_vcf_download{
    file ensembl_downloader_config
 
    output:
-   file "*.vcf" into ensembl_vcf_files
+   file "database_ensembl/*.vcf" into ensembl_vcf_files
 
    script:
    """
@@ -426,29 +404,6 @@ process ensembl_vcf_download{
    """
 }
 
-/**
- * Decompress vcf files downloaded from ENSEMBL
-
-process gunzip_vcf_ensembl_files{
-
-   label 'process_medium'
-   label 'process_single_thread'
-
-   when:
-    params.ensembl
-
-   input:
-   file vcf_file from ensembl_vcf_gz_files.flatten().map{ file(it) }
-
-   output:
-   file "*.vcf" into ensembl_vcf_files
-
-   script:
-   """
-   gunzip -d -f $vcf_file
-   """
-}
-*/
 process check_ensembl_vcf{
 
    label 'process_medium'
