@@ -183,18 +183,20 @@ process ensembl_fasta_download{
    file ensembl_downloader_config
 
    output:
-   file "database_ensembl/*.gz" into ensembl_fasta_gz_databases
+   file 'database_ensembl/*.pep.all.fa' into ensembl_protein_database_sub
+   file 'database_ensembl/*cdna.all.fa' into ensembl_cdna_database, ensembl_cdna_database_sub
+   file 'database_ensembl/*ncrna.fa' into ensembl_ncrna_database, ensembl_ncrna_database_sub
+   file 'database_ensembl/*.dna*.fa' into genome_fasta
+   file 'database_ensembl/*.gtf' into gtf
 
    script:
    """
    pypgatk_cli.py ensembl-downloader --config_file ${ensembl_downloader_config} --ensembl_name ${params.ensembl_name} -sv -sc
-   gzip -t database_ensembl/*.gz
    """
 }
 
 /**
  * Decompress all the data downloaded from ENSEMBL
- */
 process gunzip_ensembl_files{
 
    publishDir "${params.outdir}", mode: 'copy', overwrite: true
@@ -214,7 +216,7 @@ process gunzip_ensembl_files{
    gunzip -d -f ${fasta_file}
    """
 }
-
+*/
 process add_reference_proteome{
 
    when:
@@ -349,7 +351,6 @@ process cosmic_download {
 	  script:
 	  """
 	  pypgatk_cli.py cosmic-downloader --config_file "${cosmic_config}" --username ${params.cosmic_user_name} --password ${params.cosmic_password}
-    gunzip -d -f database_cosmic/*.gz
 	  """
 }
 
@@ -417,7 +418,7 @@ process ensembl_vcf_download{
    file ensembl_downloader_config
 
    output:
-   file "database_ensembl/*.vcf.gz" into ensembl_vcf_gz_files
+   file "*.vcf" into ensembl_vcf_files
 
    script:
    """
@@ -427,7 +428,7 @@ process ensembl_vcf_download{
 
 /**
  * Decompress vcf files downloaded from ENSEMBL
- */
+
 process gunzip_vcf_ensembl_files{
 
    label 'process_medium'
@@ -447,7 +448,7 @@ process gunzip_vcf_ensembl_files{
    gunzip -d -f $vcf_file
    """
 }
-
+*/
 process check_ensembl_vcf{
 
    label 'process_medium'
