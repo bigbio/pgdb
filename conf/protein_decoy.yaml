@@ -9,7 +9,6 @@ proteindb_decoy:
   keep_target_hits: true
   enzyme: trypsin
   method: decoypyrat
-  min_peptide_length: 5
   max_peptide_length: 100
   do_not_shuffle: False
   do_not_switch: False
