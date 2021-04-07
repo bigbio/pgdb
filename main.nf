@@ -479,7 +479,7 @@ process gtf_to_fasta {
    """
 }
 
-# vcf_file = Channel.fromPath(params.vcf_file)
+//vcf_file = Channel.fromPath(params.vcf_file)
 vcf_file = params.vcf_file ? Channel.fromPath(params.vcf_file, checkIfExists: true) : Channel.empty()
 
 process vcf_proteinDB {
