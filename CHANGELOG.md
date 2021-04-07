@@ -12,9 +12,9 @@ Initial release of nf-core/pgdb, created with the [nf-core](https://nf-co.re/) t
 The initial version of the pipeline features the following steps:
 
     - (optional) ENSEMBL Reference proteomes included in final proteome
-    - (optional) Generate the decoy database and attach it to the final proteome
     - Convert a Variant genome database like COSMIC or CBioPortal to proteomes
-    -
+    - Convert provided VCF to proteome database
+    - (optional) Generate the decoy database and attach it to the final proteome
 
 ### `Known issues`
 
