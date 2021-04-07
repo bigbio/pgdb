@@ -888,21 +888,6 @@ workflow.onComplete {
     email_fields['summary']['Nextflow Build'] = workflow.nextflow.build
     email_fields['summary']['Nextflow Compile Timestamp'] = workflow.nextflow.timestamp
 
-    // TODO nf-core: If not using MultiQC, strip out this code (including params.max_multiqc_email_size)
-    // On success try attach the multiqc report
-    //def mqc_report = null
-    //try {
-    //    if (workflow.success) {
-    //        mqc_report = ch_multiqc_report.getVal()
-    //        if (mqc_report.getClass() == ArrayList) {
-    //            log.warn "[nf-core/pgdb] Found multiple reports from process 'multiqc', will use only one"
-    //            mqc_report = mqc_report[0]
-    //        }
-    //    }
-    //} catch (all) {
-    //    log.warn "[nf-core/pgdb] Could not attach MultiQC report to summary email"
-    //}
-
     // Check if we are only sending emails on failure
     email_address = params.email
     if (!params.email && params.email_on_fail && !workflow.success) {
