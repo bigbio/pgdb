@@ -6,6 +6,12 @@
 
 ## Introduction
 
+General usage:
+
+```bash
+nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --ensembl_name homo_sapines --ensembl false
+```
+
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
