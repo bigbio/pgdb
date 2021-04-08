@@ -13,7 +13,7 @@ The ProteoGenomics database generation workflow (**pgdb**) use the [pypgatk](htt
 ## Introduction
 
 **nf-core/pgdb** is a bioinformatics pipeline to generate proteogenomics databases. pgdb allows users to create proteogenomics databases using EMSEMBL as the reference proteome database. Three different major databases can be attached to the final proteogenomics database:
-   
+
 * The reference proteome (ENSEMBL Reference proteome)
 * Non canonical proteins: pseudo-genes, sORFs, lncRNA.
 * Variants: COSMIC, cBioPortal, GENOMAD variants
