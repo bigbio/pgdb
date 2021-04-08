@@ -24,7 +24,7 @@
                 "ensembl_config": {
                     "type": "string",
                     "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/conf/ensembl_config.yaml",
-                    "description": "Path to configuration file for parameters in generating                                              protein databases from ENSMEBL sequences"
+                    "description": "Path to configuration file for parameters in generating protein databases from ENSMEBL sequences"
                 },
                 "gencode_url": {
                     "type": "string",
@@ -108,7 +108,7 @@
                 },
                 "cbioportal_study_id": {
                     "type": "string",
-                    "description": "Download mutations from a specific study in cbiportal                                              default is all which downloads mutations from all studies"
+                    "description": "Download mutations from a specific study in cbiportal default is all which downloads mutations from all studies"
                 },
                 "cbioportal_config": {
                     "type": "string",
