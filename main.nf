@@ -713,7 +713,7 @@ Channel.from(summary.collect{ [it.key, it.value] })
     id: 'nf-core-proteomicslfq-summary'
     description: " - this information is collected when the pipeline is started."
     section_name: 'nf-core/proteomicslfq Workflow Summary'
-    section_href: 'https://github.com/nf-core/proteomicslfq'
+    section_href: 'https://github.com/nf-core/pgdb'
     plot_type: 'html'
     data: |
         <dl class=\"dl-horizontal\">
