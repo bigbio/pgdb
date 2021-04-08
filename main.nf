@@ -712,7 +712,7 @@ Channel.from(summary.collect{ [it.key, it.value] })
     .map { x -> """
     id: 'nf-core-proteomicslfq-summary'
     description: " - this information is collected when the pipeline is started."
-    section_name: 'nf-core/proteomicslfq Workflow Summary'
+    section_name: 'nf-core/pgdb Workflow Summary'
     section_href: 'https://github.com/nf-core/pgdb'
     plot_type: 'html'
     data: |
