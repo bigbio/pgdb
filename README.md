@@ -55,13 +55,7 @@ The nf-core/pgdb pipeline comes with documentation about the pipeline: [usage](h
 
 ## Credits
 
-nf-core/pgdb was originally written by Husen M. Umer & Yasset Perez-Riverol.
-
-We thank the following people for their extensive assistance in the development
-of this pipeline:
-
-- Yasset Perez-Riverol (EMBL-EBI)
-- Husen M. Umer (Karolinska Institute)
+nf-core/pgdb was originally written by Husen M. Umer (EMBL-EBI) & Yasset Perez-Riverol (Karolinska Institute)
 
 ## Contributions and Support
 
