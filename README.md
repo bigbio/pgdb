@@ -12,7 +12,13 @@ The ProteoGenomics database generation workflow (**pgdb**) use the [pypgatk](htt
 
 ## Introduction
 
-**nf-core/pgdb** is a bioinformatics best-practise analysis pipeline for
+**nf-core/pgdb** is a bioinformatics pipeline to generate proteogenomics databases. pgdb allows users to create proteogenomics databases using EMSEMBL as the reference proteome database. Three different major databases can be attached to the final proteogenomics database:
+   
+* The reference proteome (ENSEMBL Reference proteome)
+* Non canonical proteins: pseudo-genes, sORFs, lncRNA.
+* Variants: COSMIC, cBioPortal, GENOMAD variants
+
+The pipeline allows to estimate decoy proteins with different methods and attach them to the final proteogenomics database.
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It comes with docker containers making installation trivial and results highly reproducible.
 
@@ -32,9 +38,9 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 
 4. Start running your own analysis!
 
-    ```bash
-    nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --ensembl_name homo_sapines --ensembl false
-    ```
+```bash
+nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --ensembl_name homo_sapines --ensembl false
+```
 
 See [usage docs](https://nf-co.re/pgdb/usage) for all of the available options when running the pipeline.
 
