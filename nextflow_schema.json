@@ -5,6 +5,224 @@
     "description": "Proteogenomics database creation workflow using pypgatk framework. ",
     "type": "object",
     "definitions": {
+        "ensembl_canonical_proteomes": {
+            "title": "ENSEMBL canonical proteomes",
+            "type": "object",
+            "description": "Add ENSEMBL canonical proteomes",
+            "default": "",
+            "properties": {
+                "add_reference": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Add the reference proteome to the file"
+                },
+                "ensembl_downloader_config": {
+                    "type": "string",
+                    "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/conf/ensembl_downloader_config.yaml",
+                    "description": "Path to configuration file for ENSEMBL download parameters"
+                },
+                "ensembl_config": {
+                    "type": "string",
+                    "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/conf/ensembl_config.yaml",
+                    "description": "Path to configuration file for parameters in generating protein databases from ENSMEBL sequences"
+                },
+                "gencode_url": {
+                    "type": "string",
+                    "default": "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19",
+                    "description": "URL for downloading GENCODE datafiles"
+                },
+                "taxonomy": {
+                    "type": "integer",
+                    "default": 9606,
+                    "description": "Taxonomy for the species to download ENSEMBL"
+                }
+            }
+        },
+        "non_canonical_proteome_parameters": {
+            "title": "Non canonical proteome parameters",
+            "type": "object",
+            "description": "Non canonical proteins generation parameters",
+            "default": "",
+            "properties": {
+                "ncrna": {
+                    "type": "boolean",
+                    "description": "Generate protein database from non-coding RNA"
+                },
+                "pseudogenes": {
+                    "type": "boolean",
+                    "description": "Generate protein database from pseudogenes"
+                },
+                "altorfs": {
+                    "type": "boolean",
+                    "description": "Generate alternative ORFs from canonical proteins"
+                },
+                "biotypes": {
+                    "type": "string",
+                    "default": "[protein_coding:'protein_coding,polymorphic_pseudogene,non_stop_decay,nonsense_mediated_decay,IG_C_gene,IG_D_gene,IG_J_gene,IG_V_gene,TR_C_gene,TR_D_gene,TR_J_gene,TR_V_gene,TEC', pseudogene:'pseudogene,IG_C_pseudogene,IG_J_pseudogene,IG_V_pseudogene,IG_pseudogene,TR_V_pseudogene,TR_J_pseudogene,processed_pseudogene,rRNA_pseudogene,transcribed_processed_pseudogene,transcribed_unitary_pseudogene,transcribed_unprocessed_pseudogene,translated_unprocessed_pseudogene,unitary_pseudogene,unprocessed_pseudogene,translated_processed_pseudogene', ncRNA:'lncRNA,Mt_rRNA,Mt_tRNA,miRNA,misc_RNA,rRNA,retained_intron,ribozyme,sRNA,scRNA,scaRNA,snRNA,snoRNA,vaultRNA']"
+                },
+                "ensembl": {
+                    "type": "boolean",
+                    "description": "Download ENSEMBL variants and generate protein database"
+                }
+            }
+        },
+        "custom_vcf_based_variant_proteomes": {
+            "title": "Custom VCF-based variant proteomes",
+            "type": "object",
+            "description": "Proteins generated using an input VCF",
+            "default": "",
+            "properties": {
+                "vcf": {
+                    "type": "boolean",
+                    "description": "Enable translation of a given VCF file"
+                },
+                "vcf_file": {
+                    "type": "string",
+                    "description": "VCF file path to be translated. Generate variants proteins by modifying sequences of affected transcripts."
+                },
+                "af_field": {
+                    "type": "string",
+                    "description": "Allele frequency identifier string in VCF Info column, if no AF info is given set it to empty."
+                }
+            }
+        },
+        "cbioportal_variant_proteomes": {
+            "title": "cBioportal variant proteomes",
+            "type": "object",
+            "description": "cBioportal variant parameters",
+            "default": "",
+            "properties": {
+                "cbioportal": {
+                    "type": "boolean",
+                    "description": "Download cBioPortal studies and generate protein database"
+                },
+                "cbioportal_accepted_values": {
+                    "type": "string",
+                    "default": "all",
+                    "description": "Specify a tissue type to limit the cBioPortal mutations to a particular caner type"
+                },
+                "cbioportal_filter_column": {
+                    "type": "string",
+                    "default": "CANCER_TYPE",
+                    "description": "Specify a column from the clinical sample file to be used for filtering records"
+                },
+                "cbioportal_study_id": {
+                    "type": "string",
+                    "description": "Download mutations from a specific study in cbiportal default is all which downloads mutations from all studies"
+                },
+                "cbioportal_config": {
+                    "type": "string",
+                    "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/conf/cbioportal_config.yaml"
+                }
+            }
+        },
+        "cosmic_variant_proteomes": {
+            "title": "COSMIC variant proteomes",
+            "type": "object",
+            "description": "COSMIC variant proteins parameters",
+            "default": "",
+            "properties": {
+                "cosmic": {
+                    "type": "boolean",
+                    "description": "Download COSMIC mutation files and generate protein database"
+                },
+                "cosmic_celllines": {
+                    "type": "string",
+                    "description": "Download COSMIC cell line files and generate protein database"
+                },
+                "cosmic_user_name": {
+                    "type": "string",
+                    "description": "User name (or email) for COSMIC account"
+                },
+                "cosmic_password": {
+                    "type": "string",
+                    "description": "Password for COSMIC account"
+                },
+                "cosmic_config": {
+                    "type": "string",
+                    "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/conf/cosmic_config.yaml",
+                    "description": "Path to configuration file for parameters in generating"
+                },
+                "cosmic_cancer_type": {
+                    "type": "string",
+                    "default": "all",
+                    "description": "Specify a tissue type to limit the COSMIC mutations to a particular caner type"
+                },
+                "cosmic_cellline_name": {
+                    "type": "string",
+                    "default": "all",
+                    "description": "Specify a sample name to limit the COSMIC cell line mutations to a particular  cell line"
+                }
+            }
+        },
+        "gnomad_variant_proteomes": {
+            "title": "GNOMAD variant proteomes",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "gnomad": {
+                    "type": "boolean"
+                },
+                "gnomad_file_url": {
+                    "type": "string",
+                    "default": "gs://gnomad-public/release/2.1.1/vcf/exomes/gnomad.exomes.r2.1.1.sites.vcf.bgz"
+                }
+            }
+        },
+        "decoy_generation": {
+            "title": "Decoy generation",
+            "type": "object",
+            "description": "Generate decoy proteins and attach them to the final protein database",
+            "default": "",
+            "properties": {
+                "decoy": {
+                    "type": "boolean",
+                    "description": "Append the decoy proteins to the database"
+                },
+                "decoy_prefix": {
+                    "type": "string",
+                    "default": "Decoy_",
+                    "description": "String to be used as prefix for the generated decoy sequences"
+                },
+                "decoy_method": {
+                    "type": "string",
+                    "default": "decoypyrat",
+                    "description": "Method used to generate the decoy database ['protein-reverse', 'protein-shuffle', 'decoypyrat']"
+                },
+                "decoy_enzyme": {
+                    "type": "string",
+                    "default": "Trypsin",
+                    "description": "Enzyme used to generate the decoy"
+                },
+                "protein_decoy_config": {
+                    "type": "string",
+                    "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/conf/protein_decoy.yaml"
+                }
+            }
+        },
+        "clean_and_process_database": {
+            "title": "Clean and process database",
+            "type": "object",
+            "description": "Clean and process the resulted database",
+            "default": "",
+            "properties": {
+                "clean_database": {
+                    "type": "boolean",
+                    "description": "Clean the database for stop codons, short protein sequences,"
+                },
+                "minimum_aa": {
+                    "type": "integer",
+                    "default": 6,
+                    "description": "Minimum number of AminoAcids for a protein to be included in the database"
+                },
+                "add_stop_codons": {
+                    "type": "string",
+                    "default": "true",
+                    "description": "If an stop codons is found, create two proteins from it"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -14,6 +232,12 @@
                 "input"
             ],
             "properties": {
+                "input": {
+                    "type": "string",
+                    "fa_icon": "fas fa-dna",
+                    "description": "Input FastQ files.",
+                    "help_text": "Use this to specify the location of your input FastQ files. For example:\n\n```bash\n--input 'path/to/data/sample_*_{1,2}.fastq'\n```\n\nPlease note the following requirements:\n\n1. The path must be enclosed in quotes\n2. The path must have at least one `*` wildcard character\n3. When using the pipeline with paired end data, the path must use `{1,2}` notation to specify read pairs.\n\nIf left unspecified, a default pattern is used: `data/*{1,2}.fastq.gz`"
+                },
                 "outdir": {
                     "type": "string",
                     "description": "The output directory where the results will be saved.",
@@ -26,14 +250,18 @@
                     "fa_icon": "fas fa-envelope",
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+                },
+                "root_folder": {
+                    "type": "string"
+                },
+                "final_database_protein": {
+                    "type": "string",
+                    "default": "final_proteinDB.fa"
+                },
+                "push_s3": {
+                    "type": "string"
                 }
             }
-        },
-        "reference_genome_options": {
-            "title": "Reference genome options",
-            "type": "object",
-            "fa_icon": "fas fa-dna",
-            "description": "Options for the reference genome indices used to align reads."
         },
         "generic_options": {
             "title": "Generic options",
@@ -63,13 +291,6 @@
                         "copyNoFollow",
                         "move"
                     ]
-                },
-                "name": {
-                    "type": "string",
-                    "description": "Workflow name.",
-                    "fa_icon": "fas fa-fingerprint",
-                    "hidden": true,
-                    "help_text": "A custom name for the pipeline run. Unlike the core nextflow `-name` option with one hyphen this parameter can be reused multiple times, for example if using `-resume`. Passed through to steps such as MultiQC and used for things like report filenames and titles."
                 },
                 "email_on_fail": {
                     "type": "string",
@@ -130,6 +351,7 @@
                     "description": "Maximum amount of memory that can be requested for any single job.",
                     "default": "128.GB",
                     "fa_icon": "fas fa-memory",
+                    "pattern": "^[\\d\\.]+\\s*.(K|M|G|T)?B$",
                     "hidden": true,
                     "help_text": "Use to set an upper-limit for the memory requirement for each process. Should be a string in the format integer-unit e.g. `--max_memory '8.GB'`"
                 },
@@ -138,6 +360,7 @@
                     "description": "Maximum amount of time that can be requested for any single job.",
                     "default": "240.h",
                     "fa_icon": "far fa-clock",
+                    "pattern": "^(\\d+(\\.\\d+)?(?:\\s*|\\.?)(s|m|h|d)\\s*)+$",
                     "hidden": true,
                     "help_text": "Use to set an upper-limit for the time requirement for each process. Should be a string in the format integer-unit e.g. `--max_time '2.h'`"
                 }
@@ -195,10 +418,31 @@
     },
     "allOf": [
         {
-            "$ref": "#/definitions/input_output_options"
+            "$ref": "#/definitions/ensembl_canonical_proteomes"
         },
         {
-            "$ref": "#/definitions/reference_genome_options"
+            "$ref": "#/definitions/non_canonical_proteome_parameters"
+        },
+        {
+            "$ref": "#/definitions/custom_vcf_based_variant_proteomes"
+        },
+        {
+            "$ref": "#/definitions/cbioportal_variant_proteomes"
+        },
+        {
+            "$ref": "#/definitions/cosmic_variant_proteomes"
+        },
+        {
+            "$ref": "#/definitions/gnomad_variant_proteomes"
+        },
+        {
+            "$ref": "#/definitions/decoy_generation"
+        },
+        {
+            "$ref": "#/definitions/clean_and_process_database"
+        },
+        {
+            "$ref": "#/definitions/input_output_options"
         },
         {
             "$ref": "#/definitions/generic_options"
@@ -211,158 +455,13 @@
         }
     ],
     "properties": {
-        "root_folder": {
-            "type": "string"
-        },
         "local_input_type": {
-            "type": "string"
-        },
-        "ncrna": {
             "type": "string",
-            "default": "true"
-        },
-        "pseudogenes": {
-            "type": "string",
-            "default": "true"
-        },
-        "altorfs": {
-            "type": "string",
-            "default": "true"
-        },
-        "cbioportal": {
-            "type": "string",
-            "default": "true"
-        },
-        "cosmic": {
-            "type": "string",
-            "default": "true"
-        },
-        "cosmic_celllines": {
-            "type": "string",
-            "default": "true"
-        },
-        "ensembl": {
-            "type": "string",
-            "default": "true"
-        },
-        "gnomad": {
-            "type": "string",
-            "default": "true"
-        },
-        "decoy": {
-            "type": "string",
-            "default": "true"
-        },
-        "push_s3": {
-            "type": "string"
-        },
-        "add_reference": {
-            "type": "string",
-            "default": "true"
-        },
-        "cosmic_user_name": {
-            "type": "string"
-        },
-        "cosmic_password": {
-            "type": "string"
-        },
-        "ensembl_downloader_config": {
-            "type": "string",
-            "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/configs/ensembl_downloader_config.yaml"
-        },
-        "ensembl_config": {
-            "type": "string",
-            "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/configs/ensembl_config.yaml"
-        },
-        "cosmic_config": {
-            "type": "string",
-            "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/configs/cosmic_config.yaml"
-        },
-        "cbioportal_config": {
-            "type": "string",
-            "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/configs/cbioportal_config.yaml"
-        },
-        "protein_decoy_config": {
-            "type": "string",
-            "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/configs/protein_decoy.yaml"
-        },
-        "taxonomy": {
-            "type": "integer",
-            "default": 9606
-        },
-        "biotypes": {
-            "type": "string",
-            "default": "[protein_coding:'protein_coding,polymorphic_pseudogene,non_stop_decay,nonsense_mediated_decay,IG_C_gene,IG_D_gene,IG_J_gene,IG_V_gene,TR_C_gene,TR_D_gene,TR_J_gene,TR_V_gene,TEC', pseudogene:'pseudogene,IG_C_pseudogene,IG_J_pseudogene,IG_V_pseudogene,IG_pseudogene,TR_V_pseudogene,TR_J_pseudogene,processed_pseudogene,rRNA_pseudogene,transcribed_processed_pseudogene,transcribed_unitary_pseudogene,transcribed_unprocessed_pseudogene,translated_unprocessed_pseudogene,unitary_pseudogene,unprocessed_pseudogene,translated_processed_pseudogene', ncRNA:'lncRNA,Mt_rRNA,Mt_tRNA,miRNA,misc_RNA,rRNA,retained_intron,ribozyme,sRNA,scRNA,scaRNA,snRNA,snoRNA,vaultRNA']"
-        },
-        "cosmic_cellline_name": {
-            "type": "string",
-            "default": "all"
+            "hidden": true
         },
         "split_by_filter_column": {
-            "type": "string"
-        },
-        "af_field": {
-            "type": "string"
-        },
-        "final_database_protein": {
             "type": "string",
-            "default": "final_proteinDB.fa"
-        },
-        "decoy_prefix": {
-            "type": "string",
-            "default": "decoy_"
-        },
-        "gencode_url": {
-            "type": "string",
-            "default": "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19"
-        },
-        "gnomad_file_url": {
-            "type": "string",
-            "default": "gs://gnomad-public/release/2.1.1/vcf/exomes/gnomad.exomes.r2.1.1.sites.vcf.bgz"
-        },
-        "input": {
-            "type": "string",
-            "default": "foobarbaz"
-        },
-        "clean_database": {
-            "type": "string"
-        },
-        "minimum_aa": {
-            "type": "integer",
-            "default": 6
-        },
-        "add_stop_codons": {
-            "type": "string",
-            "default": "true"
-        },
-        "cosmic_cancer_type": {
-            "type": "string",
-            "default": "all"
-        },
-        "cbioportal_accepted_values": {
-            "type": "string",
-            "default": "all"
-        },
-        "cbioportal_filter_column": {
-            "type": "string",
-            "default": "CANCER_TYPE"
-        },
-        "decoy_method": {
-            "type": "string",
-            "default": "decoypyrat"
-        },
-        "decoy_enzyme": {
-            "type": "string",
-            "default": "Trypsin"
-        },
-        "cbioportal_study_id": {
-            "type": "string"
-        },
-        "vcf": {
-            "type": "string"
-        },
-        "vcf_file": {
-            "type": "string"
+            "hidden": true
         }
     }
 }
