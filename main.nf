@@ -4,7 +4,7 @@
 ========================================================================================
                          nf-core/pgdb
 ========================================================================================
- nf-core/pgdb Analysensembl_downloader_configis Pipeline.
+ nf-core/pgdb.
  #### Homepage / Documentation
  https://github.com/nf-core/pgdb
 ----------------------------------------------------------------------------------------
@@ -710,10 +710,10 @@ Channel.from(summary.collect{ [it.key, it.value] })
     .map { k,v -> "<dt>$k</dt><dd><samp>${v ?: '<span style=\"color:#999999;\">N/A</a>'}</samp></dd>" }
     .reduce { a, b -> return [a, b].join("\n            ") }
     .map { x -> """
-    id: 'nf-core-proteomicslfq-summary'
+    id: 'nf-core-pgdb-summary'
     description: " - this information is collected when the pipeline is started."
-    section_name: 'nf-core/proteomicslfq Workflow Summary'
-    section_href: 'https://github.com/nf-core/proteomicslfq'
+    section_name: 'nf-core/pgdb Workflow Summary'
+    section_href: 'https://github.com/nf-core/pgdb'
     plot_type: 'html'
     data: |
         <dl class=\"dl-horizontal\">
