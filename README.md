@@ -60,6 +60,9 @@ nf-core/pgdb was originally written by Husen M. Umer & Yasset Perez-Riverol.
 We thank the following people for their extensive assistance in the development
 of this pipeline:
 
+- Yasset Perez-Riverol (EMBL-EBI)
+- Husen M. Umer (Karolinska Institute)
+
 ## Contributions and Support
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
