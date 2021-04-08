@@ -6,12 +6,12 @@ import re
 regexes = {
     "nf-core/pgdb": ["v_pipeline.txt", r"(\S+)"],
     "Nextflow": ["v_nextflow.txt", r"(\S+)"],
+    "pypgatk": ["v_pypgatk.txt", r"(\S+)"],
 }
 results = OrderedDict()
 results["nf-core/pgdb"] = '<span style="color:#999999;">N/A</span>'
 results["Nextflow"] = '<span style="color:#999999;">N/A</span>'
-results["FastQC"] = '<span style="color:#999999;">N/A</span>'
-results["MultiQC"] = '<span style="color:#999999;">N/A</span>'
+results["pypgatk"] = '<span style="color:#999999;">N/A</span>'
 
 # Search each file using its regex
 for k, v in regexes.items():
