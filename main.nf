@@ -10,111 +10,24 @@
 ----------------------------------------------------------------------------------------
 */
 
-def helpMessage() {
-    log.info nfcoreHeader()
-    log.info """
+log.info Headers.nf_core(workflow, params.monochrome_logs)
 
-    Usage:
-
-    The typical command for running the pipeline is as follows:
-
-    nextflow run nf-core/pgdb --ensembl_name homo_sapiens --ncrna false --pseudogenes false --altorfs false --ensembl false --gnomad false --cosmic false --cosmic_celllines false --cbioportal false --decoy false --add_reference true --vcf false
-
-    Main arguments:
-      --final_database_protein           Output file name for the final database protein fasta file under the outdir/ directory.
-      --help                             Print this help document
-
-    Database Generation:
-
-      For canonical proteomes:
-          --ensembl                          Download ENSEMBL variants and generate protein database [true | false] (default: false)
-          --add_reference                    Add the reference proteome to the file [true | false ] (default: true)
-          --ensembl_downloader_config        Path to configuration file for ENSEMBL download parameters
-          --ensembl_config                   Path to configuration file for parameters in generating
-                                             protein databases from ENSMEBL sequences
-          --taxonomy                         Taxonomy (Taxon ID) for the species to download ENSEMBL data,
-                                             default is 9606 for humans. For the list of supported taxonomies see:
-                                               https://www.ensembl.org/info/about/species.html
-
-          --ensembl_name                     Ensembl Name is used to find the specific name in ENSEMBL for the taxonomy for download
-                                             The list can be found here: configs/ensembl_species.txt
-          --gencode_url                      URL for downloading GENCODE datafiles: gencode.v19.pc_transcripts.fa.gz and
-                                             gencode.v19.annotation.gtf.gz
-
-      For non canonical proteomes:
-          --ncrna                            Generate protein database from non-coding RNAs [true | false] (default: false)
-          --pseudogenes                      Generate protein database from pseudogenes [true | false] (default: false)
-          --altorfs                          Generate alternative ORFs from canonical proteins [true | false] (default: false)
-
-      For COSMIC variants:
-          --cosmic                           Download COSMIC mutation files and generate protein database [true | false] (default: false)
-          --cosmic_celllines                 Download COSMIC cell line files and generate protein database [true | false] (default: false)
-          --cosmic_config                    Path to configuration file for parameters in generating
-          --cosmic_cancer_type               Specify a tissue type to limit the COSMIC mutations to a particular caner type
-                                             (by default all tumor types are used)
-          --cosmic_cellline_name             Specify a sample name to limit the COSMIC cell line mutations to
-                                             a particular  cell line (by default all cell lines are used)
-          --cosmic_user_name                 User name (or email) for COSMIC account
-          --cosmic_password                  Password for COSMIC account
-
-      For cBioPortal proteins:
-          --cbioportal                       Download cBioPortal studies and genrate protein database [true | false] (default: false)
-          --cbioportal_config                Path to configuration file for parameters in generating
-          --cbioportal_accepted_values       Specify a tissue type to limit the cBioPortal mutations to
-                                             a particular caner type (by default all tumor types are used)
-          --cbioportal_filter_column         Specify a column from the clinical sample file to be used for filterring records
-                                             Only values listed in cbioportal_accepted_values parameter are included, default is CANCER_TYPE
-          --cbioportal_study_id              Download mutations from a specific study in cbiportal
-                                             default is all which downloads mutations from all studies
-
-      For gNOMAD proteins:
-          --gnomad                           Download gnomAD files and generate protein database [true | false] (default: false)
-          --gnomad_file_url                  URL for downloading gnomAD VCF file(s)
-
-
-      For custom VCF-based proteomes:
-          --vcf                              Enable translation of a given VCF file [true | false ] (default: false)
-          --af_field                         Allele frequency identifier string in VCF Info column, if no AF info is given set it to empty.
-                                             For human VCF files from ENSEMBL the default is set to MAF
-          --vcf_file                         VCF file path to be translated
-                                             Generate variants proteins by modifying sequences of affected transcripts.
-                                             In case of already annotated variants it only considers variants within
-                                             potential coding regions of the transcript (CDSs & stop codons for protein-coding genes, exons for non-protein coding genes)
-                                             In case of not annotated variants, it considers all variants overlapping CDSs
-
-    Decoy generation:
-      --decoy                            Append the decoy proteins to the database [true | false] (default: false)
-      --decoy_prefix                     String to be used as prefix for the generated decoy sequences
-      --decoy_method                     Method used to generate the decoy database ['protein-reverse', 'protein-shuffle', 'decoypyrat'](Default: decoypyrat)
-      --decoy_enzyme                     Enzyme used to generate the decoy (default: Trypsin)
-      --protein_decoy_config             Path to configuration file for parameters used in generating
-                                         decoy databases
-
-    Clean database:
-      --clean_database                   Clean the database for stop codons, short protein sequences, (default: false)
-      --minimum_aa                       Minimum number of AminoAcids for a protein to be included in the database (default: 6)
-      --add_stop_codons                  If an stop codons is found, create two proteins from it (default: true)
-
-    Output parameters:
-      --publish_dir_mode [str]           Mode for publishing results in the output directory. Available:
-                                         symlink, rellink, link, copy, copyNoFollow, move (Default: copy)
-      --outdir                           Output folder for the results by default is $baseDir/result
-      --email [email]                    Set this parameter to your e-mail address to get a summary e-mail with
-                                         details of the run sent to you when the workflow exits
-      --email_on_fail [email]            Same as --email, except only send mail if the workflow is not successful
-      -name [str]                        Name for the pipeline run. If not specified, Nextflow will automatically generate a random
-
-    AWSBatch options:
-      --awsqueue [str]                The AWSBatch JobQueue that needs to be set when running on AWSBatch
-      --awsregion [str]               The AWS Region for your AWS Batch job to run on
-      --awscli [str]                  Path to the AWS CLI tool
-    """.stripIndent()
+////////////////////////////////////////////////////
+/* --               PRINT HELP                 -- */
+////////////////////////////////////////////////////+
+def json_schema = "$projectDir/nextflow_schema.json"
+if (params.help) {
+    def command = "nextflow run nf-core/pgdb -profile test,docker"
+    log.info NfcoreSchema.params_help(workflow, params, json_schema, command)
+    exit 0
 }
 
-// Show help message
-if (params.help){
-    helpMessage()
-    exit 0
+////////////////////////////////////////////////////
+/* --         VALIDATE PARAMETERS              -- */
+////////////////////////////////////////////////////+
+
+if (params.validate_params) {
+    NfcoreSchema.validateParameters(params, json_schema, log)
 }
 
 /*
