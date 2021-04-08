@@ -24,82 +24,76 @@ def helpMessage() {
       --final_database_protein           Output file name for the final database protein fasta file under the outdir/ directory.
       --help                             Print this help document
 
-    Process flags:
-      --ncrna                            Generate protein database from non-coding RNAs [true | false] (default: false)
-      --pseudogenes                      Generate protein database from pseudogenes [true | false] (default: false)
-      --altorfs                          Generate alternative ORFs from canonical proteins [true | false] (default: false)
-      --cbioportal                       Download cBioPortal studies and genrate protein database [true | false] (default: false)
-      --cosmic                           Download COSMIC mutation files and generate protein database [true | false] (default: false)
-      --cosmic_celllines                 Download COSMIC cell line files and generate protein database [true | false] (default: false)
-      --ensembl                          Download ENSEMBL variants and generate protein database [true | false] (default: false)
-      --gnomad                           Download gnomAD files and generate protein database [true | false] (default: false)
+    Database Generation:
+
+      For canonical proteomes:
+          --ensembl                          Download ENSEMBL variants and generate protein database [true | false] (default: false)
+          --add_reference                    Add the reference proteome to the file [true | false ] (default: true)
+          --ensembl_downloader_config        Path to configuration file for ENSEMBL download parameters
+          --ensembl_config                   Path to configuration file for parameters in generating
+                                             protein databases from ENSMEBL sequences
+          --taxonomy                         Taxonomy (Taxon ID) for the species to download ENSEMBL data,
+                                             default is 9606 for humans. For the list of supported taxonomies see:
+                                               https://www.ensembl.org/info/about/species.html
+
+          --ensembl_name                     Ensembl Name is used to find the specific name in ENSEMBL for the taxonomy for download
+                                             The list can be found here: configs/ensembl_species.txt
+          --gencode_url                      URL for downloading GENCODE datafiles: gencode.v19.pc_transcripts.fa.gz and
+                                             gencode.v19.annotation.gtf.gz
+
+      For non canonical proteomes:
+          --ncrna                            Generate protein database from non-coding RNAs [true | false] (default: false)
+          --pseudogenes                      Generate protein database from pseudogenes [true | false] (default: false)
+          --altorfs                          Generate alternative ORFs from canonical proteins [true | false] (default: false)
+
+      For COSMIC variants:
+          --cosmic                           Download COSMIC mutation files and generate protein database [true | false] (default: false)
+          --cosmic_celllines                 Download COSMIC cell line files and generate protein database [true | false] (default: false)
+          --cosmic_config                    Path to configuration file for parameters in generating
+          --cosmic_cancer_type               Specify a tissue type to limit the COSMIC mutations to a particular caner type
+                                             (by default all tumor types are used)
+          --cosmic_cellline_name             Specify a sample name to limit the COSMIC cell line mutations to
+                                             a particular  cell line (by default all cell lines are used)
+          --cosmic_user_name                 User name (or email) for COSMIC account
+          --cosmic_password                  Password for COSMIC account
+
+      For cBioPortal proteins:
+          --cbioportal                       Download cBioPortal studies and genrate protein database [true | false] (default: false)
+          --cbioportal_config                Path to configuration file for parameters in generating
+          --cbioportal_accepted_values       Specify a tissue type to limit the cBioPortal mutations to
+                                             a particular caner type (by default all tumor types are used)
+          --cbioportal_filter_column         Specify a column from the clinical sample file to be used for filterring records
+                                             Only values listed in cbioportal_accepted_values parameter are included, default is CANCER_TYPE
+          --cbioportal_study_id              Download mutations from a specific study in cbiportal
+                                             default is all which downloads mutations from all studies
+
+      For gNOMAD proteins:
+          --gnomad                           Download gnomAD files and generate protein database [true | false] (default: false)
+          --gnomad_file_url                  URL for downloading gnomAD VCF file(s)
 
 
-      --vcf                              Enable translation of a given VCF file [true | false ] (default: false)
-
-      --add_reference                    Add the reference proteome to the file [true | false ] (default: true)
-
-    Clean database:
-      --clean_database                   Clean the database for stop codons, short protein sequences, (default: false)
-      --minimum_aa                       Minimum number of AminoAcids for a protein to be included in the database (default: 6)
-      --add_stop_codons                  If an stop codons is found, create two proteins from it (default: true)
+      For custom VCF-based proteomes:
+          --vcf                              Enable translation of a given VCF file [true | false ] (default: false)
+          --af_field                         Allele frequency identifier string in VCF Info column, if no AF info is given set it to empty.
+                                             For human VCF files from ENSEMBL the default is set to MAF
+          --vcf_file                         VCF file path to be translated
+                                             Generate variants proteins by modifying sequences of affected transcripts.
+                                             In case of already annotated variants it only considers variants within
+                                             potential coding regions of the transcript (CDSs & stop codons for protein-coding genes, exons for non-protein coding genes)
+                                             In case of not annotated variants, it considers all variants overlapping CDSs
 
     Decoy generation:
       --decoy                            Append the decoy proteins to the database [true | false] (default: false)
       --decoy_prefix                     String to be used as prefix for the generated decoy sequences
       --decoy_method                     Method used to generate the decoy database ['protein-reverse', 'protein-shuffle', 'decoypyrat'](Default: decoypyrat)
       --decoy_enzyme                     Enzyme used to generate the decoy (default: Trypsin)
-
-    Configuration files:                 By default all config files are located in the configs directory.
-      --ensembl_downloader_config        Path to configuration file for ENSEMBL download parameters
-      --ensembl_config                   Path to configuration file for parameters in generating
-                                         protein databases from ENSMEBL sequences
-      --cosmic_config                    Path to configuration file for parameters in generating
-                                         protein databases from COSMIC mutations
-      --cbioportal_config                Path to configuration file for parameters in generating
-                                         protein databases from cBioPortal mutations
       --protein_decoy_config             Path to configuration file for parameters used in generating
                                          decoy databases
 
-    Database parameters:
-      --taxonomy                         Taxonomy (Taxon ID) for the species to download ENSEMBL data,
-                                         default is 9606 for humans. For the list of supported taxonomies see:
-                                           https://www.ensembl.org/info/about/species.html
-
-      --ensembl_name                     Ensembl Name is used to find the specific name in ENSEMBL for the taxonomy for download
-                                         The list can be found here: configs/ensembl_species.txt
-
-      --cosmic_cancer_type               Specify a tissue type to limit the COSMIC mutations to a particular caner type
-                                         (by default all tumor types are used)
-
-      --cosmic_cellline_name             Specify a sample name to limit the COSMIC cell line mutations to
-                                         a particular  cell line (by default all cell lines are used)
-
-      --cbioportal_accepted_values       Specify a tissue type to limit the cBioPortal mutations to
-                                         a particular caner type (by default all tumor types are used)
-      --cbioportal_filter_column         Specify a column from the clincal sample file to be used for filterring records
-                                         Only values listed in cbioportal_accepted_values parameter are included, default is CANCER_TYPE
-      --af_field                         Allele frequency identifier string in VCF Info column, if no AF info is given set it to empty.
-                                         For human VCF files from ENSEMBL the default is set to MAF
-
-    Data download parameters:
-      --cosmic_user_name                 User name (or email) for COSMIC account
-      --cosmic_password                  Password for COSMIC account
-                                         In order to be able to download COSMIC data, the user should
-                                         provide a user and password. Please first register in COSMIC
-                                         database (https://cancer.sanger.ac.uk/cosmic/register).
-      --cbioportal_study_id              Download mutations from a specific study in cbiportal
-                                         default is all which downloads mutations from all studies
-
-      --gencode_url                      URL for downloading GENCODE datafiles: gencode.v19.pc_transcripts.fa.gz and
-                                         gencode.v19.annotation.gtf.gz
-      --gnomad_file_url                  URL for downloading gnomAD VCF file(s)
-
-      --vcf_file                         VCF file path to be translated
-                                         Generate variants proteins by modifying sequences of affected transcripts.
-                                         In case of already annotated variants it only considers variants within
-                                         potential coding regions of the transcript (CDSs & stop codons for protein-coding genes, exons for non-protein coding genes)
-                                         In case of not annotated variants, it considers all variants overlapping CDSs
+    Clean database:
+      --clean_database                   Clean the database for stop codons, short protein sequences, (default: false)
+      --minimum_aa                       Minimum number of AminoAcids for a protein to be included in the database (default: 6)
+      --add_stop_codons                  If an stop codons is found, create two proteins from it (default: true)
 
     Output parameters:
       --publish_dir_mode [str]           Mode for publishing results in the output directory. Available:
