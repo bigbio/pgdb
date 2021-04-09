@@ -4,7 +4,7 @@
 ========================================================================================
                          nf-core/pgdb
 ========================================================================================
- nf-core/pgdb Analysensembl_downloader_configis Pipeline.
+ nf-core/pgdb Proteogenomics database generation
  #### Homepage / Documentation
  https://github.com/nf-core/pgdb
 ----------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ if (params.ensembl_name == "homo_sapiens"){
 
 // Pipeline checks
 if ((params.cosmic || params.cosmic_celllines) && (params.cosmic_user_name=="" || params.cosmic_password=="")){
-	exit 1, "User name and password has to be provided. In order to be able to download COSMIC data, the user should provide a user and password. Please first register in COSMIC database (https://cancer.sanger.ac.uk/cosmic/register)."
+	exit 1, "User name and password has to be provided. In order to be able to download COSMIC data. Please first register in COSMIC database (https://cancer.sanger.ac.uk/cosmic/register)."
 }
 
 // Pipeline OS-specific commands
@@ -98,7 +98,8 @@ process ensembl_fasta_download{
 
    script:
    """
-   pypgatk_cli.py ensembl-downloader --config_file ${ensembl_downloader_config} --ensembl_name ${params.ensembl_name} -sv -sc
+   pypgatk_cli.py ensembl-downloader --config_file ${ensembl_downloader_config} --ensembl_name ${params.ensembl_name} \\
+                  -sv -sc
    """
 }
 
@@ -158,7 +159,9 @@ process add_ncrna{
 
    script:
    """
-   pypgatk_cli.py dnaseq-to-proteindb --config_file "${ensembl_config}" --input_fasta ${x} --output_proteindb ncRNAs_proteinDB.fa --include_biotypes "${params.biotypes['ncRNA']}" --skip_including_all_cds --var_prefix ncRNA_
+   pypgatk_cli.py dnaseq-to-proteindb --config_file "${ensembl_config}" --input_fasta ${x} \\
+                  --output_proteindb ncRNAs_proteinDB.fa --include_biotypes "${params.biotypes['ncRNA']}" \\
+                  --skip_including_all_cds --var_prefix ncRNA_
    """
 }
 
@@ -183,7 +186,9 @@ process add_pseudogenes {
 
    script:
    """
-   pypgatk_cli.py dnaseq-to-proteindb --config_file "${ensembl_config}" --input_fasta "${x}" --output_proteindb pseudogenes_proteinDB.fa --include_biotypes "${params.biotypes['pseudogene']}" --skip_including_all_cds --var_prefix pseudo_
+   pypgatk_cli.py dnaseq-to-proteindb --config_file "${ensembl_config}" --input_fasta "${x}" \\
+                  --output_proteindb pseudogenes_proteinDB.fa --include_biotypes "${params.biotypes['pseudogene']}" \\
+                  --skip_including_all_cds --var_prefix pseudo_
    """
 }
 
@@ -208,7 +213,9 @@ process add_altorfs {
 
    script:
    """
-   pypgatk_cli.py dnaseq-to-proteindb --config_file "${ensembl_config}" --input_fasta "${x}" --output_proteindb altorfs_proteinDB.fa --include_biotypes "${params.biotypes['protein_coding']}'" --skip_including_all_cds --var_prefix altorf_
+   pypgatk_cli.py dnaseq-to-proteindb --config_file "${ensembl_config}" --input_fasta "${x}" \\
+                  --output_proteindb altorfs_proteinDB.fa --include_biotypes "${params.biotypes['protein_coding']}'" \\
+                  --skip_including_all_cds --var_prefix altorf_
    """
 }
 
@@ -235,7 +242,8 @@ process cosmic_download {
 
 	  script:
 	  """
-	  pypgatk_cli.py cosmic-downloader --config_file "${cosmic_config}" --username ${params.cosmic_user_name} --password ${params.cosmic_password}
+	  pypgatk_cli.py cosmic-downloader --config_file "${cosmic_config}" --username ${params.cosmic_user_name} \\
+	                 --password ${params.cosmic_password}
 	  """
 }
 
@@ -259,7 +267,9 @@ process cosmic_proteindb{
 
 	  script:
 	  """
-	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} --filter_column 'Histology subtype 1' --accepted_values ${params.cosmic_cancer_type} --output_db cosmic_proteinDB.fa
+	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} \\
+	                 --filter_column 'Histology subtype 1' --accepted_values ${params.cosmic_cancer_type} \\
+	                 --output_db cosmic_proteinDB.fa
 	  """
 }
 
@@ -285,7 +295,9 @@ process cosmic_celllines_proteindb{
 
 	  script:
 	  """
-	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} --filter_column 'Sample name' --accepted_values ${params.cosmic_cellline_name} --output_db cosmic_celllines_proteinDB.fa
+	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} \\
+	                 --filter_column 'Sample name' --accepted_values ${params.cosmic_cellline_name} \\
+	                 --output_db cosmic_celllines_proteinDB.fa
 	  """
 }
 
@@ -307,7 +319,8 @@ process ensembl_vcf_download{
 
    script:
    """
-   pypgatk_cli.py ensembl-downloader --config_file ${ensembl_downloader_config} --ensembl_name ${params.ensembl_name} -sg -sp -sc -sd -sn
+   pypgatk_cli.py ensembl-downloader --config_file ${ensembl_downloader_config} \\
+                  --ensembl_name ${params.ensembl_name} -sg -sp -sc -sd -sn
    """
 }
 
@@ -353,7 +366,9 @@ process ensembl_vcf_proteinDB {
 
    script:
    """
-   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${ensembl_af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf ${v} --output_proteindb "${v}_proteinDB.fa"  --var_prefix ensvar --annotation_field_name 'CSQ'
+   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${ensembl_af_field}" --input_fasta ${f} \\
+                  --gene_annotations_gtf ${g} --vcf ${v} --output_proteindb "${v}_proteinDB.fa"  \\
+                  --var_prefix ensvar --annotation_field_name 'CSQ'
    """
 }
 
@@ -407,8 +422,11 @@ process vcf_proteinDB {
 
    script:
    """
-   awk 'BEGIN{FS=OFS="\t"}{if(\$1=="chrM") \$1="MT"; gsub("chr","",\$1); print}' ${v} > ${v.baseName}_changedChrNames.vcf
-   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --input_fasta ${f} --gene_annotations_gtf ${g} --vcf ${v.baseName}_changedChrNames.vcf --output_proteindb ${v.baseName}_proteinDB.fa --annotation_field_name ''
+   awk 'BEGIN{FS=OFS="\t"}{if(\$1=="chrM") \$1="MT"; gsub("chr","",\$1); print}' \\
+       ${v} > ${v.baseName}_changedChrNames.vcf
+   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --af_field "${af_field}" --input_fasta ${f} \\
+                  --gene_annotations_gtf ${g} --vcf ${v.baseName}_changedChrNames.vcf \\
+                  --output_proteindb ${v.baseName}_proteinDB.fa --annotation_field_name ''
    """
 }
 
@@ -499,7 +517,9 @@ process gnomad_proteindb{
 
    script:
    """
-   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --vcf ${v} --input_fasta ${f} --gene_annotations_gtf ${g} --output_proteindb "${v}_proteinDB.fa" --af_field controls_AF --transcript_index 6 --annotation_field_name vep  --var_prefix gnomadvar
+   pypgatk_cli.py vcf-to-proteindb --config_file ${e} --vcf ${v} --input_fasta ${f} --gene_annotations_gtf ${g} \\
+                  --output_proteindb "${v}_proteinDB.fa" --af_field controls_AF --transcript_index 6 \\
+                  --annotation_field_name vep  --var_prefix gnomadvar
    """
 }
 
@@ -520,7 +540,7 @@ process cds_GRCh37_download{
    params.cbioportal
 
    output:
-   file("Homo_sapiens.GRCh37.75.cds.all.fa") into GRCh37_cds
+   file("Homo_sapiens.GRCh37.75.cds.all.fa") into ch_GRCh37_cds
 
    script:
    """
@@ -551,14 +571,28 @@ process cds_GRCh37_download{
         git lfs pull -I public --include "data_mutations_mskcc.txt"
         cd ..
         cat datahub/public/*/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
-        cat datahub/public/*/*data*clinical*sample.txt | awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; for(i=1;i<=NF;i++){if(\$i=="CANCER_TYPE_DETAILED") j=1; if(\$i=="CANCER_TYPE") s=1;} if(j==1 && s==0){gsub("CANCER_TYPE_DETAILED", "CANCER_TYPE");} print;}' > cbioportal_allstudies_data_clinical_sample.txt
+        cat datahub/public/*/*data*clinical*sample.txt | \\
+            awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | \\
+            awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; \\
+            for(i=1;i<=NF;i++){ \\
+               if(\$i=="CANCER_TYPE_DETAILED") j=1; \\
+               if(\$i=="CANCER_TYPE") s=1;} \\
+            if(j==1 && s==0){ \\
+              gsub("CANCER_TYPE_DETAILED", "CANCER_TYPE");} print;}' \\
+            > cbioportal_allstudies_data_clinical_sample.txt
         """
     else
         """
         pypgatk_cli.py cbioportal-downloader --config_file "${cbioportal_config}" -d "${params.cbioportal_study_id}"
         tar -xzvf database_cbioportal/${params.cbioportal_study_id}.tar.gz
         cat ${params.cbioportal_study_id}/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
-        cat ${params.cbioportal_study_id}/data_clinical_sample.txt | awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; for(i=1;i<=NF;i++){if(\$i=="CANCER_TYPE_DETAILED") j=1; if(\$i=="CANCER_TYPE") s=1;} if(j==1 && s==0){gsub("CANCER_TYPE_DETAILED", "CANCER_TYPE");} print;}' > cbioportal_allstudies_data_clinical_sample.txt
+        cat ${params.cbioportal_study_id}/data_clinical_sample.txt | \\
+            awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | \\
+            awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; \\
+            for(i=1;i<=NF;i++){ \\
+               if(\$i=="CANCER_TYPE_DETAILED") j=1; if(\$i=="CANCER_TYPE") s=1;} \\
+            if(j==1 && s==0){gsub("CANCER_TYPE_DETAILED", "CANCER_TYPE");} print;}' \\
+            > cbioportal_allstudies_data_clinical_sample.txt
         """
  }
 
@@ -573,7 +607,7 @@ process cds_GRCh37_download{
    params.cbioportal
 
    input:
-   file g from GRCh37_cds
+   file g from ch_GRCh37_cds
    file m from cbio_mutations
    file s from cbio_samples
    file cbioportal_config
@@ -583,7 +617,9 @@ process cds_GRCh37_download{
 
    script:
    """
-   pypgatk_cli.py cbioportal-to-proteindb --config_file ${cbioportal_config} --input_mutation ${m} --input_cds ${g} --clinical_sample_file ${s} --filter_column ${params.cbioportal_filter_column} --accepted_values ${params.cbioportal_accepted_values} --output_db cbioPortal_proteinDB.fa
+   pypgatk_cli.py cbioportal-to-proteindb --config_file ${cbioportal_config} --input_mutation ${m} --input_cds ${g} \\
+                  --clinical_sample_file ${s} --filter_column ${params.cbioportal_filter_column} \\
+                  --accepted_values ${params.cbioportal_accepted_values} --output_db cbioPortal_proteinDB.fa
    """
 }
 
@@ -632,7 +668,8 @@ process clean_protein_database {
 
    script:
    """
-   pypgatk_cli.py ensembl-check -in "${file}" --config_file "${e}" -out database_clean.fa --num_aa "${params.minimum_aa}" "${stop_codons}"
+   pypgatk_cli.py ensembl-check -in "${file}" --config_file "${e}" -out database_clean.fa \\
+                  --num_aa "${params.minimum_aa}" "${stop_codons}"
    """
 }
 
@@ -658,7 +695,9 @@ process decoy {
 
    script:
    """
-   pypgatk_cli.py generate-decoy --method "${params.decoy_method}" --enzyme "${params.decoy_enzyme}" --config_file ${protein_decoy_config} --input_database $f --decoy_prefix "${params.decoy_prefix}" --output_database decoy_database.fa
+   pypgatk_cli.py generate-decoy --method "${params.decoy_method}" --enzyme "${params.decoy_enzyme}" \\
+                  --config_file ${protein_decoy_config} --input_database $f --decoy_prefix "${params.decoy_prefix}" \\
+                  --output_database decoy_database.fa
    """
 }
 
