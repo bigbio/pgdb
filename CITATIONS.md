@@ -5,8 +5,8 @@
 * [Nextflow](https://www.ncbi.nlm.nih.gov/pubmed/28398311/)
   > Di Tommaso P, Chatzou M, Floden EW, Barja PP, Palumbo E, Notredame C. Nextflow enables reproducible computational workflows. Nat Biotechnol. 2017 Apr 11;35(4):316-319. doi: 10.1038/nbt.3820. PubMed PMID: 28398311.
 
-* [pypgatk](https://zenodo.org/record/4651319#.YHBsEBPdvUI)
-  > Yasset Perez-Riverol, & Husen M. Umer. (2021, March 31). bigbio/py-pgatk: Pre-release v0.0.19 (Version v0.0.19). Zenodo. http://doi.org/10.5281/zenodo.4651319
+* [pypgatk](https://zenodo.org/record/4651319)
+  > Yasset Perez-Riverol, & Husen M. Umer. (2021, March 31). py-pgatk: Pre-release v0.0.19 (Version v0.0.19). Zenodo.
 
 ## Data sources
 
