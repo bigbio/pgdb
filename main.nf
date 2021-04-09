@@ -4,7 +4,7 @@
 ========================================================================================
                          nf-core/pgdb
 ========================================================================================
- nf-core/pgdb.
+ nf-core/pgdb Proteogenomics database generation
  #### Homepage / Documentation
  https://github.com/nf-core/pgdb
 ----------------------------------------------------------------------------------------
@@ -520,7 +520,7 @@ process cds_GRCh37_download{
    params.cbioportal
 
    output:
-   file("Homo_sapiens.GRCh37.75.cds.all.fa") into GRCh37_cds
+   file("Homo_sapiens.GRCh37.75.cds.all.fa") into ch_GRCh37_cds
 
    script:
    """
@@ -573,7 +573,7 @@ process cds_GRCh37_download{
    params.cbioportal
 
    input:
-   file g from GRCh37_cds
+   file g from ch_GRCh37_cds
    file m from cbio_mutations
    file s from cbio_samples
    file cbioportal_config
