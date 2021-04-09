@@ -42,7 +42,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
    nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --ncrna true --pseudogenes true --altorfs true
 ```
 
-This will create a proteogenomics database with the ENSEMBL reference proteome and non canonical proteins like pseudo genes, non coding rnas or alternative open reading frames.
+> This will create a proteogenomics database with the ENSEMBL reference proteome and non canonical proteins like pseudo genes, non coding rnas or alternative open reading frames.
 
 See [usage docs](https://nf-co.re/pgdb/usage) for all of the available options when running the pipeline.
 
