@@ -31,9 +31,10 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 3. Download the pipeline and test it on a minimal dataset with a single command:
 
 ```bash
-nextflow run nf-core/pgdb -profile test,<docker/singularity/podman/conda/institute>
+   nextflow run nf-core/pgdb -profile test,<docker/singularity/podman/conda/institute>
 ```
-This run will download the canonical ENSEMBL reference proteome and create protemics database with it.
+
+This run will download the canonical ENSEMBL reference proteome and create proteomics database with it.
 
 > Please check [nf-core/configs](https://github.com/nf-core/configs#documentation) to see if a custom config file to run nf-core pipelines already exists for your Institute. If so, you can simply use `-profile <institute>` in your command. This will enable either `docker` or `singularity` and set the appropriate execution settings for your local compute environment.
 
@@ -84,4 +85,3 @@ You can cite the `nf-core` publication as follows:
 >
 > _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).
 > ReadCube: [Full Access Link](https://rdcu.be/b1GjZ)
-
