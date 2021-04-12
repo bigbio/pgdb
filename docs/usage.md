@@ -9,7 +9,7 @@
 General usage:
 
 ```bash
-nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --ensembl_name homo_sapines --ensembl false
+nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --ensembl_name homo_sapiens
 ```
 
 ## Running the pipeline
