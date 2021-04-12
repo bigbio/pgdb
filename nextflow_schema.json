@@ -256,9 +256,6 @@
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
                 },
-                "root_folder": {
-                    "type": "string"
-                },
                 "final_database_protein": {
                     "type": "string",
                     "default": "final_proteinDB.fa"
@@ -460,10 +457,6 @@
         }
     ],
     "properties": {
-        "local_input_type": {
-            "type": "string",
-            "hidden": true
-        },
         "split_by_filter_column": {
             "type": "string",
             "hidden": true
