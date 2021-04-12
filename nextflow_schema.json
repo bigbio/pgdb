@@ -188,7 +188,12 @@
                 "decoy_method": {
                     "type": "string",
                     "default": "decoypyrat",
-                    "description": "Method used to generate the decoy database ['protein-reverse', 'protein-shuffle', 'decoypyrat']"
+                    "description": "Method used to generate the decoy database ['protein-reverse', 'protein-shuffle', 'decoypyrat']",
+                    "enum": [
+                        "protein-reverse",
+                        "protein-shuffle",
+                        "decoypyrat"
+                    ]
                 },
                 "decoy_enzyme": {
                     "type": "string",
