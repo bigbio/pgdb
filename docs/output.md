@@ -32,15 +32,15 @@ The pipeline will download the the ENSEMBL protein reference proteome, this will
 
 The Ensembl non canonical includes the pseudogenes, lncRNAs, etc. The accessions of each type of kind of novel protein is predefined by the [pypgatk tool](https://github.com/bigbio/py-pgatk)
 
-- ncRNA_ENST00000456688 - non coding RNA transcript.
-- altorf_ENST00000310473 - alternative open reading frame
-- pseudo_ENST00000436135 - pseudo gene translation
+* ncRNA_ENST00000456688 - non coding RNA transcript.
+* altorf_ENST00000310473 - alternative open reading frame
+* pseudo_ENST00000436135 - pseudo gene translation
 
 ## Variants
 
 The COSMIC or cBioPortal variants are downloaded automatically from these resources. The accessions of those proteins are:
 
-- COSMIC:ANXA3_ENST00000503570:p.A67T:Substitution-Missense - Accession of the protein includes the position of the aminoacid variant.
+* COSMIC:ANXA3_ENST00000503570:p.A67T:Substitution-Missense - Accession of the protein includes the position of the aminoacid variant.
 
 ## Decoy
 
@@ -50,4 +50,4 @@ Decoy can be added to the final database. Decoys accessions are prefix with `DEC
 
  /fasta_database.fa
 
- The FASTA database including all the protein sequences including the reference proteomes, variants, pseudo-genes, etc.
+The FASTA database including all the protein sequences including the reference proteomes, variants, pseudo-genes, etc.
