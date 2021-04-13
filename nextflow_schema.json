@@ -30,8 +30,8 @@
                     "description": "URL for downloading GENCODE datafiles"
                 },
                 "taxonomy": {
-                    "type": "integer",
-                    "default": 9606,
+                    "type": "string",
+                    "default": "9606",
                     "description": "Taxonomy for the species to download ENSEMBL"
                 }
             }
@@ -215,8 +215,7 @@
                     "description": "Minimum number of AminoAcids for a protein to be included in the database"
                 },
                 "add_stop_codons": {
-                    "type": "string",
-                    "default": "true",
+                    "type": "boolean",
                     "description": "If an stop codons is found, create two proteins from it"
                 }
             }
@@ -226,15 +225,13 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": [
-                "input"
-            ],
             "properties": {
                 "input": {
                     "type": "string",
                     "fa_icon": "fas fa-dna",
-                    "description": "Input FastQ files.",
-                    "help_text": "Use this to specify the location of your input FastQ files. For example:\n\n```bash\n--input 'path/to/data/sample_*_{1,2}.fastq'\n```\n\nPlease note the following requirements:\n\n1. The path must be enclosed in quotes\n2. The path must have at least one `*` wildcard character\n3. When using the pipeline with paired end data, the path must use `{1,2}` notation to specify read pairs.\n\nIf left unspecified, a default pattern is used: `data/*{1,2}.fastq.gz`"
+                    "description": "Input files.",
+                    "help_text": "Use this to specify the location of your input files. For example:\n\n```bash\n--input 'path/to/data/sample_*_{1,2}.fastq'\n```\n\nPlease note the following requirements:\n\n1. The path must be enclosed in quotes\n2. The path must have at least one `*` wildcard character\n3. When using the pipeline with paired end data, the path must use `{1,2}` notation to specify read pairs.\n\nIf left unspecified, a default pattern is used: `data/*{1,2}.fastq.gz`",
+                    "hidden": true
                 },
                 "outdir": {
                     "type": "string",
@@ -323,6 +320,15 @@
                     "description": "Directory to keep pipeline Nextflow logs and reports.",
                     "default": "${params.outdir}/pipeline_info",
                     "fa_icon": "fas fa-cogs",
+                    "hidden": true
+                },
+                "validate_params": {
+                    "type": "boolean",
+                    "default": true,
+                    "hidden": true
+                },
+                "show_hidden_params": {
+                    "type": "string",
                     "hidden": true
                 }
             }
