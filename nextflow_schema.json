@@ -18,12 +18,10 @@
                 },
                 "ensembl_downloader_config": {
                     "type": "string",
-                    "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/conf/ensembl_downloader_config.yaml",
                     "description": "Path to configuration file for ENSEMBL download parameters"
                 },
                 "ensembl_config": {
                     "type": "string",
-                    "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/conf/ensembl_config.yaml",
                     "description": "Path to configuration file for parameters in generating protein databases from ENSMEBL sequences"
                 },
                 "gencode_url": {
@@ -112,7 +110,7 @@
                 },
                 "cbioportal_config": {
                     "type": "string",
-                    "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/conf/cbioportal_config.yaml"
+                    "description": "cBioPortal configuration file"
                 }
             }
         },
@@ -140,7 +138,6 @@
                 },
                 "cosmic_config": {
                     "type": "string",
-                    "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/conf/cosmic_config.yaml",
                     "description": "Path to configuration file for parameters in generating"
                 },
                 "cosmic_cancer_type": {
@@ -202,7 +199,7 @@
                 },
                 "protein_decoy_config": {
                     "type": "string",
-                    "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/conf/protein_decoy.yaml"
+                    "description": "Configuration file to perform the decoy generation"
                 }
             }
         },
@@ -258,7 +255,8 @@
                 },
                 "final_database_protein": {
                     "type": "string",
-                    "default": "final_proteinDB.fa"
+                    "default": "final_proteinDB.fa",
+                    "description": "The final protein database generated"
                 },
                 "push_s3": {
                     "type": "string"
