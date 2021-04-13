@@ -54,10 +54,6 @@
                     "type": "boolean",
                     "description": "Generate alternative ORFs from canonical proteins"
                 },
-                "biotypes": {
-                    "type": "string",
-                    "default": "[protein_coding:'protein_coding,polymorphic_pseudogene,non_stop_decay,nonsense_mediated_decay,IG_C_gene,IG_D_gene,IG_J_gene,IG_V_gene,TR_C_gene,TR_D_gene,TR_J_gene,TR_V_gene,TEC', pseudogene:'pseudogene,IG_C_pseudogene,IG_J_pseudogene,IG_V_pseudogene,IG_pseudogene,TR_V_pseudogene,TR_J_pseudogene,processed_pseudogene,rRNA_pseudogene,transcribed_processed_pseudogene,transcribed_unitary_pseudogene,transcribed_unprocessed_pseudogene,translated_unprocessed_pseudogene,unitary_pseudogene,unprocessed_pseudogene,translated_processed_pseudogene', ncRNA:'lncRNA,Mt_rRNA,Mt_tRNA,miRNA,misc_RNA,rRNA,retained_intron,ribozyme,sRNA,scRNA,scaRNA,snRNA,snoRNA,vaultRNA']"
-                },
                 "ensembl": {
                     "type": "boolean",
                     "description": "Download ENSEMBL variants and generate protein database"
@@ -453,11 +449,5 @@
         {
             "$ref": "#/definitions/institutional_config_options"
         }
-    ],
-    "properties": {
-        "split_by_filter_column": {
-            "type": "string",
-            "hidden": true
-        }
-    }
+    ]
 }
