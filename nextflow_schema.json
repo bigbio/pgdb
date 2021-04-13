@@ -326,6 +326,10 @@
                     "type": "boolean",
                     "default": true,
                     "hidden": true
+                },
+                "show_hidden_params": {
+                    "type": "string",
+                    "hidden": true
                 }
             }
         },
