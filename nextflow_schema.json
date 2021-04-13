@@ -325,8 +325,8 @@
                     "hidden": true
                 },
                 "validate_params": {
-                    "type": "string",
-                    "default": "true",
+                    "type": "boolean",
+                    "default": true,
                     "hidden": true
                 },
                 "show_hidden_params": {
