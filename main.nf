@@ -70,6 +70,10 @@ if ((params.cosmic || params.cosmic_celllines) && (params.cosmic_user_name=="" |
 //---------------------- Nextflow specifics --------------------- //
 //--------------------------------------------------------------- //
 
+////////////////////////////////////////////////////
+/* --         PRINT PARAMETER SUMMARY          -- */
+////////////////////////////////////////////////////
+log.info NfcoreSchema.params_summary_log(workflow, params, json_schema)
 
 // Header log info
 def summary = [:]
@@ -96,8 +100,6 @@ if (params.email || params.email_on_fail) {
     summary['E-mail Address']    = params.email
     summary['E-mail on failure'] = params.email_on_fail
 }
-log.info summary.collect { k,v -> "${k.padRight(18)}: $v" }.join("\n")
-log.info "-\033[2m--------------------------------------------------\033[0m-"
 
 // Check the hostnames against configured profiles
 checkHostname()
