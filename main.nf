@@ -34,13 +34,6 @@ if (params.validate_params) {
  * SET UP CONFIGURATION VARIABLES
  */
 
-// Has the run name been specified by the user?
-// this has the bonus effect of catching both -name and --name
-custom_runName = params.name
-if (!(workflow.runName ==~ /[a-z]+_[a-z]+/)) {
-    custom_runName = workflow.runName
-}
-
 // Check AWS batch settings
 if (workflow.profile.contains('awsbatch')) {
     // AWSBatch sanity checking
