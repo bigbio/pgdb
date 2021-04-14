@@ -637,7 +637,7 @@ process gnomad_proteindb {
 }
 
 //concatenate all gnomad proteindbs into one
-gnomad_vcf_proteindb.collectFile(name: 'gnomad_proteindb.fa', newLine: false, storeDir: "${baseDir}/result")
+gnomad_vcf_proteindb.collectFile(name: 'gnomad_proteindb.fa', newLine: false, storeDir: "${projectDir}/result")
     .set {gnomad_vcf_proteindb_final}
 
 merged_databases = merged_databases.mix(gnomad_vcf_proteindb_final)
