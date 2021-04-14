@@ -170,8 +170,8 @@ process ensembl_fasta_download {
     script:
     """
     pypgatk_cli.py ensembl-downloader \\
-        --config_file ${ensembl_downloader_config} \\
-        --ensembl_name ${params.ensembl_name} \\
+        --config_file $ensembl_downloader_config \\
+        --ensembl_name $params.ensembl_name \\
         -sv -sc
     """
 }
@@ -189,7 +189,7 @@ process add_reference_proteome {
 
     script:
     """
-    cat ${reference_proteome} >> reference_proteome.fa
+    cat $reference_proteome >> reference_proteome.fa
     """
 
 }
@@ -208,8 +208,8 @@ process merge_cdnas {
 
     script:
     """
-    cat ${a} >> total_cdnas.fa
-    cat ${b} >> total_cdnas.fa
+    cat $a >> total_cdnas.fa
+    cat $b >> total_cdnas.fa
     """
 }
 
@@ -233,8 +233,8 @@ process add_ncrna {
     script:
     """
     pypgatk_cli.py dnaseq-to-proteindb \\
-        --config_file "${ensembl_config}" \\
-        --input_fasta ${x} \\
+        --config_file "$ensembl_config" \\
+        --input_fasta $x \\
         --output_proteindb ncRNAs_proteinDB.fa \\
         --include_biotypes "${params.biotypes['ncRNA']}" \\
         --skip_including_all_cds --var_prefix ncRNA_
@@ -263,8 +263,8 @@ process add_pseudogenes {
     script:
     """
     pypgatk_cli.py dnaseq-to-proteindb \\
-        --config_file "${ensembl_config}" \\
-        --input_fasta "${x}" \\
+        --config_file "$ensembl_config" \\
+        --input_fasta "$x" \\
         --output_proteindb pseudogenes_proteinDB.fa \\
         --include_biotypes "${params.biotypes['pseudogene']}" \\
         --skip_including_all_cds \\
@@ -294,8 +294,8 @@ process add_altorfs {
     script:
     """
     pypgatk_cli.py dnaseq-to-proteindb \\
-        --config_file "${ensembl_config}" {{
-        --input_fasta "${x}" \\
+        --config_file "$ensembl_config" {{
+        --input_fasta "$x" \\
         --output_proteindb altorfs_proteinDB.fa \\
         --include_biotypes "${params.biotypes['protein_coding']}'" \\
         --skip_including_all_cds \\
@@ -327,9 +327,9 @@ process cosmic_download {
     script:
     """
     pypgatk_cli.py cosmic-downloader \\
-        --config_file "${cosmic_config}" \\
-        --username ${params.cosmic_user_name} \\
-        --password ${params.cosmic_password}
+        --config_file "$cosmic_config" \\
+        --username $params.cosmic_user_name \\
+        --password $params.cosmic_password
     """
 }
 
@@ -354,10 +354,10 @@ process cosmic_proteindb {
     script:
     """
     pypgatk_cli.py cosmic-to-proteindb \\
-        --config_file "${cosmic_config}" \\
-        --input_mutation ${m} --input_genes ${g} \\
+        --config_file "$cosmic_config" \\
+        --input_mutation $m --input_genes $g \\
         --filter_column 'Histology subtype 1' \\
-        --accepted_values ${params.cosmic_cancer_type} \\
+        --accepted_values $params.cosmic_cancer_type \\
         --output_db cosmic_proteinDB.fa
     """
 }
@@ -385,11 +385,11 @@ process cosmic_celllines_proteindb {
     script:
     """
     pypgatk_cli.py cosmic-to-proteindb \\
-        --config_file "${cosmic_config}" \\
-        --input_mutation ${m} \\
-        --input_genes ${g} \\
+        --config_file "$cosmic_config" \\
+        --input_mutation $m \\
+        --input_genes $g \\
         --filter_column 'Sample name' \\
-        --accepted_values ${params.cosmic_cellline_name} \\
+        --accepted_values $params.cosmic_cellline_name \\
         --output_db cosmic_celllines_proteinDB.fa
     """
 }
@@ -413,8 +413,8 @@ process ensembl_vcf_download {
     script:
     """
     pypgatk_cli.py ensembl-downloader \\
-        --config_file ${ensembl_downloader_config} \\
-        --ensembl_name ${params.ensembl_name} \\
+        --config_file $ensembl_downloader_config \\
+        --ensembl_name $params.ensembl_name \\
         -sg -sp -sc -sd -sn
     """
 }
@@ -462,11 +462,11 @@ process ensembl_vcf_proteinDB {
     script:
     """
     pypgatk_cli.py vcf-to-proteindb \\
-        --config_file ${e} \\
-        --af_field "${ensembl_af_field}" \\
-        --input_fasta ${f} \\
-        --gene_annotations_gtf ${g} \\
-        --vcf ${v} \\
+        --config_file $e \\
+        --af_field "$ensembl_af_field" \\
+        --input_fasta $f \\
+        --gene_annotations_gtf $g \\
+        --vcf $v \\
         --output_proteindb "${v}_proteinDB.fa"  \\
         --var_prefix ensvar \\
         --annotation_field_name 'CSQ'
@@ -474,7 +474,7 @@ process ensembl_vcf_proteinDB {
 }
 
 //concatenate all ensembl proteindbs into one
-proteinDB_vcf.collectFile(name: 'ensembl_proteindb.fa', newLine: false, storeDir: "${baseDir}/result")
+proteinDB_vcf.collectFile(name: 'ensembl_proteindb.fa', newLine: false, storeDir: "${projectDir}/result")
     .set {proteinDB_vcf_final}
 
 merged_databases = merged_databases.mix(proteinDB_vcf_final)
@@ -497,7 +497,7 @@ process gtf_to_fasta {
 
     script:
     """
-    gffread -w transcripts.fa -g ${f} ${g}
+    gffread -w transcripts.fa -g $f $g
     """
 }
 
@@ -523,13 +523,13 @@ process vcf_proteinDB {
     script:
     """
     awk 'BEGIN{FS=OFS="\t"}{if(\$1=="chrM") \$1="MT"; gsub("chr","",\$1); print}' \\
-        ${v} > ${v.baseName}_changedChrNames.vcf
+        $v > ${v.baseName}_changedChrNames.vcf
 
     pypgatk_cli.py vcf-to-proteindb \\
-        --config_file ${e} \\
-        --af_field "${af_field}" \\
-        --input_fasta ${f} \\
-        --gene_annotations_gtf ${g} \\
+        --config_file $e \\
+        --af_field "$af_field" \\
+        --input_fasta $f \\
+        --gene_annotations_gtf $g \\
         --vcf ${v.baseName}_changedChrNames.vcf \\
         --output_proteindb ${v.baseName}_proteinDB.fa \\
         --annotation_field_name ''
@@ -580,7 +580,7 @@ process gnomad_download {
 
     script:
     """
-    gsutil cp ${g} .
+    gsutil cp $g .
     """
 }
 
@@ -600,7 +600,7 @@ process extract_gnomad_vcf {
 
     script:
     """
-    zcat ${g} > ${g}.vcf
+    zcat $g > ${g}.vcf
     """
 }
 
@@ -624,10 +624,10 @@ process gnomad_proteindb {
     script:
     """
     pypgatk_cli.py vcf-to-proteindb \\
-        --config_file ${e} \\
-        --vcf ${v} \\
-        --input_fasta ${f} \\
-        --gene_annotations_gtf ${g} \\
+        --config_file $e \\
+        --vcf $v \\
+        --input_fasta $f \\
+        --gene_annotations_gtf $g \\
         --output_proteindb "${v}_proteinDB.fa" \\
         --af_field controls_AF \\
         --transcript_index 6 \\
@@ -698,8 +698,8 @@ process download_all_cbioportal {
     else
         """
         pypgatk_cli.py cbioportal-downloader \\
-            --config_file "${cbioportal_config}" \\
-            -d "${params.cbioportal_study_id}"
+            --config_file "$cbioportal_config" \\
+            -d "$params.cbioportal_study_id"
 
         tar -xzvf database_cbioportal/${params.cbioportal_study_id}.tar.gz
         cat ${params.cbioportal_study_id}/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
@@ -736,12 +736,12 @@ process cbioportal_proteindb {
     script:
     """
     pypgatk_cli.py cbioportal-to-proteindb \\
-        --config_file ${cbioportal_config} \\
-        --input_mutation ${m} \\
-        --input_cds ${g} \\
-        --clinical_sample_file ${s} \\
-        --filter_column ${params.cbioportal_filter_column} \\
-        --accepted_values ${params.cbioportal_accepted_values} \\
+        --config_file $cbioportal_config \\
+        --input_mutation $m \\
+        --input_cds $g \\
+        --clinical_sample_file $s \\
+        --filter_column $params.cbioportal_filter_column \\
+        --accepted_values $params.cbioportal_accepted_values \\
         --output_db cbioPortal_proteinDB.fa
     """
 }
@@ -792,11 +792,11 @@ process clean_protein_database {
     script:
     """
     pypgatk_cli.py ensembl-check \\
-        -in "${file}" \\
-        --config_file "${e}" \\
+        -in "$file" \\
+        --config_file "$e" \\
         -out database_clean.fa \\
-        --num_aa "${params.minimum_aa}" \\
-        "${stop_codons}"
+        --num_aa "$params.minimum_aa" \\
+        "$stop_codons"
     """
 }
 
@@ -823,11 +823,11 @@ process decoy {
     script:
     """
     pypgatk_cli.py generate-decoy \\
-        --method "${params.decoy_method}" \\
-        --enzyme "${params.decoy_enzyme}" \\
-        --config_file ${protein_decoy_config} \\
+        --method "$params.decoy_method" \\
+        --enzyme "$params.decoy_enzyme" \\
+        --config_file $protein_decoy_config \\
         --input_database $f \\
-        --decoy_prefix "${params.decoy_prefix}" \\
+        --decoy_prefix "$params.decoy_prefix" \\
         --output_database decoy_database.fa
     """
 }
