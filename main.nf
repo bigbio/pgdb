@@ -54,8 +54,8 @@ if (workflow.profile.contains('awsbatch')) {
 }
 
 // Stage config files
-ch_output_docs = file("$baseDir/docs/output.md", checkIfExists: true)
-ch_output_docs_images = file("$baseDir/docs/images/", checkIfExists: true)
+ch_output_docs = file("$projectDir/docs/output.md", checkIfExists: true)
+ch_output_docs_images = file("$projectDir/docs/images/", checkIfExists: true)
 ensembl_downloader_config = file(params.ensembl_downloader_config, checkIfExists: true)
 ensembl_config = file(params.ensembl_config)
 cosmic_config = file(params.cosmic_config)
