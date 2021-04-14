@@ -17,7 +17,8 @@ log.info Headers.nf_core(workflow, params.monochrome_logs)
 ////////////////////////////////////////////////////+
 def json_schema = "$projectDir/nextflow_schema.json"
 if (params.help) {
-    def command = "nextflow run nf-core/pgdb -profile test,docker"
+    def command = "nextflow run nf-core/pgdb -profile docker --ensembl_name homo_sapiens
+"
     log.info NfcoreSchema.params_help(workflow, params, json_schema, command)
     exit 0
 }
