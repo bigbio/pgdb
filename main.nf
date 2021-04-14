@@ -74,10 +74,6 @@ if ((params.cosmic || params.cosmic_celllines) && (params.cosmic_user_name=="" |
 	exit 1, "User name and password has to be provided. In order to be able to download COSMIC data. Please first register in COSMIC database (https://cancer.sanger.ac.uk/cosmic/register)."
 }
 
-// Pipeline OS-specific commands
-ZCAT = (System.properties['os.name'] == 'Mac OS X' ? 'gzcat' : 'zcat')
-
-
 /**
  * Download data from ensembl for the particular species.
  */
