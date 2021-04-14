@@ -61,8 +61,6 @@ cosmic_config = file(params.cosmic_config)
 cbioportal_config = file(params.cbioportal_config)
 protein_decoy_config = file(params.protein_decoy_config)
 
-params.cbioportal_study_id = "all"
-
 af_field = params.af_field
 ensembl_af_field = params.af_field
 if (params.ensembl_name == "homo_sapiens"){
