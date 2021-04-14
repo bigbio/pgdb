@@ -66,12 +66,12 @@ params.cbioportal_study_id = "all"
 af_field = params.af_field
 ensembl_af_field = params.af_field
 if (params.ensembl_name == "homo_sapiens"){
-	ensembl_af_field = "MAF"
+    ensembl_af_field = "MAF"
 }
 
 // Pipeline checks
 if ((params.cosmic || params.cosmic_celllines) && (params.cosmic_user_name=="" || params.cosmic_password=="")){
-	exit 1, "User name and password has to be provided. In order to be able to download COSMIC data. Please first register in COSMIC database (https://cancer.sanger.ac.uk/cosmic/register)."
+    exit 1, "User name and password has to be provided. In order to be able to download COSMIC data. Please first register in COSMIC database (https://cancer.sanger.ac.uk/cosmic/register)."
 }
 
 // Pipeline OS-specific commands
@@ -228,23 +228,23 @@ merged_databases = merged_databases.mix(optional_altorfs)
  */
 process cosmic_download {
 
-	  when:
-  	  params.cosmic || params.cosmic_celllines
+      when:
+        params.cosmic || params.cosmic_celllines
 
-	  input:
-	  file cosmic_config
+      input:
+      file cosmic_config
 
-	  output:
+      output:
     file "database_cosmic/All_COSMIC_Genes.fasta" into cosmic_genes
     file "database_cosmic/CosmicMutantExport.tsv" into cosmic_mutations
     file "database_cosmic/All_CellLines_Genes.fasta" into cosmic_celllines_genes
     file "database_cosmic/CosmicCLP_MutantExport.tsv" into cosmic_celllines_mutations
 
-	  script:
-	  """
-	  pypgatk_cli.py cosmic-downloader --config_file "${cosmic_config}" --username ${params.cosmic_user_name} \\
-	                 --password ${params.cosmic_password}
-	  """
+      script:
+      """
+      pypgatk_cli.py cosmic-downloader --config_file "${cosmic_config}" --username ${params.cosmic_user_name} \\
+                     --password ${params.cosmic_password}
+      """
 }
 
 /**
@@ -252,25 +252,25 @@ process cosmic_download {
 */
 process cosmic_proteindb{
 
-	  publishDir "${params.outdir}", mode: 'copy', overwrite: true
+      publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
-	  when:
-  	  params.cosmic
+      when:
+        params.cosmic
 
-	  input:
-	  file g from cosmic_genes
-	  file m from cosmic_mutations
-	  file cosmic_config
+      input:
+      file g from cosmic_genes
+      file m from cosmic_mutations
+      file cosmic_config
 
-	  output:
-	  file 'cosmic_proteinDB*.fa' into cosmic_proteindbs
+      output:
+      file 'cosmic_proteinDB*.fa' into cosmic_proteindbs
 
-	  script:
-	  """
-	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} \\
-	                 --filter_column 'Histology subtype 1' --accepted_values ${params.cosmic_cancer_type} \\
-	                 --output_db cosmic_proteinDB.fa
-	  """
+      script:
+      """
+      pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} \\
+                     --filter_column 'Histology subtype 1' --accepted_values ${params.cosmic_cancer_type} \\
+                     --output_db cosmic_proteinDB.fa
+      """
 }
 
 merged_databases = merged_databases.mix(cosmic_proteindbs)
@@ -280,25 +280,25 @@ merged_databases = merged_databases.mix(cosmic_proteindbs)
 */
 process cosmic_celllines_proteindb{
 
-	  publishDir "${params.outdir}", mode: 'copy', overwrite: true
+      publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
-	  when:
-  	  params.cosmic_celllines
+      when:
+        params.cosmic_celllines
 
-	  input:
-	  file g from cosmic_celllines_genes
-	  file m from cosmic_celllines_mutations
-	  file cosmic_config
+      input:
+      file g from cosmic_celllines_genes
+      file m from cosmic_celllines_mutations
+      file cosmic_config
 
-	  output:
-	  file 'cosmic_celllines_proteinDB*.fa' into cosmic_celllines_proteindbs
+      output:
+      file 'cosmic_celllines_proteinDB*.fa' into cosmic_celllines_proteindbs
 
-	  script:
-	  """
-	  pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} \\
-	                 --filter_column 'Sample name' --accepted_values ${params.cosmic_cellline_name} \\
-	                 --output_db cosmic_celllines_proteinDB.fa
-	  """
+      script:
+      """
+      pypgatk_cli.py cosmic-to-proteindb --config_file "${cosmic_config}" --input_mutation ${m} --input_genes ${g} \\
+                     --filter_column 'Sample name' --accepted_values ${params.cosmic_cellline_name} \\
+                     --output_db cosmic_celllines_proteinDB.fa
+      """
 }
 
 merged_databases = merged_databases.mix(cosmic_celllines_proteindbs)
@@ -374,8 +374,8 @@ process ensembl_vcf_proteinDB {
 
 //concatenate all ensembl proteindbs into one
 proteinDB_vcf
-	.collectFile(name: 'ensembl_proteindb.fa', newLine: false, storeDir: "${baseDir}/result")
-	.set {proteinDB_vcf_final}
+    .collectFile(name: 'ensembl_proteindb.fa', newLine: false, storeDir: "${baseDir}/result")
+    .set {proteinDB_vcf_final}
 
 merged_databases = merged_databases.mix(proteinDB_vcf_final)
 
@@ -441,21 +441,21 @@ merged_databases = merged_databases.mix(proteinDB_custom_vcf)
 process gencode_download{
 
    when:
-	  params.gnomad
+      params.gnomad
 
    input:
-	 val g from params.gencode_url
+     val g from params.gencode_url
 
    output:
-	 file("gencode.v19.pc_transcripts.fa") into gencode_fasta
-	 file("gencode.v19.annotation.gtf") into gencode_gtf
+     file("gencode.v19.pc_transcripts.fa") into gencode_fasta
+     file("gencode.v19.annotation.gtf") into gencode_gtf
 
    script:
-	 """
-	 wget ${g}/gencode.v19.pc_transcripts.fa.gz
-	 wget ${g}/gencode.v19.annotation.gtf.gz
-	 gunzip *.gz
-	 """
+     """
+     wget ${g}/gencode.v19.pc_transcripts.fa.gz
+     wget ${g}/gencode.v19.annotation.gtf.gz
+     gunzip *.gz
+     """
 }
 
 /**
@@ -464,10 +464,10 @@ process gencode_download{
 process gnomad_download{
 
    when:
-	  params.gnomad
+      params.gnomad
 
    input:
-	 val g from params.gnomad_file_url
+     val g from params.gnomad_file_url
 
    output:
    file "*.vcf.bgz" into gnomad_vcf_bgz
@@ -525,8 +525,8 @@ process gnomad_proteindb{
 
 //concatenate all gnomad proteindbs into one
 gnomad_vcf_proteindb
-	.collectFile(name: 'gnomad_proteindb.fa', newLine: false, storeDir: "${baseDir}/result")
-	.set {gnomad_vcf_proteindb_final}
+    .collectFile(name: 'gnomad_proteindb.fa', newLine: false, storeDir: "${baseDir}/result")
+    .set {gnomad_vcf_proteindb_final}
 
 merged_databases = merged_databases.mix(gnomad_vcf_proteindb_final)
 
@@ -558,8 +558,8 @@ process cds_GRCh37_download{
          params.cbioportal
 
    output:
- 	 file('cbioportal_allstudies_data_mutations_mskcc.txt') into cbio_mutations
- 	 file('cbioportal_allstudies_data_clinical_sample.txt') into cbio_samples
+      file('cbioportal_allstudies_data_mutations_mskcc.txt') into cbio_mutations
+      file('cbioportal_allstudies_data_clinical_sample.txt') into cbio_samples
 
    script:
    if (params.cbioportal_study_id == "all")
@@ -646,7 +646,7 @@ process merge_proteindbs {
 
 stop_codons = ''
 if (params.add_stop_codons){
-	stop_codons = "--add_stop_codons"
+    stop_codons = "--add_stop_codons"
 }
 
 /**
