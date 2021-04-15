@@ -61,7 +61,7 @@ if (params.ensembl_name == "homo_sapiens"){
 }
 
 // Pipeline checks
-if ((params.cosmic || params.cosmic_celllines) && (params.cosmic_user_name=="" || params.cosmic_password=="")){
+if ((params.cosmic || params.cosmic_celllines) && (!params.cosmic_user_name || !params.cosmic_password)){
     exit 1, "User name and password has to be provided. In order to be able to download COSMIC data. Please first register in COSMIC database (https://cancer.sanger.ac.uk/cosmic/register)."
 }
 
