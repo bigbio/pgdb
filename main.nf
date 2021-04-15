@@ -759,12 +759,12 @@ process clean_protein_database {
     file 'database_clean.fa' into clean_database_sh
 
     script:
-    """
     stop_codons = ''
     if (params.add_stop_codons){
        stop_codons = "--add_stop_codons"
     }
 
+    """
     pypgatk_cli.py ensembl-check \\
         -in "$file" \\
         --config_file "$e" \\
