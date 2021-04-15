@@ -21,6 +21,7 @@ Te main purpose of the pgdb pipeline to add non-canonical proteins to the databa
 ```bash
 nextflow run nf-core/pgdb --taxonomy 9606 --altorfs --decoy  -profile docker
 ```
+
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
 Note that the pipeline will create the following files in your working directory:
