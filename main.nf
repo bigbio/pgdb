@@ -760,11 +760,6 @@ process merge_proteindbs {
     """
 }
 
-stop_codons = ''
-if (params.add_stop_codons){
-    stop_codons = "--add_stop_codons"
-}
-
 /**
  * clean the database for stop codons, and unwanted AA like: *, also remove proteins with less than 6 AA
  */
@@ -784,6 +779,11 @@ process clean_protein_database {
 
     script:
     """
+    stop_codons = ''
+    if (params.add_stop_codons){
+       stop_codons = "--add_stop_codons"
+    }
+
     pypgatk_cli.py ensembl-check \\
         -in "$file" \\
         --config_file "$e" \\
