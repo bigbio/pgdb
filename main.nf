@@ -61,7 +61,7 @@ if (params.ensembl_name == "homo_sapiens"){
 }
 
 // Pipeline checks
-if ((params.cosmic || params.cosmic_celllines) && (params.cosmic_user_name=="" || params.cosmic_password=="")){
+if ((params.cosmic || params.cosmic_celllines) && (!params.cosmic_user_name || !params.cosmic_password)){
     exit 1, "User name and password has to be provided. In order to be able to download COSMIC data. Please first register in COSMIC database (https://cancer.sanger.ac.uk/cosmic/register)."
 }
 
@@ -211,8 +211,6 @@ process merge_cdnas {
  */
 process add_ncrna {
 
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true
-
     when:
     params.ncrna
 
@@ -240,8 +238,6 @@ merged_databases = ensembl_protein_database.mix(optional_ncrna)
  * Creates the pseudogenes protein database
  */
 process add_pseudogenes {
-
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
     when:
     params.pseudogenes
@@ -271,8 +267,6 @@ merged_databases = merged_databases.mix(optional_pseudogenes)
  * Creates the altORFs protein database
  */
 process add_altorfs {
-
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
     when:
     params.altorfs
@@ -331,8 +325,6 @@ process cosmic_download {
 */
 process cosmic_proteindb {
 
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true
-
     when:
     params.cosmic
 
@@ -361,8 +353,6 @@ merged_databases = merged_databases.mix(cosmic_proteindbs)
  * Generate proteindb from cosmic cell lines mutations
 */
 process cosmic_celllines_proteindb {
-
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
     when:
     params.cosmic_celllines
@@ -494,12 +484,9 @@ process gtf_to_fasta {
     """
 }
 
-//vcf_file = Channel.fromPath(params.vcf_file)
 vcf_file = params.vcf_file ? Channel.fromPath(params.vcf_file, checkIfExists: true) : Channel.empty()
 
 process vcf_proteinDB {
-
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
     when:
     params.vcf
@@ -712,8 +699,6 @@ process download_all_cbioportal {
  */
 process cbioportal_proteindb {
 
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true
-
     when:
     params.cbioportal
 
@@ -746,8 +731,6 @@ merged_databases = merged_databases.mix(cBioportal_proteindb)
  */
 process merge_proteindbs {
 
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true
-
     input:
     file("proteindb*") from merged_databases.collect()
 
@@ -760,17 +743,10 @@ process merge_proteindbs {
     """
 }
 
-stop_codons = ''
-if (params.add_stop_codons){
-    stop_codons = "--add_stop_codons"
-}
-
 /**
  * clean the database for stop codons, and unwanted AA like: *, also remove proteins with less than 6 AA
  */
 process clean_protein_database {
-
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
     when:
     params.clean_database
@@ -783,6 +759,11 @@ process clean_protein_database {
     file 'database_clean.fa' into clean_database_sh
 
     script:
+    stop_codons = ''
+    if (params.add_stop_codons){
+       stop_codons = "--add_stop_codons"
+    }
+
     """
     pypgatk_cli.py ensembl-check \\
         -in "$file" \\
@@ -800,8 +781,6 @@ to_protein_decoy_ch = params.clean_database ? clean_database_sh : to_clean_ch
  * Decoy sequences will have "DECOY_" prefix tag to the protein accession.
  */
 process decoy {
-
-    publishDir "${params.outdir}", mode: 'copy', overwrite: true
 
     when:
     params.decoy

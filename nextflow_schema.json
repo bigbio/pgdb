@@ -155,11 +155,13 @@
             "default": "",
             "properties": {
                 "gnomad": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "description": "Add gNOMAD variants to the database"
                 },
                 "gnomad_file_url": {
                     "type": "string",
-                    "default": "gs://gnomad-public/release/2.1.1/vcf/exomes/gnomad.exomes.r2.1.1.sites.vcf.bgz"
+                    "default": "gs://gnomad-public/release/2.1.1/vcf/exomes/gnomad.exomes.r2.1.1.sites.vcf.bgz",
+                    "description": "gNOMAD url"
                 }
             }
         },
@@ -226,13 +228,6 @@
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
             "properties": {
-                "input": {
-                    "type": "string",
-                    "fa_icon": "fas fa-dna",
-                    "description": "Input files.",
-                    "help_text": "Use this to specify the location of your input files. For example:\n\n```bash\n--input 'path/to/data/sample_*_{1,2}.fastq'\n```\n\nPlease note the following requirements:\n\n1. The path must be enclosed in quotes\n2. The path must have at least one `*` wildcard character\n3. When using the pipeline with paired end data, the path must use `{1,2}` notation to specify read pairs.\n\nIf left unspecified, a default pattern is used: `data/*{1,2}.fastq.gz`",
-                    "hidden": true
-                },
                 "outdir": {
                     "type": "string",
                     "description": "The output directory where the results will be saved.",
@@ -252,7 +247,8 @@
                     "description": "The final protein database generated"
                 },
                 "push_s3": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "push data to s3"
                 }
             }
         },
@@ -325,11 +321,13 @@
                 "validate_params": {
                     "type": "boolean",
                     "default": true,
-                    "hidden": true
+                    "hidden": true,
+                    "description": "validate params of the schema"
                 },
                 "show_hidden_params": {
                     "type": "string",
-                    "hidden": true
+                    "hidden": true,
+                    "description": "hide params of the schema"
                 }
             }
         },
