@@ -29,10 +29,10 @@
                     "default": "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19",
                     "description": "URL for downloading GENCODE datafiles"
                 },
-                "taxonomy": {
+                "ensembl_name": {
                     "type": "string",
-                    "default": "9606",
-                    "description": "Taxonomy for the species to download ENSEMBL"
+                    "default": "homo_sapiens",
+                    "description": "Taxonomic term for the species to download from ENSEMBL"
                 }
             }
         },
@@ -394,6 +394,12 @@
                 "hostnames": {
                     "type": "string",
                     "description": "Institutional configs hostname.",
+                    "hidden": true,
+                    "fa_icon": "fas fa-users-cog"
+                },
+                "config_profile_name": {
+                    "type": "string",
+                    "description": "Institutional config name.",
                     "hidden": true,
                     "fa_icon": "fas fa-users-cog"
                 },

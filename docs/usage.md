@@ -17,7 +17,7 @@ nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> -
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run nf-core/pgdb --taxonomy 9606 --altorfs -profile docker
+nextflow run nf-core/pgdb --ensembl_name homo_sapiens --altorfs -profile docker
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
