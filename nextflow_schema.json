@@ -281,6 +281,13 @@
                         "move"
                     ]
                 },
+                "validate_params": {
+                    "type": "boolean",
+                    "description": "Boolean whether to validate parameters against the schema at runtime",
+                    "default": true,
+                    "fa_icon": "fas fa-check-square",
+                    "hidden": true
+                },
                 "email_on_fail": {
                     "type": "string",
                     "description": "Email address for completion summary, only when pipeline fails.",
@@ -318,16 +325,12 @@
                     "fa_icon": "fas fa-cogs",
                     "hidden": true
                 },
-                "validate_params": {
-                    "type": "boolean",
-                    "default": true,
-                    "hidden": true,
-                    "description": "validate params of the schema"
-                },
                 "show_hidden_params": {
-                    "type": "string",
+                    "type": "boolean",
+                    "fa_icon": "far fa-eye-slash",
+                    "description": "Show all params when using `--help`",
                     "hidden": true,
-                    "description": "hide params of the schema"
+                    "help_text": "By default, parameters set as _hidden_ in the schema are not shown on the command line when a user runs with `--help`. Specifying this option will tell the pipeline to show all parameters."
                 }
             }
         },

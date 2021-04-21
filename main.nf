@@ -37,12 +37,12 @@ if (params.validate_params) {
 // Check AWS batch settings
 if (workflow.profile.contains('awsbatch')) {
     // AWSBatch sanity checking
-    if (!params.awsqueue || !params.awsregion) exit 1, "Specify correct --awsqueue and --awsregion parameters on AWSBatch!"
+    if (!params.awsqueue || !params.awsregion) exit 1, 'Specify correct --awsqueue and --awsregion parameters on AWSBatch!'
     // Check outdir paths to be S3 buckets if running on AWSBatch
     // related: https://github.com/nextflow-io/nextflow/issues/813
-    if (!params.outdir.startsWith('s3:')) exit 1, "Outdir not on S3 - specify S3 Bucket to run on AWSBatch!"
+    if (!params.outdir.startsWith('s3:')) exit 1, 'Outdir not on S3 - specify S3 Bucket to run on AWSBatch!'
     // Prevent trace files to be stored on S3 since S3 does not support rolling files.
-    if (params.tracedir.startsWith('s3:')) exit 1, "Specify a local tracedir or run without trace! S3 cannot be used for tracefiles."
+    if (params.tracedir.startsWith('s3:')) exit 1, 'Specify a local tracedir or run without trace! S3 cannot be used for tracefiles.'
 }
 
 // Stage config files
@@ -126,13 +126,13 @@ Channel.from(summary.collect{ [it.key, it.value] })
 process get_software_versions {
     publishDir "${params.outdir}/pipeline_info", mode: params.publish_dir_mode,
         saveAs: { filename ->
-                      if (filename.indexOf(".csv") > 0) filename
+                      if (filename.indexOf('.csv') > 0) filename
                       else null
-                }
+        }
 
     output:
     file 'software_versions_mqc.yaml' into ch_software_versions_yaml
-    file "software_versions.csv"
+    file 'software_versions.csv'
 
     script:
     """
@@ -823,7 +823,7 @@ process output_documentation {
     file images from ch_output_docs_images
 
     output:
-    file "results_description.html"
+    file 'results_description.html'
 
     script:
     """
@@ -946,15 +946,15 @@ def checkHostname() {
     def c_red = params.monochrome_logs ? '' : "\033[1;91m"
     def c_yellow_bold = params.monochrome_logs ? '' : "\033[1;93m"
     if (params.hostnames) {
-        def hostname = "hostname".execute().text.trim()
+        def hostname = 'hostname'.execute().text.trim()
         params.hostnames.each { prof, hnames ->
             hnames.each { hname ->
                 if (hostname.contains(hname) && !workflow.profile.contains(prof)) {
-                    log.error "====================================================\n" +
+                    log.error '====================================================\n' +
                             "  ${c_red}WARNING!${c_reset} You are running with `-profile $workflow.profile`\n" +
                             "  but your machine hostname is ${c_white}'$hostname'${c_reset}\n" +
                             "  ${c_yellow_bold}It's highly recommended that you use `-profile $prof${c_reset}`\n" +
-                            "============================================================"
+                            '============================================================'
                 }
             }
         }

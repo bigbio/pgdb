@@ -1,9 +1,5 @@
 # nf-core/pgdb: Output
 
-## :warning: Please read this documentation on the nf-core website: [https://nf-co.re/pgdb/output](https://nf-co.re/pgdb/output)
-
-> _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
-
 ## Introduction
 
 This document describes the output produced by the pipeline. The main output of the pgdb pipeline is the protein sequence database. Protein databases are use for peptide and protein [identification algorithms](https://pubmed.ncbi.nlm.nih.gov/27975215/). In most of the proteomics experiments, researchers tried to quantified the peptides and proteins using canonical protein databases such as ENSEMBL or UNIPROT.
