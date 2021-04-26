@@ -731,6 +731,12 @@ merged_databases = merged_databases.mix(cBioportal_proteindb)
  */
 process merge_proteindbs {
 
+    publishDir "${params.outdir}/", mode: params.publish_dir_mode,
+        // Final step if not cleaning or creating a decoy database - save output to params.final_database_protein
+        saveAs: { filename ->
+            params.clean_database || params.decoy ? null : params.final_database_protein
+        }
+
     input:
     file("proteindb*") from merged_databases.collect()
 
@@ -747,6 +753,12 @@ process merge_proteindbs {
  * clean the database for stop codons, and unwanted AA like: *, also remove proteins with less than 6 AA
  */
 process clean_protein_database {
+
+    publishDir "${params.outdir}/", mode: params.publish_dir_mode,
+        // Final step if not creating a decoy database - save output to params.final_database_protein
+        saveAs: { filename ->
+            params.decoy ? null : params.final_database_protein
+        }
 
     when:
     params.clean_database
@@ -782,6 +794,9 @@ to_protein_decoy_ch = params.clean_database ? clean_database_sh : to_clean_ch
  */
 process decoy {
 
+    publishDir "${params.outdir}/", mode: params.publish_dir_mode,
+        saveAs: { filename -> params.final_database_protein }
+
     when:
     params.decoy
 
@@ -803,12 +818,6 @@ process decoy {
         --output_database decoy_database.fa
     """
 }
-
-result_database_ch = params.decoy ? fasta_decoy_db_ch: to_protein_decoy_ch
-
-/** Write the final results to S3 bucket**/
-
-result_database_ch.subscribe { results -> results.copyTo("${params.outdir}/${params.final_database_protein}")}
 
 
 /*
