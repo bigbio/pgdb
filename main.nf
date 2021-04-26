@@ -794,7 +794,8 @@ to_protein_decoy_ch = params.clean_database ? clean_database_sh : to_clean_ch
  */
 process decoy {
 
-    publishDir "${params.outdir}/", mode: params.publish_dir_mode, saveAs: params.final_database_protein
+    publishDir "${params.outdir}/", mode: params.publish_dir_mode,
+        saveAs: { filename -> params.final_database_protein }
 
     when:
     params.decoy
