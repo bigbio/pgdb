@@ -20,30 +20,34 @@ The main source of canonical protein sequence in pgdb is ENSEMBL. The user can t
 * [Decoy](#decoys) - Add decoy proteins to the final database.
 * [Output](#output) - Output results including clean databases and decoy generation
 
-## Ensembl
+## Pipeline modes
 
-The pipeline will download the the ENSEMBL protein reference proteome, this will be added to the final protein database. The protein databae is downloaded from [ENSEMBL FTP](http://www.ensembl.org/info/data/ftp/index.html)
+### Ensembl
 
-## Ensembl non canonical
+The pipeline will download the the ENSEMBL protein reference proteome, this will be added to the final protein database. The protein database is downloaded from [ENSEMBL FTP](http://www.ensembl.org/info/data/ftp/index.html).
 
-The Ensembl non canonical includes the pseudogenes, lncRNAs, etc. The accessions of each type of kind of novel protein is predefined by the [pypgatk tool](https://github.com/bigbio/py-pgatk)
+### Ensembl non canonical
 
-* ncRNA_ENST00000456688 - non coding RNA transcript.
-* altorf_ENST00000310473 - alternative open reading frame
-* pseudo_ENST00000436135 - pseudo gene translation
+The Ensembl non canonical includes the pseudogenes, lncRNAs, etc. The accessions of each type of kind of novel protein is predefined by the [pypgatk tool](https://github.com/bigbio/py-pgatk).
 
-## Variants
+* `ncRNA_ENST00000456688` - non coding RNA transcript.
+* `altorf_ENST00000310473` - alternative open reading frame
+* `pseudo_ENST00000436135` - pseudo gene translation
+
+### Variants
 
 The COSMIC or cBioPortal variants are downloaded automatically from these resources. The accessions of those proteins are:
 
-* COSMIC:ANXA3_ENST00000503570:p.A67T:Substitution-Missense - Accession of the protein includes the position of the aminoacid variant.
+* `COSMIC:ANXA3_ENST00000503570:p.A67T:Substitution-Missense` - Accession of the protein includes the position of the aminoacid variant.
 
-## Decoy
+### Decoy
 
 Decoy can be added to the final database. Decoys accessions are prefix with `DECOY_` by default, but they can be configured by the users.
 
-## Output
+## Output files
 
- /fasta_database.fa
+The nf-core/pgdb pipeline produces one single output file:
 
-The FASTA database including all the protein sequences including the reference proteomes, variants, pseudo-genes, etc.
+* `/fasta_database.fa`
+
+This FASTA database includes all of the protein sequences including the reference proteomes, variants, pseudo-genes, etc.
