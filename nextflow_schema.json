@@ -183,7 +183,7 @@
                 "decoy_method": {
                     "type": "string",
                     "default": "decoypyrat",
-                    "description": "Method used to generate the decoy database ['protein-reverse', 'protein-shuffle', 'decoypyrat']",
+                    "description": "Method used to generate the decoy database",
                     "enum": [
                         "protein-reverse",
                         "protein-shuffle",
@@ -209,7 +209,7 @@
             "properties": {
                 "clean_database": {
                     "type": "boolean",
-                    "description": "Clean the database for stop codons, short protein sequences,"
+                    "description": "Clean the database for stop codons, short protein sequences"
                 },
                 "minimum_aa": {
                     "type": "integer",
@@ -244,11 +244,7 @@
                 "final_database_protein": {
                     "type": "string",
                     "default": "final_proteinDB.fa",
-                    "description": "The final protein database generated"
-                },
-                "push_s3": {
-                    "type": "string",
-                    "description": "push data to s3"
+                    "description": "Filename for the final protein database"
                 }
             }
         },
