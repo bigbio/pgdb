@@ -17,8 +17,6 @@ jobs:
     env:
       NXF_VER: ${{ matrix.nxf_ver }}
       NXF_ANSI_LOG: false
-      COSMIC_USERNAME: ${{ secrets.COSMIC_USERNAME }}
-      COSMIC_PASSWORD: ${{ secrets.COSMIC_PASSWORD }}
 
     strategy:
       matrix:
