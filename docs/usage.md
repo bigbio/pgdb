@@ -9,18 +9,20 @@
 General usage:
 
 ```bash
-nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --taxonomy 9606 --decoy
+nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --ensembl_name homo_sapiens --decoy
 ```
 
 This command will download the ENSEMBL human proteome and attach the decoy database to it.
 
 ## Adding non canonical proteins
 
-Te main purpose of the pgdb pipeline to add non-canonical proteins to the database including varriants, ncRNAs, altORFs:
+The main purpose of the pgdb pipeline is to add non-canonical proteins to the database including variants, ncRNAs, altORFs:
 
 ```bash
-nextflow run nf-core/pgdb --taxonomy 9606 --altorfs --decoy  -profile docker
+nextflow run nf-core/pgdb --ensembl_name homo_sapiens --altorfs --decoy -profile docker
 ```
+
+Please see the [https://nf-co.re/pgdb/parameters](parameter documentation) to see which options are available.
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
