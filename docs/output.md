@@ -38,7 +38,7 @@ The Ensembl non canonical includes the pseudogenes, lncRNAs, etc. The accessions
 
 The COSMIC or cBioPortal variants are downloaded automatically from these resources. The accessions of those proteins are:
 
-* `COSMIC:ANXA3_ENST00000503570:p.A67T:Substitution-Missense` - Accession of the protein includes the position of the aminoacid variant.
+* `COSMIC:ANXA3_ENST00000503570:p.A67T:Substitution-Missense` - Accession of the protein includes the position of the amino acid variant.
 
 ### Decoy
 
@@ -46,8 +46,8 @@ Decoy can be added to the final database. Decoys accessions are prefix with `DEC
 
 ## Output files
 
-The nf-core/pgdb pipeline produces one single output file:
-
-* `/fasta_database.fa`
+The nf-core/pgdb pipeline produces one single output file: `/final_proteinDB.fa` _(or whatever `params.final_database_protein` is set to)_.
 
 This FASTA database includes all of the protein sequences including the reference proteomes, variants, pseudo-genes, etc.
+
+A directory called `pipeline_info` is also created with logs and reports from the pipeline execution.
