@@ -656,12 +656,14 @@ process download_all_cbioportal {
     script:
     if (params.cbioportal_study_id == "all")
         """
-        git clone https://github.com/cBioPortal/datahub.git .
+        git clone https://github.com/cBioPortal/datahub.git
+        cd datahub
         git lfs install --local --skip-smudge
         git lfs pull -I public --include "data*clinical*sample.txt"
         git lfs pull -I public --include "data_mutations_mskcc.txt"
-        cat public/*/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
-        cat public/*/*data*clinical*sample.txt | \\
+        cd ..
+        cat datahub/public/*/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
+        cat datahub/public/*/*data*clinical*sample.txt | \\
             awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | \\
             awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; \\
                 for(i=1;i<=NF;i++){ \\
