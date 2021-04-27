@@ -33,12 +33,12 @@ jobs:
             environment.yml
       - name: Build new docker image
         if: env.MATCHED_FILES
-        run: docker build --no-cache . -t nfcore/pgdb:1.0.0
+        run: docker build --no-cache . -t nfcore/pgdb:dev
       - name: Pull docker image
         if: ${{ !env.MATCHED_FILES }}
         run: |
           docker pull nfcore/pgdb:dev
-          docker tag nfcore/pgdb:dev nfcore/pgdb:1.0.0
+          docker tag nfcore/pgdb:dev nfcore/pgdb:dev
       - name: Install Nextflow
         env:
           CAPSULE_LOG: none
