@@ -14,7 +14,7 @@ process COSMIC_PROTEINDB_LOCAL {
     file cosmic_config
 
     output:
-    file 'cosmic_proteinDB*.fa' into cosmic_proteindbs_uselocal
+    path 'cosmic_proteinDB*.fa' ,emit: cosmic_proteindbs_uselocal
 
     script:
     """
