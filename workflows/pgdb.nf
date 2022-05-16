@@ -149,41 +149,41 @@ Channel.from(summary.collect{ [it.key, it.value] })
 // Don't overwrite global params.modules, create a copy instead and use that within the main script.
 //def modules = params.modules.clone()
 
-include { GET_SOFTWARE_VERSIONS } from '../modules/get_software_versions'
+include { GET_SOFTWARE_VERSIONS } from '../modules/local/get_software_versions/get_software_versions'
 
-include { ENSEMBL_FASTA_DOWNLOAD } from '../modules/CanonicalAndNoncanonicalProteomes/ensembl_fasta_download'
-include { ADD_REFERENCE_PROTEOME } from '../modules/CanonicalAndNoncanonicalProteomes/add_reference_proteome'
-include { MERGE_CDNAS} from '../modules/CanonicalAndNoncanonicalProteomes/merge_cdnas'
-include { ADD_NCRNA } from '../modules/CanonicalAndNoncanonicalProteomes/add_ncrna'
-include { ADD_PSEUDOGENES } from '../modules/CanonicalAndNoncanonicalProteomes/add_pseudogenes'
-include { ADD_ALTORFS } from '../modules/CanonicalAndNoncanonicalProteomes/add_altorfs'
+include { ENSEMBL_FASTA_DOWNLOAD } from '../modules/local/CanonicalAndNoncanonicalProteomes/ensembl_fasta_download'
+include { ADD_REFERENCE_PROTEOME } from '../modules/local/CanonicalAndNoncanonicalProteomes/add_reference_proteome'
+include { MERGE_CDNAS} from '../modules/local/CanonicalAndNoncanonicalProteomes/merge_cdnas'
+include { ADD_NCRNA } from '../modules/local/CanonicalAndNoncanonicalProteomes/add_ncrna'
+include { ADD_PSEUDOGENES } from '../modules/local/CanonicalAndNoncanonicalProteomes/add_pseudogenes'
+include { ADD_ALTORFS } from '../modules/local/CanonicalAndNoncanonicalProteomes/add_altorfs'
 
-include { COSMIC_DOWNLOAD } from '../modules/CosmicMutations/cosmic_download'
-include { COSMIC_PROTEINDB } from '../modules/CosmicMutations/cosmic_proteindb'
-include { COSMIC_CELLLINES_PROTEINDB } from '../modules/CosmicMutations/cosmic_celllines_proteindb'
-include { COSMIC_PROTEINDB_LOCAL } from '../modules/CosmicMutations/cosmic_proteindb_local'
-include { COSMIC_CELLLINES_PROTEINDB_LOCAL } from '../modules/CosmicMutations/cosmic_celllines_proteindb_local'
+include { COSMIC_DOWNLOAD } from '../modules/local/CosmicMutations/cosmic_download'
+include { COSMIC_PROTEINDB } from '../modules/local/CosmicMutations/cosmic_proteindb'
+include { COSMIC_CELLLINES_PROTEINDB } from '../modules/local/CosmicMutations/cosmic_celllines_proteindb'
+include { COSMIC_PROTEINDB_LOCAL } from '../modules/local/CosmicMutations/cosmic_proteindb_local'
+include { COSMIC_CELLLINES_PROTEINDB_LOCAL } from '../modules/local/CosmicMutations/cosmic_celllines_proteindb_local'
 
-include { ENSEMBL_VCF_DOWNLOAD } from '../modules/VCF/ensembl_vcf_download'
-include { CHECK_ENSEMBL_VCF } from '../modules/VCF/check_ensembl_vcf'
-include { ENSEMBL_VCF_PROTEINDB } from '../modules/VCF/ensembl_vcf_proteindb'
+include { ENSEMBL_VCF_DOWNLOAD } from '../modules/local/VCF/ensembl_vcf_download'
+include { CHECK_ENSEMBL_VCF } from '../modules/local/VCF/check_ensembl_vcf'
+include { ENSEMBL_VCF_PROTEINDB } from '../modules/local/VCF/ensembl_vcf_proteindb'
 
-include { GTF_TO_FASTA } from '../modules/CustomVCF/gtf_to_fasta'
-include { VCF_PROTEINDB } from '../modules/CustomVCF/vcf_proteinDB'
+include { GTF_TO_FASTA } from '../modules/local/CustomVCF/gtf_to_fasta'
+include { VCF_PROTEINDB } from '../modules/local/CustomVCF/vcf_proteinDB'
 
-include { GENCODE_DOWNLOAD } from '../modules/gnomADvariatns/gencode_download'
-include { GNOMAD_DOWNLOAD } from '../modules/gnomADvariatns/gnomad_download'
-include { EXTRACT_GNOMAD_VCF } from '../modules/gnomADvariatns/extract_gnomad_vcf'
-include { GNOMAD_PROTEINDB } from '../modules/gnomADvariatns/gnomad_proteindb'
+include { GENCODE_DOWNLOAD } from '../modules/local/gnomADvariatns/gencode_download'
+include { GNOMAD_DOWNLOAD } from '../modules/local/gnomADvariatns/gnomad_download'
+include { EXTRACT_GNOMAD_VCF } from '../modules/local/gnomADvariatns/extract_gnomad_vcf'
+include { GNOMAD_PROTEINDB } from '../modules/local/gnomADvariatns/gnomad_proteindb'
 
-include { CDS_GRCH37_DOWNLOAD } from '../modules/cBioPortalMutations/cds_GRCh37_download'
-include { DOWNLOAD_ALL_CBIOPORTAL } from '../modules/cBioPortalMutations/download_all_cbioportal'
-include { CBIOPORTAL_PROTEINDB } from '../modules/cBioPortalMutations/cbioportal_proteindb'
+include { CDS_GRCH37_DOWNLOAD } from '../modules/local/cBioPortalMutations/cds_GRCh37_download'
+include { DOWNLOAD_ALL_CBIOPORTAL } from '../modules/local/cBioPortalMutations/download_all_cbioportal'
+include { CBIOPORTAL_PROTEINDB } from '../modules/local/cBioPortalMutations/cbioportal_proteindb'
 
-include { MERGE_PROTEINDBS } from '../modules/merge_proteindbs'
-include { CLEAN_PROTEIN_DATABASE } from '../modules/clean_protein_database'
-include { DECOY } from '../modules/decoy'
-include { OUTPUT_DOCUMENTATION } from '../modules/output_documentation'
+include { MERGE_PROTEINDBS } from '../modules/local/merge_proteindbs/merge_proteindbs'
+include { CLEAN_PROTEIN_DATABASE } from '../modules/local/clean_protein_database/clean_protein_database'
+include { DECOY } from '../modules/local/decoy/decoy'
+include { OUTPUT_DOCUMENTATION } from '../modules/local/output_documentation/output_documentation'
 
 /*
 ========================================================================================
