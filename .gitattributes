@@ -1,3 +1,1 @@
 *.config linguist-language=nextflow
-modules/nf-core/** linguist-generated=nextflow
-subworkflows/nf-core/** linguist-generated=nextflow
