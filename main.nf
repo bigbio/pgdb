@@ -12,6 +12,8 @@
 
 nextflow.enable.dsl = 2
 
+//WorkflowMain.initialise(workflow, params, log)
+
  include { PGDB } from './workflows/pgdb'
 
 //

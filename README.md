@@ -1,4 +1,4 @@
-# ![nf-core/pgdb](docs/images/nf-core-pgdb_logo.png)
+# ![nf-core/pgdb](docs/images/nf-core-pgdb_logo_light.png)
 
 The ProteoGenomics database generation workflow (**pgdb**) use the [pypgatk](https://github.com/bigbio/py-pgatk) and [nextflow](https://www.nextflow.io/) to create different protein databases for ProteoGenomics data analysis.
 

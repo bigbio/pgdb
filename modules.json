@@ -1,0 +1,9 @@
+{
+    "name": "nf-core/pgdb",
+    "homePage": "https://github.com/nf-core/pgdb",
+    "repos": {
+        "nf-core/modules": {
+            
+        }
+    }
+}
