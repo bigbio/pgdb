@@ -1,1 +1,10 @@
 repository_type: pipeline
+lint:
+  files_exist:
+    - conf/igenomes.config
+  files_unchanged:
+    - assets/email_template.html
+    - lib/NfcoreSchema.groovy
+    - .github/workflows/linting.yml
+  pipeline_todos: False
+  nextflow_config: False
