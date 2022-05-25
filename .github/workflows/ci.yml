@@ -8,26 +8,20 @@ on:
   release:
     types: [published]
 
-env:
-  NXF_ANSI_LOG: false
-  CAPSULE_LOG: none
-
 jobs:
   test:
     name: Run workflow tests
     # Only run on push if this is the nf-core dev branch (merged PRs)
     if: ${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'nf-core/pgdb') }}
     runs-on: ubuntu-latest
+    env:
+      NXF_VER: ${{ matrix.nxf_ver }}
+      NXF_ANSI_LOG: false
+
     strategy:
       matrix:
-        # Nextflow versions
-        include:
-          # Test pipeline minimum Nextflow version
-          - NXF_VER: "21.10.3"
-            NXF_EDGE: ""
-          # Test latest edge release of Nextflow
-          - NXF_VER: ""
-            NXF_EDGE: "1"
+        # Nextflow versions: check pipeline minimum and current latest
+        nxf_ver: ['20.04.0', '21.03.0-edge']
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@v2
