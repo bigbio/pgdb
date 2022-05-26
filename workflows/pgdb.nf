@@ -66,9 +66,14 @@ if (params.cosmiccelllines_genes&&params.cosmiccelllines_mutations) {
 cbioportal_config = file(params.cbioportal_config)
 protein_decoy_config = file(params.protein_decoy_config)
 
-
 af_field = params.af_field
 ensembl_af_field = params.af_field
+if (af_field == null ) {
+    af_field = ""
+}
+if (ensembl_af_field == null ) {
+    ensembl_af_field = ""
+}
 if (params.ensembl_name == "homo_sapiens"){
     ensembl_af_field = "MAF"
 }
