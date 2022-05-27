@@ -170,8 +170,8 @@ include { COSMIC_PROTEINDB_LOCAL } from '../modules/local/cosmicmutations/cosmic
 include { COSMIC_CELLLINES_PROTEINDB_LOCAL } from '../modules/local/cosmicmutations/cosmic_celllines_proteindb_local'
 
 include { ENSEMBL_VCF_DOWNLOAD } from '../modules/local/vcf/ensembl_vcf_download'
-include { CHECK_ENSEMBL_VCF } from '../modules/vcf/VCF/check_ensembl_vcf'
-include { ENSEMBL_VCF_PROTEINDB } from '../modules/vcf/VCF/ensembl_vcf_proteindb'
+include { CHECK_ENSEMBL_VCF } from '../modules/local/vcf/check_ensembl_vcf'
+include { ENSEMBL_VCF_PROTEINDB } from '../modules/local/vcf/ensembl_vcf_proteindb'
 
 include { GTF_TO_FASTA } from '../modules/local/customvcf/gtf_to_fasta'
 include { VCF_PROTEINDB } from '../modules/local/customvcf/vcf_proteinDB'
