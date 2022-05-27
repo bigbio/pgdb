@@ -37,6 +37,9 @@ jobs:
           FILES: |
             Dockerfile
             environment.yml
+      - name: Build new docker image
+        if: env.MATCHED_FILES
+        run: docker build --no-cache . -t nfcore/pgdb:1.0.0
       - name: Pull docker image
         if: ${{ !env.MATCHED_FILES }}
         run: |
