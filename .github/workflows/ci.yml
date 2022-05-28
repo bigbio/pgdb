@@ -11,6 +11,8 @@ on:
 env:
   NXF_ANSI_LOG: false
   CAPSULE_LOG: none
+  COSMIC_USERNAME: ${{ secrets.username }}
+  COSMIC_PASSWORD: ${{ secrets.password }}
 
 jobs:
   test:
@@ -55,3 +57,10 @@ jobs:
         # For example: adding multiple test runs with different parameters
         # Remember that you can parallelise this by using strategy.matrix
         run: nextflow run ${GITHUB_WORKSPACE} -profile test,docker
+      - name: Run pipeline with cosmic test
+          # TODO nf-core: You can customise CI pipeline run tests as required
+          # For example: adding multiple test runs with different parameters
+          # Remember that you can parallelise this by using strategy.matrix
+        run: nextflow run ${GITHUB_WORKSPACE} -profile test_full,docker --cosmic_user_name ${COSMIC_USERNAME} --cosmic_password ${COSMIC_PASSWORD}
+
+
