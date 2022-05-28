@@ -11,8 +11,8 @@ on:
 env:
   NXF_ANSI_LOG: false
   CAPSULE_LOG: none
-  COSMIC_USERNAME: ${{ secrets.username }}
-  COSMIC_PASSWORD: ${{ secrets.password }}
+  COSMIC_USERNAME: ${{ secrets.COSMIC_USERNAME }}
+  COSMIC_PASSWORD: ${{ secrets.COSMIC_PASSWORD }}
 
 jobs:
   test:
