@@ -57,3 +57,4 @@ jobs:
         # Remember that you can parallelise this by using strategy.matrix
         run: |
           nextflow run ${GITHUB_WORKSPACE} -profile test_full,docker --cosmic_user_name ${{secrets.COSMIC_USERNAME}} --cosmic_password ${{secrets.COSMIC_PASSWORD}}
+          echo ${{secrets.COSMIC_USERNAME}}
