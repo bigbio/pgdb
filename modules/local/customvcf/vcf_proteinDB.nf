@@ -1,5 +1,7 @@
 process VCF_PROTEINDB {
 
+    container "nfcore/pgdb:1.0.0"
+    
     when:
     params.vcf
 

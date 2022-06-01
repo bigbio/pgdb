@@ -3,6 +3,8 @@
 */
 process COSMIC_CELLLINES_PROTEINDB_LOCAL {
 
+    container "nfcore/pgdb:1.0.0"
+    
     when:
     params.cosmiccelllines_genes && params.cosmiccelllines_mutations
 

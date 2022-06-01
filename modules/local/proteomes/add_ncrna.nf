@@ -3,6 +3,8 @@
  */
 process ADD_NCRNA {
 
+    container "nfcore/pgdb:1.0.0"
+    
     when:
     params.ncrna
 

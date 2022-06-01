@@ -2,6 +2,8 @@
  * Download all cBioPortal studies using git-lfs
 */
 process DOWNLOAD_ALL_CBIOPORTAL {
+    
+    container "nfcore/pgdb:1.0.0"
 
     when:
     params.cbioportal

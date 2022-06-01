@@ -3,6 +3,8 @@
  */
 process ENSEMBL_VCF_DOWNLOAD {
 
+    container "nfcore/pgdb:1.0.0"
+    
     when:
     params.ensembl
 

@@ -3,6 +3,8 @@
  */
 process GTF_TO_FASTA {
 
+    container "nfcore/pgdb:1.0.0"
+    
     when:
     params.vcf
 

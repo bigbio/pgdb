@@ -3,6 +3,8 @@
 */
 process COSMIC_CELLLINES_PROTEINDB {
 
+    container "nfcore/pgdb:1.0.0"
+
     when:
     params.cosmic_celllines
 

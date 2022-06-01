@@ -3,6 +3,8 @@
  **/
 process MERGE_CDNAS {
 
+    container "nfcore/pgdb:1.0.0"
+    
     input:
     file a
     file b

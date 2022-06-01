@@ -3,6 +3,8 @@
  */
 process ENSEMBL_FASTA_DOWNLOAD {
 
+    container "nfcore/pgdb:1.0.0"
+    
     when:
     params.add_reference ||  params.ensembl || params.altorfs || params.ncrna || params.pseudogenes || params.vcf
 

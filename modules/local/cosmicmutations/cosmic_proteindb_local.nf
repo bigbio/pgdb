@@ -3,6 +3,8 @@
 */
 process COSMIC_PROTEINDB_LOCAL {
 
+    container "nfcore/pgdb:1.0.0"
+    
     when:
     params.cosmicgenes && params.cosmicmutations
 

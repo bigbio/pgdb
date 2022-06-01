@@ -3,6 +3,8 @@
  */
 process ADD_ALTORFS {
 
+    container "nfcore/pgdb:1.0.0"
+    
     when:
     params.altorfs
 

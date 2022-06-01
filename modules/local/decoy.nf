@@ -4,6 +4,8 @@
  */
 process DECOY {
 
+    container "nfcore/pgdb:1.0.0"
+    
     publishDir "${params.outdir}/", mode: params.publish_dir_mode,
         saveAs: { filename -> params.final_database_protein }
 

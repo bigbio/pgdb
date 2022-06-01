@@ -2,6 +2,8 @@
  * Generate proteindb from cosmic mutations
 */
 process COSMIC_PROTEINDB {
+    
+    container "nfcore/pgdb:1.0.0"
 
     when:
     params.cosmic

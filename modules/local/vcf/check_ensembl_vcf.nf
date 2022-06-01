@@ -5,6 +5,8 @@ process CHECK_ENSEMBL_VCF {
 
     label 'process_medium'
     label 'process_single_thread'
+    
+    container "nfcore/pgdb:1.0.0"
 
     when:
     params.ensembl
