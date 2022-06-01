@@ -92,9 +92,10 @@ if ((params.cosmiccelllines_genes&&!params.cosmiccelllines_mutations) || (!param
     exit 1, "You have to provide both genes and mutations."
 }
 
+
 /*
 ========================================================================================
-    PRINT PARAMETER SUMMARY 
+    PRINT PARAMETER SUMMARY
 ========================================================================================
 */
 log.info NfcoreSchema.params_summary_log(workflow, params, json_schema)
@@ -238,7 +239,7 @@ workflow PGDB {
         COSMIC_PROTEINDB_LOCAL(cosmicgenes,cosmicmutations,cosmic_config)
         merged_databases = merged_databases.mix(COSMIC_PROTEINDB_LOCAL.out.cosmic_proteindbs_uselocal)
     }
-    
+
     //Generate proteindb from cosmic cell lines mutations
     COSMIC_CELLLINES_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_celllines_genes,COSMIC_DOWNLOAD.out.cosmic_celllines_mutations,cosmic_config)
     if (params.cosmic_celllines) {
@@ -273,7 +274,7 @@ workflow PGDB {
     VCF_PROTEINDB(vcf_file,GTF_TO_FASTA.out.gtf_transcripts_fasta,ENSEMBL_FASTA_DOWNLOAD.out.gtf,ensembl_config,af_field)
     merged_databases = merged_databases.mix(VCF_PROTEINDB.out.proteinDB_custom_vcf)
 
-    
+
     /*gnomAD variatns */
 
     //Download gencode files (fasta and gtf)
@@ -319,7 +320,7 @@ workflow PGDB {
 
     //Output Description HTML
     OUTPUT_DOCUMENTATION(ch_output_docs,ch_output_docs_images)
- 
+
 }
 
 
