@@ -52,9 +52,12 @@ jobs:
           nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
           echo ${COSMIC_USERNAME}
       - name: Run pipeline with cosmic test
+        env: 
+          COSMIC_USERNAME: ${{ secrets.COSMIC_USERNAME }} 
+          COSMIC_PASSWORD: ${{ secrets.COSMIC_PASSWORD }}
         # TODO nf-core: You can customise CI pipeline run tests as required
         # For example: adding multiple test runs with different parameters
         # Remember that you can parallelise this by using strategy.matrix
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test_full,docker --cosmic_user_name ${{secrets.COSMIC_USERNAME}} --cosmic_password ${{secrets.COSMIC_PASSWORD}}
+          nextflow run ${GITHUB_WORKSPACE} -profile test_full,docker --cosmic_user_name $COSMIC_USERNAME --cosmic_password $COSMIC_PASSWORD
       #    echo ${{secrets.COSMIC_USERNAME}}
