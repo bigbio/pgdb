@@ -10,20 +10,20 @@ ensembl_data_downloader:
   skip_vcf: False
   ensembl_ftp:
     base_url: ftp://ftp.ensembl.org/pub
-  rewrite_local_path_ensembl_repo: 'False'
+  rewrite_local_path_ensembl_repo: "False"
   ensembl_file_names:
     protein_sequence_file:
       file_type: pep
       file_suffixes:
-      - all
-      - abinitio
+        - all
+        - abinitio
       file_extension: fa
     gtf_file:
       file_suffixes:
-      - ''
-      - abinitio.
-      - chr.
-      - chr_patch_hapl_scaff.
+        - ""
+        - abinitio.
+        - chr.
+        - chr_patch_hapl_scaff.
       file_extension: gtf
   ensembl_api:
     server: http://rest.ensembl.org

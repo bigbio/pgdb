@@ -19,9 +19,9 @@
 
 **nf-core/pgdb** is a bioinformatics pipeline to generate proteogenomics databases. pgdb allows users to create proteogenomics databases using EMSEMBL as the reference proteome database. Three different major databases can be attached to the final proteogenomics database:
 
-* The reference proteome (ENSEMBL Reference proteome)
-* Non canonical proteins: pseudo-genes, sORFs, lncRNA.
-* Variants: COSMIC, cBioPortal, GENOMAD variants
+- The reference proteome (ENSEMBL Reference proteome)
+- Non canonical proteins: pseudo-genes, sORFs, lncRNA.
+- Variants: COSMIC, cBioPortal, GENOMAD variants
 
 The pipeline allows to estimate decoy proteins with different methods and attach them to the final proteogenomics database.
 
@@ -35,19 +35,19 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 
 3. Download the pipeline and test it on a minimal dataset with a single command (This run will download the canonical ENSEMBL reference proteome and create proteomics database with it):
 
-    ```bash
-    nextflow run nf-core/pgdb -profile test,<docker/singularity/podman/shifter/charliecloud/conda/institute>
-    ```
+   ```bash
+   nextflow run nf-core/pgdb -profile test,<docker/singularity/podman/shifter/charliecloud/conda/institute>
+   ```
 
-    > Please check [nf-core/configs](https://github.com/nf-core/configs#documentation) to see if a custom config file to run nf-core pipelines already exists for your Institute. If so, you can simply use `-profile <institute>` in your command. This will enable either `docker` or `singularity` and set the appropriate execution settings for your local compute environment.
+   > Please check [nf-core/configs](https://github.com/nf-core/configs#documentation) to see if a custom config file to run nf-core pipelines already exists for your Institute. If so, you can simply use `-profile <institute>` in your command. This will enable either `docker` or `singularity` and set the appropriate execution settings for your local compute environment.
 
 4. Start running your own analysis!
 
-    ```bash
-    nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --ncrna true --pseudogenes true --altorfs true
-    ```
+   ```bash
+   nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --ncrna true --pseudogenes true --altorfs true
+   ```
 
-    > This will create a proteogenomics database with the ENSEMBL reference proteome and non canonical proteins like pseudo genes, non coding rnas or alternative open reading frames.
+   > This will create a proteogenomics database with the ENSEMBL reference proteome and non canonical proteins like pseudo genes, non coding rnas or alternative open reading frames.
 
 See [usage docs](https://nf-co.re/pgdb/usage) for all of the available options when running the pipeline.
 
@@ -57,10 +57,10 @@ By default, the pipeline currently performs the following:
 
 ![ProteoGenomics Database](/docs/images/pgdb-databases.png)
 
-* Download protein databases from ENSEMBL
-* Translate from Genomics Variant databases into ProteoGenomics Databases (`COSMIC`, `GNOMAD`)
-* Add to a Reference proteomics database, non-coding RNAs + pseudogenes.
-* Compute Decoy for a proteogenomics databases
+- Download protein databases from ENSEMBL
+- Translate from Genomics Variant databases into ProteoGenomics Databases (`COSMIC`, `GNOMAD`)
+- Add to a Reference proteomics database, non-coding RNAs + pseudogenes.
+- Compute Decoy for a proteogenomics databases
 
 ## Documentation
 
