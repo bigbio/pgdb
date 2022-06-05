@@ -18,7 +18,7 @@ nextflow.enable.dsl = 2
 // WORKFLOW: Run main nf-core/pgdb analysis pipeline
 //
  workflow {
-    PGDB()   
+    PGDB()
 }
 
 /*

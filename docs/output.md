@@ -14,11 +14,11 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and aim to crea
 
 The main source of canonical protein sequence in pgdb is ENSEMBL. The user can then attach to the proteogenomic database protein vairants from COSMIC or cBioPortal. In addition, the pseudogenes, lncRNAs and other novel translation events can be configure to get novel protein sequences. The main sources of sequences are:
 
-* [Ensembl](#ensembl) - Download the Ensembl databases proteins and add canonical proteins.
-* [Ensemblnoncanonical](#ensemblnoncanonical) - ENSEMBL non canonical proteins
-* [Variants](#variants) - Add the COSMIC and cPortal variant databases.
-* [Decoy](#decoys) - Add decoy proteins to the final database.
-* [Output](#output) - Output results including clean databases and decoy generation
+- [Ensembl](#ensembl) - Download the Ensembl databases proteins and add canonical proteins.
+- [Ensemblnoncanonical](#ensemblnoncanonical) - ENSEMBL non canonical proteins
+- [Variants](#variants) - Add the COSMIC and cPortal variant databases.
+- [Decoy](#decoys) - Add decoy proteins to the final database.
+- [Output](#output) - Output results including clean databases and decoy generation
 
 ## Pipeline modes
 

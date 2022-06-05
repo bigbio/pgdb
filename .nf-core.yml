@@ -1,8 +1,1 @@
 repository_type: pipeline
-lint:
-  files_unchanged:
-    - assets/email_template.html
-    - lib/NfcoreSchema.groovy
-    - .github/workflows/linting.yml
-  pipeline_todos: False
-  nextflow_config: False

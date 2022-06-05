@@ -162,7 +162,7 @@
                     "type": "string",
                     "description": "Loading local COSMIC cell line files"
                 }
-                
+
             }
         },
         "gnomad_variant_proteomes": {
