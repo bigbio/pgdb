@@ -12,12 +12,12 @@
 
 nextflow.enable.dsl = 2
 
- include { PGDB } from './workflows/pgdb'
+include { PGDB } from './workflows/pgdb'
 
 //
 // WORKFLOW: Run main nf-core/pgdb analysis pipeline
 //
- workflow {
+workflow {
     PGDB()
 }
 

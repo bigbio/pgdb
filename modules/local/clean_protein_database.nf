@@ -24,7 +24,7 @@ process CLEAN_PROTEIN_DATABASE {
     script:
     stop_codons = ''
     if (params.add_stop_codons){
-       stop_codons = "--add_stop_codons"
+        stop_codons = "--add_stop_codons"
     }
 
     """

@@ -1,16 +1,13 @@
 /*
  * Parse software version numbers
  */
- process GET_SOFTWARE_VERSIONS {
+process GET_SOFTWARE_VERSIONS {
 
     container "nfcore/pgdb:1.0.0"
     
     publishDir "${params.outdir}/pipeline_info", 
         mode: params.publish_dir_mode,
-        saveAs: { filename ->
-                      if (filename.indexOf('.csv') > 0) filename
-                      else null
-        }
+        saveAs: { filename ->  if (filename.indexOf('.csv') > 0) filename else null }
 
     output:
     path 'software_versions_mqc.yaml' ,emit: ch_software_versions_yaml
