@@ -161,7 +161,6 @@ workflow PGDB {
         .set {proteinDB_vcf_final}
     merged_databases = merged_databases.mix(proteinDB_vcf_final)
 
-
     /*Custom VCF */
 
     //Generate protein databse for a given VCF
