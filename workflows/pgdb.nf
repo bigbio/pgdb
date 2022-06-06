@@ -13,7 +13,7 @@
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 
 // Validate input parameters
-WorkflowMain.initialise(params, log)
+WorkflowPgdb.initialise(params, log)
 
 // Check input path parameters to see if they exist
 def checkPathParamList = [ ]
