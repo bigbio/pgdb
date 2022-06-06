@@ -154,7 +154,7 @@ workflow PGDB {
     CHECK_ENSEMBL_VCF(ENSEMBL_VCF_DOWNLOAD.out.ensembl_vcf_files)
 
     //Generate protein database(s) from ENSEMBL vcf file(s)
-    ENSEMBL_VCF_PROTEINDB(CHECK_ENSEMBL_VCF.out.ensembl_vcf_files_checked,MERGE_CDNAS.out.total_cdnas,ENSEMBL_FASTA_DOWNLOAD.out.gtf, params.ensembl_config, params.af_field)
+    ENSEMBL_VCF_PROTEINDB(CHECK_ENSEMBL_VCF.out.ensembl_vcf_files_checked,MERGE_CDNAS.out.total_cdnas,ENSEMBL_FASTA_DOWNLOAD.out.gtf, params.ensembl_config)
 
     //concatenate all ensembl proteindbs into one
     ENSEMBL_VCF_PROTEINDB.out.proteinDB_vcf.collectFile(name: 'ensembl_proteindb.fa', newLine: false, storeDir: "${projectDir}/result")
