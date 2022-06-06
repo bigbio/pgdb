@@ -22,3 +22,4 @@ process ENSEMBL_VCF_DOWNLOAD {
         -sg -sp -sc -sd -sn
     """
 }
+

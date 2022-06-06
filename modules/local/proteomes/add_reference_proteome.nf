@@ -18,5 +18,4 @@ process ADD_REFERENCE_PROTEOME {
     """
     cat $reference_proteome >> reference_proteome.fa
     """
-
 }

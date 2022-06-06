@@ -26,3 +26,4 @@ process ADD_PSEUDOGENES {
         --var_prefix pseudo_
     """
 }
+

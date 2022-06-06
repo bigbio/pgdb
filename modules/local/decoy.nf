@@ -30,3 +30,4 @@ process DECOY {
         --output_database decoy_database.fa
     """
 }
+

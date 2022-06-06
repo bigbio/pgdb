@@ -17,3 +17,4 @@ process CDS_GRCH37_DOWNLOAD {
     gunzip *.gz
     """
 }
+
