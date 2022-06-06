@@ -24,7 +24,7 @@ process DECOY {
     pypgatk_cli.py generate-decoy \\
         --method "$params.decoy_method" \\
         --enzyme "$params.decoy_enzyme" \\
-        --config_file $protein_decoy_config \\
+        --config_file $params.protein_decoy_config \\
         --input_database $f \\
         --decoy_prefix "$params.decoy_prefix" \\
         --output_database decoy_database.fa
