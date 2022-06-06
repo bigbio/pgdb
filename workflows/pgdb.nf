@@ -13,7 +13,7 @@
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 
 // Validate input parameters
-WorkflowPgdb.initialise(params, log)
+WorkflowMain.initialise(params, log)
 
 // Check input path parameters to see if they exist
 def checkPathParamList = [ ]
@@ -99,7 +99,7 @@ workflow PGDB {
     // Parse software version numbers
     GET_SOFTWARE_VERSIONS()
 
-    //Download data from ensembl for the particular species
+    // Download data from ensembl for the particular species
     ENSEMBL_FASTA_DOWNLOAD(ensembl_downloader_config)
 
     ADD_REFERENCE_PROTEOME(ENSEMBL_FASTA_DOWNLOAD.out.ensembl_protein_database_sub)
