@@ -19,9 +19,9 @@ WorkflowPgdb.initialise(params, log)
 def checkPathParamList = [ ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
-if (params.validate_params) {
-    NfcoreSchema.validateParameters(params, log)
-}
+// if (params.validate_params) {
+//     NfcoreSchema.validateParameters(params, log)
+// }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
