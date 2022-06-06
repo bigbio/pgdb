@@ -20,7 +20,7 @@ def checkPathParamList = [ ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 if (params.validate_params) {
-    NfcoreSchema.validateParameters(params, json_schema, log)
+    NfcoreSchema.validateParameters(params, log)
 }
 
 /*
