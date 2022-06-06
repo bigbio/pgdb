@@ -158,8 +158,8 @@ workflow PGDB {
 
     //concatenate all ensembl proteindbs into one
     ENSEMBL_VCF_PROTEINDB.out.proteinDB_vcf.collectFile(name: 'ensembl_proteindb.fa', newLine: false, storeDir: "${projectDir}/result")
-        .set {params.proteinDB_vcf_final}
-    merged_databases = merged_databases.mix(params.proteinDB_vcf_final)
+        .set {proteinDB_vcf_final}
+    merged_databases = merged_databases.mix(proteinDB_vcf_final)
 
 
     /*Custom VCF */
@@ -200,7 +200,7 @@ workflow PGDB {
     DOWNLOAD_ALL_CBIOPORTAL()
 
     //Generate proteinDB from cBioPortal mutations
-    CBIOPORTAL_PROTEINDB(CDS_GRCH37_DOWNLOAD.out.ch_GRCh37_cds,DOWNLOAD_ALL_CBIOPORTAL.out.cbio_mutations,DOWNLOAD_ALL_CBIOPORTAL.out.cbio_samples,cbioportal_config)
+    CBIOPORTAL_PROTEINDB(CDS_GRCH37_DOWNLOAD.out.ch_GRCh37_cds,DOWNLOAD_ALL_CBIOPORTAL.out.cbio_mutations,DOWNLOAD_ALL_CBIOPORTAL.out.cbio_samples,params.cbioportal_config)
     merged_databases = merged_databases.mix(CBIOPORTAL_PROTEINDB.out.cBioportal_proteindb)
 
     //Concatenate all generated databases from merged_databases channel to the final_database_protein file
@@ -215,8 +215,8 @@ workflow PGDB {
     //Decoy sequences will have "DECOY_" prefix tag to the protein accession
     DECOY(to_protein_decoy_ch,params.protein_decoy_config)
 
-    //Output Description HTML
-    OUTPUT_DOCUMENTATION(ch_output_docs,ch_output_docs_images)
+//     //Output Description HTML
+//     OUTPUT_DOCUMENTATION(ch_output_docs,ch_output_docs_images)
 
 }
 
