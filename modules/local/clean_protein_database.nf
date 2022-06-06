@@ -30,7 +30,7 @@ process CLEAN_PROTEIN_DATABASE {
     """
     pypgatk_cli.py ensembl-check \\
         -in "$file" \\
-        --config_file "$e" \\
+        --config_file $params.ensembl_config \\
         -out database_clean.fa \\
         --num_aa "$params.minimum_aa" \\
         "$stop_codons"
