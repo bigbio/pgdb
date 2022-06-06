@@ -85,7 +85,6 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 The pgdb pipeline should be cited using the following citation:
 
-
 > Umer HM, Audain E, Zhu Y, Pfeuffer J, Sachsenberg T, Lehtiö J, Branca R, Perez-Riverol Y. Generation of ENSEMBL-based proteogenomics databases boosts the identification of non-canonical peptides.
 >
 > _Bioinformatics_. 2021 Dec 14;38(5):1470–2. doi: [10.1093/bioinformatics/btab838](https://dx.doi.org/10.1093/bioinformatics/btab838). Epub ahead of print. PMID: 34904638; PMCID: PMC8825679.
