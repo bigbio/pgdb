@@ -16,7 +16,7 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 WorkflowPgdb.initialise(params, log)
 
 // Check input path parameters to see if they exist
-def checkPathParamList = [ params.input, params.multiqc_config, params.fasta ]
+def checkPathParamList = [ ]
 for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true) } }
 
 if (params.validate_params) {
@@ -29,8 +29,8 @@ if (params.validate_params) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
-ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
+// ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
+// ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
