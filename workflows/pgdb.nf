@@ -96,8 +96,8 @@ include { OUTPUT_DOCUMENTATION } from '../modules/local/output_documentation'
 
 workflow PGDB {
 
-    // Parse software version numbers
-    GET_SOFTWARE_VERSIONS()
+//     // Parse software version numbers
+//     GET_SOFTWARE_VERSIONS()
 
     // Download data from ensembl for the particular species
     ENSEMBL_FASTA_DOWNLOAD(params.ensembl_downloader_config)
