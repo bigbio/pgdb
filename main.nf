@@ -2,11 +2,11 @@
 
 /*
 ========================================================================================
-                         nf-core/pgdb
+                        nf-core/pgdb
 ========================================================================================
- nf-core/pgdb Proteogenomics database generation
- #### Homepage / Documentation
- https://github.com/nf-core/pgdb
+nf-core/pgdb Proteogenomics database generation
+#### Homepage / Documentation
+https://github.com/nf-core/pgdb
 ----------------------------------------------------------------------------------------
 */
 
