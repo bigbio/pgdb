@@ -2,8 +2,6 @@
  * Add reference proteome
  */
 process ADD_REFERENCE_PROTEOME {
-
-    container "nfcore/pgdb:1.0.0"
     
     when:
     params.add_reference

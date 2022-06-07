@@ -3,7 +3,6 @@
  */
 process CDS_GRCH37_DOWNLOAD {
 
-    container "nfcore/pgdb:1.0.0"
     
     when:
     params.cbioportal

@@ -2,8 +2,6 @@
  * Concatenate all generated databases from merged_databases channel to the final_database_protein file
  */
 process MERGE_PROTEINDBS {
-
-    container "nfcore/pgdb:1.0.0"
     
     publishDir "${params.outdir}/", mode: params.publish_dir_mode,
         // Final step if not cleaning or creating a decoy database - save output to params.final_database_protein

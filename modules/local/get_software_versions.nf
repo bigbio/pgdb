@@ -2,8 +2,6 @@
  * Parse software version numbers
  */
 process GET_SOFTWARE_VERSIONS {
-
-    container "nfcore/pgdb:1.0.0"
     
     publishDir "${params.outdir}/pipeline_info", 
         mode: params.publish_dir_mode,
