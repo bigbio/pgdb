@@ -7,7 +7,7 @@ process DECOY {
     conda (params.enable_conda ? "bioconda::pypgatk=0.0.19" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/pypgatk_0.0.19--py_0' :
-        'quay.io/biocontainers/pypgatk' }"
+        'quay.io/biocontainers/pypgatk:0.0.19--py_0' }"
     
     publishDir "${params.outdir}/", mode: params.publish_dir_mode,
         saveAs: { filename -> params.final_database_protein }
