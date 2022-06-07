@@ -288,7 +288,7 @@
         },
         "ensembl_downloader_config": {
             "type": "string",
-            "default": "conf/ensembl_downloader_config.yaml"
+            "default": "/Users/yperez/IdeaProjects/github-repo/BDP/pgdb/conf/ensembl_downloader_config.yaml"
         },
         "ensembl_config": {
             "type": "string",
