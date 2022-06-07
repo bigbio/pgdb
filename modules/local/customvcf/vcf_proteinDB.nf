@@ -10,7 +10,6 @@ process VCF_PROTEINDB {
     file f
     file g
     file e
-    val af_field
 
     output:
     path "*_proteinDB.fa" ,emit: proteinDB_custom_vcf
@@ -22,7 +21,7 @@ process VCF_PROTEINDB {
 
     pypgatk_cli.py vcf-to-proteindb \\
         --config_file $e \\
-        --af_field "$af_field" \\
+        --af_field "$params.af_field" \\
         --input_fasta $f \\
         --gene_annotations_gtf $g \\
         --vcf ${v.baseName}_changedChrNames.vcf \\

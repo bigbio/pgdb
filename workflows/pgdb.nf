@@ -167,9 +167,8 @@ workflow PGDB {
     GTF_TO_FASTA(ENSEMBL_FASTA_DOWNLOAD.out.gtf,ENSEMBL_FASTA_DOWNLOAD.out.genome_fasta)
     vcf_file = params.vcf_file ? Channel.fromPath(params.vcf_file, checkIfExists: true) : Channel.empty()
 
-    VCF_PROTEINDB(vcf_file,GTF_TO_FASTA.out.gtf_transcripts_fasta,ENSEMBL_FASTA_DOWNLOAD.out.gtf,params.ensembl_config,params.af_field)
+    VCF_PROTEINDB(vcf_file,GTF_TO_FASTA.out.gtf_transcripts_fasta,ENSEMBL_FASTA_DOWNLOAD.out.gtf,params.ensembl_config)
     merged_databases = merged_databases.mix(VCF_PROTEINDB.out.proteinDB_custom_vcf)
-
 
     /*gnomAD variatns */
 
