@@ -11,12 +11,17 @@ process DOWNLOAD_ALL_CBIOPORTAL {
     when:
     params.cbioportal
 
+    input:
+    val cbioportal_study_id
+    file cbioportal_config
+
+
     output:
     path('cbioportal_allstudies_data_mutations_mskcc.txt') ,emit: cbio_mutations
     path('cbioportal_allstudies_data_clinical_sample.txt') ,emit: cbio_samples
 
     script:
-    if (params.cbioportal_study_id == "all")
+    if (cbioportal_study_id == "all")
         """
         git clone https://github.com/cBioPortal/datahub.git .
         git lfs install --local --skip-smudge
@@ -41,11 +46,11 @@ process DOWNLOAD_ALL_CBIOPORTAL {
         """
         pypgatk_cli.py cbioportal-downloader \\
             --config_file "$cbioportal_config" \\
-            -d "$params.cbioportal_study_id"
+            -d "$cbioportal_study_id"
 
-        tar -xzvf database_cbioportal/${params.cbioportal_study_id}.tar.gz
-        cat ${params.cbioportal_study_id}/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
-        cat ${params.cbioportal_study_id}/data_clinical_sample.txt | \\
+        tar -xzvf database_cbioportal/${cbioportal_study_id}.tar.gz
+        cat ${cbioportal_study_id}/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
+        cat ${cbioportal_study_id}/data_clinical_sample.txt | \\
             awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | \\
             awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; \\
             for(i=1;i<=NF;i++){ \\

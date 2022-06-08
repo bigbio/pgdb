@@ -17,7 +17,10 @@ process DECOY {
 
     input:
     file f
-    file protein_decoy_config
+    file protein_decoy_config 
+    val decoy_method
+    val decoy_enzyme
+    val decoy_prefix
 
     output:
     path 'decoy_database.fa' ,emit: fasta_decoy_db_ch
@@ -25,11 +28,11 @@ process DECOY {
     script:
     """
     pypgatk_cli.py generate-decoy \\
-        --method "$params.decoy_method" \\
-        --enzyme "$params.decoy_enzyme" \\
-        --config_file $params.protein_decoy_config \\
+        --method "$decoy_method" \\
+        --enzyme "$decoy_enzyme" \\
+        --config_file $protein_decoy_config \\
         --input_database $f \\
-        --decoy_prefix "$params.decoy_prefix" \\
+        --decoy_prefix "$decoy_prefix" \\
         --output_database decoy_database.fa
     """
 }

@@ -16,6 +16,8 @@ process CBIOPORTAL_PROTEINDB {
     file m
     file s
     file cbioportal_config
+    val cbioportal_filter_column
+    val cbioportal_accepted_values
 
     output:
     path 'cbioPortal_proteinDB*.fa' ,emit: cBioportal_proteindb
@@ -27,8 +29,8 @@ process CBIOPORTAL_PROTEINDB {
         --input_mutation $m \\
         --input_cds $g \\
         --clinical_sample_file $s \\
-        --filter_column $params.cbioportal_filter_column \\
-        --accepted_values $params.cbioportal_accepted_values \\
+        --filter_column $cbioportal_filter_column \\
+        --accepted_values $cbioportal_accepted_values \\
         --output_db cbioPortal_proteinDB.fa
     """
 }

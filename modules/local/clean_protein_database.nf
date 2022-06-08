@@ -19,7 +19,9 @@ process CLEAN_PROTEIN_DATABASE {
 
     input:
     file file
-    file e
+    file ensembl_config
+    val minimum_aa
+    val stop_codons
 
     output:
     path 'database_clean.fa' ,emit: clean_database_sh
@@ -33,9 +35,9 @@ process CLEAN_PROTEIN_DATABASE {
     """
     pypgatk_cli.py ensembl-check \\
         -in "$file" \\
-        --config_file $params.ensembl_config \\
+        --config_file $ensembl_config \\
         -out database_clean.fa \\
-        --num_aa "$params.minimum_aa" \\
+        --num_aa "$minimum_aa" \\
         "$stop_codons"
     """
 }

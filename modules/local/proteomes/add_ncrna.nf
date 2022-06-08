@@ -14,6 +14,8 @@ process ADD_NCRNA {
     input:
     file x
     file ensembl_config
+    val biotypes
+    
 
     output:
     path 'ncRNAs_proteinDB.fa',emit: optional_ncrna
@@ -24,7 +26,7 @@ process ADD_NCRNA {
         --config_file "$ensembl_config" \\
         --input_fasta $x \\
         --output_proteindb ncRNAs_proteinDB.fa \\
-        --include_biotypes "${params.biotypes['ncRNA']}" \\
+        --include_biotypes "$biotypes" \\
         --skip_including_all_cds --var_prefix ncRNA_
     """
 }

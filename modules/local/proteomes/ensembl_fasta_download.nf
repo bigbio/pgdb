@@ -13,6 +13,7 @@ process ENSEMBL_FASTA_DOWNLOAD {
 
     input:
     file ensembl_downloader_config
+    val ensembl_name
 
     output:
     path 'database_ensembl/*.pep.all.fa', emit: ensembl_protein_database_sub
@@ -24,7 +25,7 @@ process ENSEMBL_FASTA_DOWNLOAD {
     script:
     """
     pypgatk_cli.py ensembl-downloader \\
-        --config_file $params.ensembl_downloader_config \\
+        --config_file $ensembl_downloader_config \\
         --ensembl_name $params.ensembl_name \\
         -sv -sc
     """

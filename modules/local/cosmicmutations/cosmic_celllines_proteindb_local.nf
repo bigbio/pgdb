@@ -18,6 +18,7 @@ process COSMIC_CELLLINES_PROTEINDB_LOCAL {
     }
     
     file cosmic_config
+    val cosmic_cellline_name
 
     output:
     file 'cosmic_celllines_proteinDB*.fa' into cosmic_celllines_proteindbs_uselocal
@@ -29,7 +30,7 @@ process COSMIC_CELLLINES_PROTEINDB_LOCAL {
         --input_mutation $cosmiccelllines_mutations \\
         --input_genes $cosmiccelllines_genes \\
         --filter_column 'Sample name' \\
-        --accepted_values $params.cosmic_cellline_name \\
+        --accepted_values $cosmic_cellline_name \\
         --output_db cosmic_celllines_proteinDB.fa
     """
 }
