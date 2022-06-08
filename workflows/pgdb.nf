@@ -108,22 +108,22 @@ workflow PGDB {
     MERGE_CDNAS(ENSEMBL_FASTA_DOWNLOAD.out.ensembl_cdna_database_sub.collect(),ENSEMBL_FASTA_DOWNLOAD.out.ensembl_ncrna_database_sub.collect())
 
     //Creates the ncRNA protein database
-    ADD_NCRNA(MERGE_CDNAS.out.total_cdnas,params.ensembl_config,params.biotypes['ncRNA'])
+    ADD_NCRNA(MERGE_CDNAS.out.total_cdnas,params.ensembl_config)
     merged_databases = ADD_REFERENCE_PROTEOME.out.ensembl_protein_database.mix(ADD_NCRNA.out.optional_ncrna)
 
     //Creates the pseudogenes protein database
-    ADD_PSEUDOGENES(MERGE_CDNAS.out.total_cdnas, params.ensembl_config,params.biotypes['pseudogene'])
+    ADD_PSEUDOGENES(MERGE_CDNAS.out.total_cdnas, params.ensembl_config)
     merged_databases = merged_databases.mix(ADD_PSEUDOGENES.out.optional_pseudogenes)
 
     //Creates the altORFs protein database
-    ADD_ALTORFS(ENSEMBL_FASTA_DOWNLOAD.out.ensembl_cdna_database_sub,params.ensembl_config,params.biotypes['protein_coding'])
+    ADD_ALTORFS(ENSEMBL_FASTA_DOWNLOAD.out.ensembl_cdna_database_sub,params.ensembl_config)
     merged_databases = merged_databases.mix(ADD_ALTORFS.out.optional_altorfs)
 
 
     /* Mutations to proteinDB */
 
     //Download COSMIC Mutations
-    COSMIC_DOWNLOAD(params.cosmic_config,params.cosmic_user_name,params.cosmic_password)
+    COSMIC_DOWNLOAD(params.cosmic_config)
 
     //Generate proteindb from cosmic mutations
     COSMIC_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_genes,COSMIC_DOWNLOAD.out.cosmic_mutations, params.cosmic_config,params.cosmic_cancer_type)
@@ -133,7 +133,7 @@ workflow PGDB {
 
     //Generate proteindb from local cosmic mutations
     if (params.cosmicgenes&&params.cosmicmutations) {
-        COSMIC_PROTEINDB_LOCAL(params.cosmicgenes,params.cosmicmutations, params.cosmic_config,params.cosmic_cancer_type)
+        COSMIC_PROTEINDB_LOCAL(params.cosmic_config,params.cosmic_cancer_type)
         merged_databases = merged_databases.mix(COSMIC_PROTEINDB_LOCAL.out.cosmic_proteindbs_uselocal)
     }
 
@@ -145,7 +145,7 @@ workflow PGDB {
 
     //Generate proteindb from local cosmic cell lines mutations
     if (params.cosmiccelllines_genes&&params.cosmiccelllines_mutations) {
-        COSMIC_CELLLINES_PROTEINDB_LOCAL(params.cosmiccelllines_genes,params.cosmiccelllines_mutations, params.cosmic_config,params.cosmic_cellline_name)
+        COSMIC_CELLLINES_PROTEINDB_LOCAL(params.cosmic_config,params.cosmic_cellline_name)
         merged_databases = merged_databases.mix(COSMIC_CELLLINES_PROTEINDB_LOCAL.out.cosmic_celllines_proteindbs_uselocal)
     }
 
@@ -205,7 +205,7 @@ workflow PGDB {
     MERGE_PROTEINDBS(merged_databases.collect())
 
     //clean the database for stop codons, and unwanted AA like: *, also remove proteins with less than 6 AA
-    CLEAN_PROTEIN_DATABASE(MERGE_PROTEINDBS.out.to_clean_ch,params.ensembl_config,params.minimum_aa,params.stop_codons)
+    CLEAN_PROTEIN_DATABASE(MERGE_PROTEINDBS.out.to_clean_ch,params.ensembl_config,params.minimum_aa)
 
     to_protein_decoy_ch = params.clean_database ? CLEAN_PROTEIN_DATABASE.out.clean_database_sh : MERGE_PROTEINDBS.out.to_clean_ch
 

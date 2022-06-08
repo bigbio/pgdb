@@ -26,7 +26,7 @@ process ENSEMBL_FASTA_DOWNLOAD {
     """
     pypgatk_cli.py ensembl-downloader \\
         --config_file $ensembl_downloader_config \\
-        --ensembl_name $params.ensembl_name \\
+        --ensembl_name $ensembl_name \\
         -sv -sc
     """
 }

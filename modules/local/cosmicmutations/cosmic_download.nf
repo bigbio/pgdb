@@ -13,8 +13,7 @@ process COSMIC_DOWNLOAD {
 
     input:
     file cosmic_config
-    val cosmic_user_name
-    val cosmic_password
+
 
     output:
     path "database_cosmic/All_COSMIC_Genes.fasta" ,emit:cosmic_genes
@@ -26,7 +25,7 @@ process COSMIC_DOWNLOAD {
     """
     pypgatk_cli.py cosmic-downloader \\
         --config_file "$cosmic_config" \\
-        --username $cosmic_user_name \\
-        --password $cosmic_password
+        --username $params.cosmic_user_name \\
+        --password $params.cosmic_password
     """
 }

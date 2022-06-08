@@ -21,7 +21,6 @@ process CLEAN_PROTEIN_DATABASE {
     file file
     file ensembl_config
     val minimum_aa
-    val stop_codons
 
     output:
     path 'database_clean.fa' ,emit: clean_database_sh

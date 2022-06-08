@@ -14,7 +14,6 @@ process ADD_PSEUDOGENES {
     input:
     file x
     file ensembl_config
-    val biotypes
 
     output:
     path 'pseudogenes_proteinDB.fa' ,emit: optional_pseudogenes
@@ -25,7 +24,7 @@ process ADD_PSEUDOGENES {
         --config_file "$ensembl_config" \\
         --input_fasta "$x" \\
         --output_proteindb pseudogenes_proteinDB.fa \\
-        --include_biotypes "$biotypes" \\
+        --include_biotypes "${params.biotypes['pseudogene']}" \\
         --skip_including_all_cds \\
         --var_prefix pseudo_
     """
