@@ -2,7 +2,8 @@
  * Extract gnomAD VCF
  */
 process EXTRACT_GNOMAD_VCF {
- 
+
+    
     when:
     params.gnomad
 
