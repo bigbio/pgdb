@@ -100,7 +100,7 @@ workflow PGDB {
 //     GET_SOFTWARE_VERSIONS()
 
     // Download data from ensembl for the particular species
-    ENSEMBL_FASTA_DOWNLOAD(params.ensembl_downloader_config)
+    ENSEMBL_FASTA_DOWNLOAD(params.ensembl_downloader_config,params.ensembl_name)
 
     ADD_REFERENCE_PROTEOME(ENSEMBL_FASTA_DOWNLOAD.out.ensembl_protein_database_sub)
 
