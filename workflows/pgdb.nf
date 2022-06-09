@@ -100,7 +100,7 @@ workflow PGDB {
 //     GET_SOFTWARE_VERSIONS()
 
     // Download data from ensembl for the particular species
-    ENSEMBL_FASTA_DOWNLOAD(params.ensembl_downloader_config)
+    ENSEMBL_FASTA_DOWNLOAD(params.ensembl_downloader_config,params.ensembl_name)
 
     ADD_REFERENCE_PROTEOME(ENSEMBL_FASTA_DOWNLOAD.out.ensembl_protein_database_sub)
 
@@ -126,7 +126,7 @@ workflow PGDB {
     COSMIC_DOWNLOAD(params.cosmic_config)
 
     //Generate proteindb from cosmic mutations
-    COSMIC_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_genes,COSMIC_DOWNLOAD.out.cosmic_mutations, params.cosmic_config)
+    COSMIC_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_genes,COSMIC_DOWNLOAD.out.cosmic_mutations,params.cosmic_config,params.cosmic_cancer_type)
     if (params.cosmic) {
         merged_databases = merged_databases.mix(COSMIC_PROTEINDB.out.cosmic_proteindbs)
     }
@@ -138,7 +138,7 @@ workflow PGDB {
     }
 
     //Generate proteindb from cosmic cell lines mutations
-    COSMIC_CELLLINES_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_celllines_genes,COSMIC_DOWNLOAD.out.cosmic_celllines_mutations, params.cosmic_config)
+    COSMIC_CELLLINES_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_celllines_genes,COSMIC_DOWNLOAD.out.cosmic_celllines_mutations,params.cosmic_config,params.cosmic_cellline_name)
     if (params.cosmic_celllines) {
         merged_databases = merged_databases.mix(COSMIC_CELLLINES_PROTEINDB.out.cosmic_celllines_proteindbs)
     }
@@ -150,7 +150,7 @@ workflow PGDB {
     }
 
     //Download VCF files from ensembl for the particular species
-    ENSEMBL_VCF_DOWNLOAD(params.ensembl_downloader_config)
+    ENSEMBL_VCF_DOWNLOAD(params.ensembl_downloader_config,params.ensembl_name)
     CHECK_ENSEMBL_VCF(ENSEMBL_VCF_DOWNLOAD.out.ensembl_vcf_files)
 
     //Generate protein database(s) from ENSEMBL vcf file(s)
@@ -195,10 +195,10 @@ workflow PGDB {
     CDS_GRCH37_DOWNLOAD()
 
     //Download all cBioPortal studies using git-lfs
-    DOWNLOAD_ALL_CBIOPORTAL()
+    DOWNLOAD_ALL_CBIOPORTAL(params.cbioportal_config,params.cbioportal_study_id)
 
     //Generate proteinDB from cBioPortal mutations
-    CBIOPORTAL_PROTEINDB(CDS_GRCH37_DOWNLOAD.out.ch_GRCh37_cds,DOWNLOAD_ALL_CBIOPORTAL.out.cbio_mutations,DOWNLOAD_ALL_CBIOPORTAL.out.cbio_samples,params.cbioportal_config)
+    CBIOPORTAL_PROTEINDB(CDS_GRCH37_DOWNLOAD.out.ch_GRCh37_cds,DOWNLOAD_ALL_CBIOPORTAL.out.cbio_mutations,DOWNLOAD_ALL_CBIOPORTAL.out.cbio_samples,params.cbioportal_config,params.cbioportal_filter_column,params.cbioportal_accepted_values)
     merged_databases = merged_databases.mix(CBIOPORTAL_PROTEINDB.out.cBioportal_proteindb)
 
     //Concatenate all generated databases from merged_databases channel to the final_database_protein file
@@ -211,7 +211,7 @@ workflow PGDB {
 
     //Create the decoy database using DecoyPYrat
     //Decoy sequences will have "DECOY_" prefix tag to the protein accession
-    DECOY(to_protein_decoy_ch,params.protein_decoy_config)
+    DECOY(to_protein_decoy_ch,params.protein_decoy_config,params.decoy_method,params.decoy_enzyme,params.decoy_prefix)
 
 //     //Output Description HTML
 //     OUTPUT_DOCUMENTATION(ch_output_docs,ch_output_docs_images)

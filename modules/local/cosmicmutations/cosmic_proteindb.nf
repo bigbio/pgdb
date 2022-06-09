@@ -12,9 +12,10 @@ process COSMIC_PROTEINDB {
     params.cosmic
 
     input:
-    file g
-    file m
+    file cosmic_genes
+    file cosmic_mutations
     file cosmic_config
+    val cosmic_cancer_type
 
     output:
     path 'cosmic_proteinDB*.fa' ,emit: cosmic_proteindbs
@@ -23,9 +24,9 @@ process COSMIC_PROTEINDB {
     """
     pypgatk_cli.py cosmic-to-proteindb \\
         --config_file "$cosmic_config" \\
-        --input_mutation $m --input_genes $g \\
+        --input_mutation $cosmic_mutations --input_genes $cosmic_genes \\
         --filter_column 'Histology subtype 1' \\
-        --accepted_values $params.cosmic_cancer_type \\
+        --accepted_values $cosmic_cancer_type \\
         --output_db cosmic_proteinDB.fa
     """
 }
