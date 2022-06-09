@@ -154,7 +154,7 @@ workflow PGDB {
     CHECK_ENSEMBL_VCF(ENSEMBL_VCF_DOWNLOAD.out.ensembl_vcf_files)
 
     //Generate protein database(s) from ENSEMBL vcf file(s)
-    ENSEMBL_VCF_PROTEINDB(CHECK_ENSEMBL_VCF.out.ensembl_vcf_files_checked,MERGE_CDNAS.out.total_cdnas,ENSEMBL_FASTA_DOWNLOAD.out.gtf, params.ensembl_config,params.af_field)
+    ENSEMBL_VCF_PROTEINDB(CHECK_ENSEMBL_VCF.out.ensembl_vcf_files_checked,MERGE_CDNAS.out.total_cdnas,ENSEMBL_FASTA_DOWNLOAD.out.gtf, params.ensembl_config)
 
     //concatenate all ensembl proteindbs into one
     ENSEMBL_VCF_PROTEINDB.out.proteinDB_vcf.collectFile(name: 'ensembl_proteindb.fa', newLine: false, storeDir: "${projectDir}/result")
@@ -167,7 +167,7 @@ workflow PGDB {
     GTF_TO_FASTA(ENSEMBL_FASTA_DOWNLOAD.out.gtf,ENSEMBL_FASTA_DOWNLOAD.out.genome_fasta)
     vcf_file = params.vcf_file ? Channel.fromPath(params.vcf_file, checkIfExists: true) : Channel.empty()
 
-    VCF_PROTEINDB(vcf_file,GTF_TO_FASTA.out.gtf_transcripts_fasta,ENSEMBL_FASTA_DOWNLOAD.out.gtf,params.ensembl_config,params.af_field)
+    VCF_PROTEINDB(vcf_file,GTF_TO_FASTA.out.gtf_transcripts_fasta,ENSEMBL_FASTA_DOWNLOAD.out.gtf,params.ensembl_config)
     merged_databases = merged_databases.mix(VCF_PROTEINDB.out.proteinDB_custom_vcf)
 
     /*gnomAD variatns */
