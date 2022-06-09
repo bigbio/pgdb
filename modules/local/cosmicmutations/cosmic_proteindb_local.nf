@@ -14,6 +14,8 @@ process COSMIC_PROTEINDB_LOCAL {
     input:
     file cosmic_config
     val cosmic_cancer_type
+    file cosmicmutations
+    file cosmicgenes
 
     output:
     file 'cosmic_proteinDB*.fa' into cosmic_proteindbs_uselocal
@@ -22,7 +24,7 @@ process COSMIC_PROTEINDB_LOCAL {
     """
     pypgatk_cli.py cosmic-to-proteindb \\
         --config_file "$cosmic_config" \\
-        --input_mutation $params.cosmicmutations --input_genes $params.cosmicgenes \\
+        --input_mutation $cosmicmutations --input_genes $cosmicgenes \\
         --filter_column 'Histology subtype 1' \\
         --accepted_values $cosmic_cancer_type \\
         --output_db cosmic_proteinDB.fa

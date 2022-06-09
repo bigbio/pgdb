@@ -14,6 +14,8 @@ process COSMIC_CELLLINES_PROTEINDB_LOCAL {
     input:
     file cosmic_config
     val cosmic_cellline_name
+    file cosmiccelllines_mutations
+    file cosmiccelllines_genes
 
     output:
     file 'cosmic_celllines_proteinDB*.fa' into cosmic_celllines_proteindbs_uselocal
@@ -22,8 +24,8 @@ process COSMIC_CELLLINES_PROTEINDB_LOCAL {
     """
     pypgatk_cli.py cosmic-to-proteindb \\
         --config_file "$cosmic_config" \\
-        --input_mutation $params.cosmiccelllines_mutations \\
-        --input_genes $params.cosmiccelllines_genes \\
+        --input_mutation $cosmiccelllines_mutations \\
+        --input_genes $cosmiccelllines_genes \\
         --filter_column 'Sample name' \\
         --accepted_values $cosmic_cellline_name \\
         --output_db cosmic_celllines_proteinDB.fa

@@ -153,7 +153,7 @@ workflow PGDB {
 
     //Generate proteindb from local cosmic mutations
     if (params.cosmicgenes&&params.cosmicmutations) {
-        COSMIC_PROTEINDB_LOCAL(cosmic_config,params.cosmic_cancer_type)
+        COSMIC_PROTEINDB_LOCAL(cosmic_config,params.cosmic_cancer_type,cosmicmutations,cosmicgenes)
         merged_databases = merged_databases.mix(COSMIC_PROTEINDB_LOCAL.out.cosmic_proteindbs_uselocal)
     }
 
@@ -165,7 +165,7 @@ workflow PGDB {
 
     //Generate proteindb from local cosmic cell lines mutations
     if (params.cosmiccelllines_genes&&params.cosmiccelllines_mutations) {
-        COSMIC_CELLLINES_PROTEINDB_LOCAL(cosmic_config,params.cosmic_cellline_name)
+        COSMIC_CELLLINES_PROTEINDB_LOCAL(cosmic_config,params.cosmic_cellline_name,cosmiccelllines_mutations,cosmiccelllines_genes)
         merged_databases = merged_databases.mix(COSMIC_CELLLINES_PROTEINDB_LOCAL.out.cosmic_celllines_proteindbs_uselocal)
     }
 
