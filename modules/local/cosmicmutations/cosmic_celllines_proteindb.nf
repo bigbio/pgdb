@@ -12,10 +12,9 @@ process COSMIC_CELLLINES_PROTEINDB {
     params.cosmic_celllines
 
     input:
-    file cosmic_celllines_genes
-    file cosmic_celllines_mutations
+    file g
+    file m
     file cosmic_config
-    val cosmic_cellline_name
 
     output:
     path 'cosmic_celllines_proteinDB*.fa' ,emit:cosmic_celllines_proteindbs
@@ -24,9 +23,10 @@ process COSMIC_CELLLINES_PROTEINDB {
     """
     pypgatk_cli.py cosmic-to-proteindb \\
         --config_file "$cosmic_config" \\
-        --input_mutation $cosmic_celllines_mutations --input_genes $cosmic_celllines_genes \\
+        --input_mutation $m \\
+        --input_genes $g \\
         --filter_column 'Sample name' \\
-        --accepted_values $cosmic_cellline_name \\
+        --accepted_values $params.cosmic_cellline_name \\
         --output_db cosmic_celllines_proteinDB.fa
     """
 }
