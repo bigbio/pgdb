@@ -19,7 +19,7 @@ process ENSEMBL_VCF_PROTEINDB {
     file f
     file g
     file e
-    val ensembl_af_field
+    val af_field
 
 
     output:
@@ -29,7 +29,7 @@ process ENSEMBL_VCF_PROTEINDB {
     """
     pypgatk_cli.py vcf-to-proteindb \\
         --config_file $e \\
-        --af_field $ensembl_af_field \\
+        --af_field $af_field \\
         --input_fasta $f \\
         --gene_annotations_gtf $g \\
         --vcf $v \\
