@@ -28,7 +28,7 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
     CONFIG FILES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
+ensembl_downloader_config = file(params.ensembl_downloader_config, checkIfExists: true)
 // ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
 // ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
 
@@ -100,7 +100,7 @@ workflow PGDB {
 //     GET_SOFTWARE_VERSIONS()
 
     // Download data from ensembl for the particular species
-    ENSEMBL_FASTA_DOWNLOAD(params.ensembl_downloader_config)
+    ENSEMBL_FASTA_DOWNLOAD(ensembl_downloader_config)
 
     ADD_REFERENCE_PROTEOME(ENSEMBL_FASTA_DOWNLOAD.out.ensembl_protein_database_sub)
 
