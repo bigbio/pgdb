@@ -15,7 +15,6 @@ process COSMIC_PROTEINDB {
     file g
     file m
     file cosmic_config
-    val cosmic_cancer_type
 
     output:
     path 'cosmic_proteinDB*.fa' ,emit: cosmic_proteindbs
@@ -26,7 +25,7 @@ process COSMIC_PROTEINDB {
         --config_file "$cosmic_config" \\
         --input_mutation $m --input_genes $g \\
         --filter_column 'Histology subtype 1' \\
-        --accepted_values $cosmic_cancer_type \\
+        --accepted_values $params.cosmic_cancer_type \\
         --output_db cosmic_proteinDB.fa
     """
 }

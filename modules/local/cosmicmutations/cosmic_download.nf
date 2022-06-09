@@ -14,7 +14,6 @@ process COSMIC_DOWNLOAD {
     input:
     file cosmic_config
 
-
     output:
     path "database_cosmic/All_COSMIC_Genes.fasta" ,emit:cosmic_genes
     path "database_cosmic/CosmicMutantExport.tsv" ,emit:cosmic_mutations

@@ -20,7 +20,6 @@ process ENSEMBL_VCF_PROTEINDB {
     file g
     file e
 
-
     output:
     path "${v}_proteinDB.fa" ,emit: proteinDB_vcf
 

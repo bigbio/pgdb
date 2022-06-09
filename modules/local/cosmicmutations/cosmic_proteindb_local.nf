@@ -13,7 +13,6 @@ process COSMIC_PROTEINDB_LOCAL {
 
     input:
     file cosmic_config
-    val cosmic_cancer_type
 
     output:
     file 'cosmic_proteinDB*.fa' into cosmic_proteindbs_uselocal
@@ -24,7 +23,7 @@ process COSMIC_PROTEINDB_LOCAL {
         --config_file "$cosmic_config" \\
         --input_mutation $params.cosmicmutations --input_genes $params.cosmicgenes \\
         --filter_column 'Histology subtype 1' \\
-        --accepted_values $cosmic_cancer_type \\
+        --accepted_values $params.cosmic_cancer_type \\
         --output_db cosmic_proteinDB.fa
     """
 }
