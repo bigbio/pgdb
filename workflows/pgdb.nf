@@ -29,6 +29,26 @@ for (param in checkPathParamList) { if (param) { file(param, checkIfExists: true
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 ensembl_downloader_config = file(params.ensembl_downloader_config, checkIfExists: true)
+ensembl_config = file(params.ensembl_config)
+cosmic_config = file(params.cosmic_config)
+if (params.cosmicgenes&&params.cosmicmutations) {
+    cosmicgenes = file(params.cosmicgenes)
+    cosmicmutations = file(params.cosmicmutations)
+}
+if (params.cosmiccelllines_genes&&params.cosmiccelllines_mutations) {
+    cosmiccelllines_genes = file(params.cosmiccelllines_genes)
+    cosmiccelllines_mutations = file(params.cosmiccelllines_mutations)
+}
+cbioportal_config = file(params.cbioportal_config)
+protein_decoy_config = file(params.protein_decoy_config)
+
+af_field = params.af_field
+if (af_field == null ) {
+    af_field = ""
+}
+if (params.ensembl_name == "homo_sapiens"){
+    af_field = "MAF"
+}
 // ch_multiqc_config        = file("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
 // ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multiqc_config) : Channel.empty()
 
@@ -108,53 +128,53 @@ workflow PGDB {
     MERGE_CDNAS(ENSEMBL_FASTA_DOWNLOAD.out.ensembl_cdna_database_sub.collect(),ENSEMBL_FASTA_DOWNLOAD.out.ensembl_ncrna_database_sub.collect())
 
     //Creates the ncRNA protein database
-    ADD_NCRNA(MERGE_CDNAS.out.total_cdnas,params.ensembl_config)
+    ADD_NCRNA(MERGE_CDNAS.out.total_cdnas,ensembl_config)
     merged_databases = ADD_REFERENCE_PROTEOME.out.ensembl_protein_database.mix(ADD_NCRNA.out.optional_ncrna)
 
     //Creates the pseudogenes protein database
-    ADD_PSEUDOGENES(MERGE_CDNAS.out.total_cdnas, params.ensembl_config)
+    ADD_PSEUDOGENES(MERGE_CDNAS.out.total_cdnas,ensembl_config)
     merged_databases = merged_databases.mix(ADD_PSEUDOGENES.out.optional_pseudogenes)
 
     //Creates the altORFs protein database
-    ADD_ALTORFS(ENSEMBL_FASTA_DOWNLOAD.out.ensembl_cdna_database_sub,params.ensembl_config)
+    ADD_ALTORFS(ENSEMBL_FASTA_DOWNLOAD.out.ensembl_cdna_database_sub,ensembl_config)
     merged_databases = merged_databases.mix(ADD_ALTORFS.out.optional_altorfs)
 
 
     /* Mutations to proteinDB */
 
     //Download COSMIC Mutations
-    COSMIC_DOWNLOAD(params.cosmic_config)
+    COSMIC_DOWNLOAD(cosmic_config)
 
     //Generate proteindb from cosmic mutations
-    COSMIC_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_genes,COSMIC_DOWNLOAD.out.cosmic_mutations, params.cosmic_config)
+    COSMIC_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_genes,COSMIC_DOWNLOAD.out.cosmic_mutations,cosmic_config,params.cosmic_cancer_type)
     if (params.cosmic) {
         merged_databases = merged_databases.mix(COSMIC_PROTEINDB.out.cosmic_proteindbs)
     }
 
     //Generate proteindb from local cosmic mutations
     if (params.cosmicgenes&&params.cosmicmutations) {
-        COSMIC_PROTEINDB_LOCAL(params.cosmic_config,params.cosmic_cancer_type)
+        COSMIC_PROTEINDB_LOCAL(cosmic_config,params.cosmic_cancer_type)
         merged_databases = merged_databases.mix(COSMIC_PROTEINDB_LOCAL.out.cosmic_proteindbs_uselocal)
     }
 
     //Generate proteindb from cosmic cell lines mutations
-    COSMIC_CELLLINES_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_celllines_genes,COSMIC_DOWNLOAD.out.cosmic_celllines_mutations, params.cosmic_config)
+    COSMIC_CELLLINES_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_celllines_genes,COSMIC_DOWNLOAD.out.cosmic_celllines_mutations,cosmic_config,params.cosmic_cellline_name)
     if (params.cosmic_celllines) {
         merged_databases = merged_databases.mix(COSMIC_CELLLINES_PROTEINDB.out.cosmic_celllines_proteindbs)
     }
 
     //Generate proteindb from local cosmic cell lines mutations
     if (params.cosmiccelllines_genes&&params.cosmiccelllines_mutations) {
-        COSMIC_CELLLINES_PROTEINDB_LOCAL(params.cosmic_config,params.cosmic_cellline_name)
+        COSMIC_CELLLINES_PROTEINDB_LOCAL(cosmic_config,params.cosmic_cellline_name)
         merged_databases = merged_databases.mix(COSMIC_CELLLINES_PROTEINDB_LOCAL.out.cosmic_celllines_proteindbs_uselocal)
     }
 
     //Download VCF files from ensembl for the particular species
-    ENSEMBL_VCF_DOWNLOAD(params.ensembl_downloader_config)
+    ENSEMBL_VCF_DOWNLOAD(ensembl_downloader_config,params.ensembl_name)
     CHECK_ENSEMBL_VCF(ENSEMBL_VCF_DOWNLOAD.out.ensembl_vcf_files)
 
     //Generate protein database(s) from ENSEMBL vcf file(s)
-    ENSEMBL_VCF_PROTEINDB(CHECK_ENSEMBL_VCF.out.ensembl_vcf_files_checked,MERGE_CDNAS.out.total_cdnas,ENSEMBL_FASTA_DOWNLOAD.out.gtf, params.ensembl_config)
+    ENSEMBL_VCF_PROTEINDB(CHECK_ENSEMBL_VCF.out.ensembl_vcf_files_checked,MERGE_CDNAS.out.total_cdnas,ENSEMBL_FASTA_DOWNLOAD.out.gtf,ensembl_config,af_field)
 
     //concatenate all ensembl proteindbs into one
     ENSEMBL_VCF_PROTEINDB.out.proteinDB_vcf.collectFile(name: 'ensembl_proteindb.fa', newLine: false, storeDir: "${projectDir}/result")
@@ -167,7 +187,7 @@ workflow PGDB {
     GTF_TO_FASTA(ENSEMBL_FASTA_DOWNLOAD.out.gtf,ENSEMBL_FASTA_DOWNLOAD.out.genome_fasta)
     vcf_file = params.vcf_file ? Channel.fromPath(params.vcf_file, checkIfExists: true) : Channel.empty()
 
-    VCF_PROTEINDB(vcf_file,GTF_TO_FASTA.out.gtf_transcripts_fasta,ENSEMBL_FASTA_DOWNLOAD.out.gtf,params.ensembl_config)
+    VCF_PROTEINDB(vcf_file,GTF_TO_FASTA.out.gtf_transcripts_fasta,ENSEMBL_FASTA_DOWNLOAD.out.gtf,ensembl_config,af_field)
     merged_databases = merged_databases.mix(VCF_PROTEINDB.out.proteinDB_custom_vcf)
 
     /*gnomAD variatns */
@@ -195,23 +215,23 @@ workflow PGDB {
     CDS_GRCH37_DOWNLOAD()
 
     //Download all cBioPortal studies using git-lfs
-    DOWNLOAD_ALL_CBIOPORTAL()
+    DOWNLOAD_ALL_CBIOPORTAL(cbioportal_config,params.cbioportal_study_id)
 
     //Generate proteinDB from cBioPortal mutations
-    CBIOPORTAL_PROTEINDB(CDS_GRCH37_DOWNLOAD.out.ch_GRCh37_cds,DOWNLOAD_ALL_CBIOPORTAL.out.cbio_mutations,DOWNLOAD_ALL_CBIOPORTAL.out.cbio_samples,params.cbioportal_config)
+    CBIOPORTAL_PROTEINDB(CDS_GRCH37_DOWNLOAD.out.ch_GRCh37_cds,DOWNLOAD_ALL_CBIOPORTAL.out.cbio_mutations,DOWNLOAD_ALL_CBIOPORTAL.out.cbio_samples,cbioportal_config,params.cbioportal_filter_column,params.cbioportal_accepted_values)
     merged_databases = merged_databases.mix(CBIOPORTAL_PROTEINDB.out.cBioportal_proteindb)
 
     //Concatenate all generated databases from merged_databases channel to the final_database_protein file
     MERGE_PROTEINDBS(merged_databases.collect())
 
     //clean the database for stop codons, and unwanted AA like: *, also remove proteins with less than 6 AA
-    CLEAN_PROTEIN_DATABASE(MERGE_PROTEINDBS.out.to_clean_ch,params.ensembl_config,params.minimum_aa)
+    CLEAN_PROTEIN_DATABASE(MERGE_PROTEINDBS.out.to_clean_ch,ensembl_config,params.minimum_aa)
 
     to_protein_decoy_ch = params.clean_database ? CLEAN_PROTEIN_DATABASE.out.clean_database_sh : MERGE_PROTEINDBS.out.to_clean_ch
 
     //Create the decoy database using DecoyPYrat
     //Decoy sequences will have "DECOY_" prefix tag to the protein accession
-    DECOY(to_protein_decoy_ch,params.protein_decoy_config)
+    DECOY(to_protein_decoy_ch,protein_decoy_config,params.decoy_method,params.decoy_enzyme,params.decoy_prefix)
 
 //     //Output Description HTML
 //     OUTPUT_DOCUMENTATION(ch_output_docs,ch_output_docs_images)
