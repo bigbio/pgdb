@@ -181,6 +181,42 @@
                 }
             }
         },
+        "decoy_generation": {
+            "title": "Decoy generation",
+            "type": "object",
+            "description": "Generate decoy proteins and attach them to the final protein database",
+            "default": "",
+            "properties": {
+                "decoy": {
+                    "type": "boolean",
+                    "description": "Append the decoy proteins to the database"
+                },
+                "decoy_prefix": {
+                    "type": "string",
+                    "default": "Decoy_",
+                    "description": "String to be used as prefix for the generated decoy sequences"
+                },
+                "decoy_method": {
+                    "type": "string",
+                    "default": "decoypyrat",
+                    "description": "Method used to generate the decoy database",
+                    "enum": [
+                        "protein-reverse",
+                        "protein-shuffle",
+                        "decoypyrat"
+                    ]
+                },
+                "decoy_enzyme": {
+                    "type": "string",
+                    "default": "Trypsin",
+                    "description": "Enzyme used to generate the decoy"
+                },
+                "protein_decoy_config": {
+                    "type": "string",
+                    "description": "Configuration file to perform the decoy generation"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
