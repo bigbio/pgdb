@@ -5,6 +5,37 @@
     "description": "Proteogenomics database creation workflow using pypgatk framework. ",
     "type": "object",
     "definitions": {
+        "ensembl_canonical_proteomes": {
+            "title": "ENSEMBL canonical proteomes",
+            "type": "object",
+            "description": "Add ENSEMBL canonical proteomes",
+            "default": "",
+            "properties": {
+                "add_reference": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Add the reference proteome to the file"
+                },
+                "ensembl_downloader_config": {
+                    "type": "string",
+                    "description": "Path to configuration file for ENSEMBL download parameters"
+                },
+                "ensembl_config": {
+                    "type": "string",
+                    "description": "Path to configuration file for parameters in generating protein databases from ENSMEBL sequences"
+                },
+                "gencode_url": {
+                    "type": "string",
+                    "default": "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_19",
+                    "description": "URL for downloading GENCODE datafiles"
+                },
+                "ensembl_name": {
+                    "type": "string",
+                    "default": "homo_sapiens",
+                    "description": "Taxonomic term for the species to download from ENSEMBL"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
