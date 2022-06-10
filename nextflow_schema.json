@@ -213,6 +213,27 @@
                 }
             }
         },
+        "clean_and_process_database": {
+            "title": "Clean and process database",
+            "type": "object",
+            "description": "Clean and process the resulted database",
+            "default": "",
+            "properties": {
+                "clean_database": {
+                    "type": "boolean",
+                    "description": "Clean the database for stop codons, short protein sequences"
+                },
+                "minimum_aa": {
+                    "type": "integer",
+                    "default": 6,
+                    "description": "Minimum number of AminoAcids for a protein to be included in the database"
+                },
+                "add_stop_codons": {
+                    "type": "boolean",
+                    "description": "If an stop codons is found, create two proteins from it"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -431,6 +452,12 @@
         },
         {
             "$ref": "#/definitions/gnomad_variant_proteomes"
+        },
+        {
+            "$ref": "#/definitions/decoy_generation"
+        },
+        {
+            "$ref": "#/definitions/clean_and_process_database"
         },
         {
             "$ref": "#/definitions/input_output_options"
