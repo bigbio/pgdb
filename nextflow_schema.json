@@ -164,6 +164,23 @@
                 }
             }
         },
+        "gnomad_variant_proteomes": {
+            "title": "GNOMAD variant proteomes",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "gnomad": {
+                    "type": "boolean",
+                    "description": "Add gNOMAD variants to the database"
+                },
+                "gnomad_file_url": {
+                    "type": "string",
+                    "default": "gs://gnomad-public/release/2.1.1/vcf/exomes/gnomad.exomes.r2.1.1.sites.vcf.bgz",
+                    "description": "gNOMAD url"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -379,6 +396,9 @@
         },
         {
             "$ref": "#/definitions/cosmic_variant_proteomes"
+        },
+        {
+            "$ref": "#/definitions/gnomad_variant_proteomes"
         },
         {
             "$ref": "#/definitions/input_output_options"
