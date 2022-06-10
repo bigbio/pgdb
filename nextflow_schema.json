@@ -110,6 +110,60 @@
                 }
             }
         },
+        "cosmic_variant_proteomes": {
+            "title": "COSMIC variant proteomes",
+            "type": "object",
+            "description": "COSMIC variant proteins parameters",
+            "default": "",
+            "properties": {
+                "cosmic": {
+                    "type": "boolean",
+                    "description": "Download COSMIC mutation files and generate protein database"
+                },
+                "cosmic_celllines": {
+                    "type": "string",
+                    "description": "Download COSMIC cell line files and generate protein database"
+                },
+                "cosmic_user_name": {
+                    "type": "string",
+                    "description": "User name (or email) for COSMIC account"
+                },
+                "cosmic_password": {
+                    "type": "string",
+                    "description": "Password for COSMIC account"
+                },
+                "cosmic_config": {
+                    "type": "string",
+                    "description": "Path to configuration file for parameters in generating"
+                },
+                "cosmic_cancer_type": {
+                    "type": "string",
+                    "default": "all",
+                    "description": "Specify a tissue type to limit the COSMIC mutations to a particular caner type"
+                },
+                "cosmic_cellline_name": {
+                    "type": "string",
+                    "default": "all",
+                    "description": "Specify a sample name to limit the COSMIC cell line mutations to a particular  cell line"
+                },
+                "cosmicgenes": {
+                    "type": "string",
+                    "description": "Loading local cosmic protein database"
+                },
+                "cosmicmutations": {
+                    "type": "string",
+                    "description": "Loading local COSMIC mutation files"
+                },
+                "cosmiccelllines_genes": {
+                    "type": "string",
+                    "description": "Loading local cosmic_celllines protein database"
+                },
+                "cosmiccelllines_mutations": {
+                    "type": "string",
+                    "description": "Loading local COSMIC cell line files"
+                }    
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
