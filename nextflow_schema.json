@@ -36,6 +36,30 @@
                 }
             }
         },
+        "non_canonical_proteome_parameters": {
+            "title": "Non canonical proteome parameters",
+            "type": "object",
+            "description": "Non canonical proteins generation parameters",
+            "default": "",
+            "properties": {
+                "ncrna": {
+                    "type": "boolean",
+                    "description": "Generate protein database from non-coding RNA"
+                },
+                "pseudogenes": {
+                    "type": "boolean",
+                    "description": "Generate protein database from pseudogenes"
+                },
+                "altorfs": {
+                    "type": "boolean",
+                    "description": "Generate alternative ORFs from canonical proteins"
+                },
+                "ensembl": {
+                    "type": "boolean",
+                    "description": "Download ENSEMBL variants and generate protein database"
+                }
+            }
+        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -226,6 +250,12 @@
         }
     },
     "allOf": [
+        {
+            "$ref": "#/definitions/ensembl_canonical_proteomes"
+        },
+        {
+            "$ref": "#/definitions/non_canonical_proteome_parameters"
+        },
         {
             "$ref": "#/definitions/input_output_options"
         },
