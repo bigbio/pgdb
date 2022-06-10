@@ -164,80 +164,6 @@
                 }
             }
         },
-        "gnomad_variant_proteomes": {
-            "title": "GNOMAD variant proteomes",
-            "type": "object",
-            "description": "",
-            "default": "",
-            "properties": {
-                "gnomad": {
-                    "type": "boolean",
-                    "description": "Add gNOMAD variants to the database"
-                },
-                "gnomad_file_url": {
-                    "type": "string",
-                    "default": "gs://gnomad-public/release/2.1.1/vcf/exomes/gnomad.exomes.r2.1.1.sites.vcf.bgz",
-                    "description": "gNOMAD url"
-                }
-            }
-        },
-        "decoy_generation": {
-            "title": "Decoy generation",
-            "type": "object",
-            "description": "Generate decoy proteins and attach them to the final protein database",
-            "default": "",
-            "properties": {
-                "decoy": {
-                    "type": "boolean",
-                    "description": "Append the decoy proteins to the database"
-                },
-                "decoy_prefix": {
-                    "type": "string",
-                    "default": "Decoy_",
-                    "description": "String to be used as prefix for the generated decoy sequences"
-                },
-                "decoy_method": {
-                    "type": "string",
-                    "default": "decoypyrat",
-                    "description": "Method used to generate the decoy database",
-                    "enum": [
-                        "protein-reverse",
-                        "protein-shuffle",
-                        "decoypyrat"
-                    ]
-                },
-                "decoy_enzyme": {
-                    "type": "string",
-                    "default": "Trypsin",
-                    "description": "Enzyme used to generate the decoy"
-                },
-                "protein_decoy_config": {
-                    "type": "string",
-                    "description": "Configuration file to perform the decoy generation"
-                }
-            }
-        },
-        "clean_and_process_database": {
-            "title": "Clean and process database",
-            "type": "object",
-            "description": "Clean and process the resulted database",
-            "default": "",
-            "properties": {
-                "clean_database": {
-                    "type": "boolean",
-                    "description": "Clean the database for stop codons, short protein sequences"
-                },
-                "minimum_aa": {
-                    "type": "integer",
-                    "default": 6,
-                    "description": "Minimum number of AminoAcids for a protein to be included in the database"
-                },
-                "add_stop_codons": {
-                    "type": "boolean",
-                    "description": "If an stop codons is found, create two proteins from it"
-                }
-            }
-        },
         "input_output_options": {
             "title": "Input/output options",
             "type": "object",
@@ -453,15 +379,6 @@
         },
         {
             "$ref": "#/definitions/cosmic_variant_proteomes"
-        },
-        {
-            "$ref": "#/definitions/gnomad_variant_proteomes"
-        },
-        {
-            "$ref": "#/definitions/decoy_generation"
-        },
-        {
-            "$ref": "#/definitions/clean_and_process_database"
         },
         {
             "$ref": "#/definitions/input_output_options"
