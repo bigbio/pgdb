@@ -193,11 +193,6 @@
                     "fa_icon": "fas fa-envelope",
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
-                },
-                "final_database_protein": {
-                    "type": "string",
-                    "default": "final_proteinDB.fa",
-                    "description": "Filename for the final protein database"
                 }
             }
         },
@@ -208,12 +203,6 @@
             "description": "Parameters used to describe centralised config profiles. These should not be edited.",
             "help_text": "The centralised nf-core configuration profiles use a handful of pipeline parameters to describe themselves. This information is then printed to the Nextflow log when you run a pipeline. You should not need to change these values when you run a pipeline.",
             "properties": {
-                "hostnames": {
-                    "type": "string",
-                    "description": "Institutional configs hostname.",
-                    "hidden": true,
-                    "fa_icon": "fas fa-users-cog"
-                },
                 "custom_config_version": {
                     "type": "string",
                     "description": "Git commit id for Institutional configs.",
