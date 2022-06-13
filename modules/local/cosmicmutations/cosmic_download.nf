@@ -15,10 +15,10 @@ process COSMIC_DOWNLOAD {
     file cosmic_config
 
     output:
-    path "database_cosmic/All_COSMIC_Genes.fasta" ,emit:cosmic_genes
-    path "database_cosmic/CosmicMutantExport.tsv" ,emit:cosmic_mutations
-    path "database_cosmic/All_CellLines_Genes.fasta" ,emit:cosmic_celllines_genes
-    path "database_cosmic/CosmicCLP_MutantExport.tsv" ,emit:cosmic_celllines_mutations
+    file "database_cosmic/All_COSMIC_Genes.fasta" ,emit:cosmic_genes
+    file "database_cosmic/CosmicMutantExport.tsv" ,emit:cosmic_mutations
+    file "database_cosmic/All_CellLines_Genes.fasta" ,emit:cosmic_celllines_genes
+    file "database_cosmic/CosmicCLP_MutantExport.tsv" ,emit:cosmic_celllines_mutations
 
     script:
     """
