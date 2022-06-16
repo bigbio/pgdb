@@ -143,7 +143,7 @@ workflow PGDB {
     /* Mutations to proteinDB */
 
     //Download COSMIC Mutations
-    COSMIC_DOWNLOAD(cosmic_config)
+    COSMIC_DOWNLOAD()
 
     //Generate proteindb from cosmic mutations
     COSMIC_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_genes,COSMIC_DOWNLOAD.out.cosmic_mutations,cosmic_config,params.cosmic_cancer_type)

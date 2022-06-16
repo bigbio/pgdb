@@ -3,28 +3,23 @@
  */
 process COSMIC_DOWNLOAD {
 
-    conda (params.enable_conda ? "bioconda::pypgatk=0.0.19" : null)
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/pypgatk_0.0.19--py_0' :
-        'quay.io/biocontainers/pypgatk:0.0.19--py_0' }"
-    
     when:
     params.cosmic || params.cosmic_celllines
 
-    input:
-    file cosmic_config
-
     output:
-    path "database_cosmic/All_COSMIC_Genes.fasta" ,emit:cosmic_genes
+    path "database_cosmic/All_COSMIC_Genes.fasta" ,emit: cosmic_genes
     path "database_cosmic/CosmicMutantExport.tsv" ,emit:cosmic_mutations
-    path "database_cosmic/All_CellLines_Genes.fasta" ,emit:cosmic_celllines_genes
+    path "database_cosmic/All_CellLines_Genes.fasta" ,emit: cosmic_celllines_genes
     path "database_cosmic/CosmicCLP_MutantExport.tsv" ,emit:cosmic_celllines_mutations
 
     script:
+    base64 = ''
     """
-    pypgatk_cli.py cosmic-downloader \\
-        --config_file "$cosmic_config" \\
-        --username $params.cosmic_user_name \\
-        --password $params.cosmic_password
+    base64=`echo "$params.cosmic_user_name:$params.cosmic_password" | base64`
+    curl -o database_cosmic/All_COSMIC_Genes.fasta.gz --create-dirs `curl -H "Authorization: \$base64" https://cancer.sanger.ac.uk/cosmic/file_download/GRCh38/cosmic/$params.cosmic_dababase_version/All_COSMIC_Genes.fasta.gz |grep -Po 'url[" :]+\\K[^"]+'`
+    curl -o database_cosmic/CosmicMutantExport.tsv.gz --create-dirs `curl -H "Authorization: \$base64" https://cancer.sanger.ac.uk/cosmic/file_download/GRCh38/cosmic/$params.cosmic_dababase_version/CosmicMutantExport.tsv.gz |grep -Po 'url[" :]+\\K[^"]+'`
+    curl -o database_cosmic/All_CellLines_Genes.fasta.gz --create-dirs `curl -H "Authorization: \$base64" https://cancer.sanger.ac.uk/cosmic/file_download/GRCh38/cell_lines/$params.cosmic_dababase_version/All_CellLines_Genes.fasta.gz |grep -Po 'url[" :]+\\K[^"]+'`
+    curl -o database_cosmic/CosmicCLP_MutantExport.tsv.gz --create-dirs `curl -H "Authorization: \$base64" https://cancer.sanger.ac.uk/cosmic/file_download/GRCh38/cell_lines/$params.cosmic_dababase_version/CosmicCLP_MutantExport.tsv.gz |grep -Po 'url[" :]+\\K[^"]+'`
+    gunzip database_cosmic/*.gz
     """
 }

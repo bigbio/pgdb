@@ -116,6 +116,11 @@
             "description": "COSMIC variant proteins parameters",
             "default": "",
             "properties": {
+                "cosmic_dababase_version": {
+                    "type": "string",
+                    "default": "latest",
+                    "description": "Cosmic database version required"
+                },
                 "cosmic": {
                     "type": "boolean",
                     "description": "Download COSMIC mutation files and generate protein database"
