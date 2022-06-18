@@ -72,7 +72,7 @@ if (params.ensembl_name == "homo_sapiens"){
 // Don't overwrite global params.modules, create a copy instead and use that within the main script.
 //def modules = params.modules.clone()
 
-include { GET_SOFTWARE_VERSIONS } from '../modules/local/get_software_versions'
+//include { GET_SOFTWARE_VERSIONS } from '../modules/local/get_software_versions'
 
 include { ENSEMBL_FASTA_DOWNLOAD } from '../modules/local/proteomes/ensembl_fasta_download'
 include { ADD_REFERENCE_PROTEOME } from '../modules/local/proteomes/add_reference_proteome'
@@ -117,7 +117,7 @@ include { OUTPUT_DOCUMENTATION } from '../modules/local/output_documentation'
 workflow PGDB {
 
     // Parse software version numbers
-    GET_SOFTWARE_VERSIONS()
+    //GET_SOFTWARE_VERSIONS()
 
     // Download data from ensembl for the particular species
     ENSEMBL_FASTA_DOWNLOAD(ensembl_downloader_config,params.ensembl_name)
