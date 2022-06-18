@@ -61,7 +61,7 @@ if (params.ensembl_name == "homo_sapiens"){
 //
 // SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
 //
-include { INPUT_CHECK } from '../subworkflows/local/input_check'
+//include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -116,8 +116,8 @@ include { OUTPUT_DOCUMENTATION } from '../modules/local/output_documentation'
 
 workflow PGDB {
 
-//     // Parse software version numbers
-//     GET_SOFTWARE_VERSIONS()
+    // Parse software version numbers
+    GET_SOFTWARE_VERSIONS()
 
     // Download data from ensembl for the particular species
     ENSEMBL_FASTA_DOWNLOAD(ensembl_downloader_config,params.ensembl_name)
