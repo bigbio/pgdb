@@ -1,7 +1,7 @@
 /*
  * Parse software version numbers
  */
-process GETSOFTWAREVERSIONS {
+process GET_SOFTWARE_VERSIONS {
 
     output:
     path "v_pipeline.txt" ,emit: v_pipeline
