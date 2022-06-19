@@ -82,6 +82,7 @@ include { ADD_PSEUDOGENES } from '../modules/local/proteomes/add_pseudogenes'
 include { ADD_ALTORFS } from '../modules/local/proteomes/add_altorfs'
 
 include { COSMIC_DOWNLOAD } from '../modules/local/cosmicmutations/cosmic_download'
+include { COSMIC_CELLLINES_DOWNLOAD } from '../modules/local/cosmicmutations/cosmic_celllines_download'
 include { COSMIC_PROTEINDB } from '../modules/local/cosmicmutations/cosmic_proteindb'
 include { COSMIC_CELLLINES_PROTEINDB } from '../modules/local/cosmicmutations/cosmic_celllines_proteindb'
 include { COSMIC_PROTEINDB_LOCAL } from '../modules/local/cosmicmutations/cosmic_proteindb_local'
@@ -145,12 +146,13 @@ workflow PGDB {
     //Download COSMIC Mutations
     COSMIC_DOWNLOAD()
 
+    //Download COSMIC Cell Lines Mutations
+    COSMIC_CELLLINES_DOWNLOAD()
+
     //Generate proteindb from cosmic mutations
     COSMIC_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_genes,COSMIC_DOWNLOAD.out.cosmic_mutations,cosmic_config,params.cosmic_cancer_type)
-    if (params.cosmic) {
-        merged_databases = merged_databases.mix(COSMIC_PROTEINDB.out.cosmic_proteindbs)
-    }
-
+    merged_databases = merged_databases.mix(COSMIC_PROTEINDB.out.cosmic_proteindbs)
+    
     //Generate proteindb from local cosmic mutations
     if (params.cosmicgenes&&params.cosmicmutations) {
         COSMIC_PROTEINDB_LOCAL(cosmic_config,params.cosmic_cancer_type,cosmicmutations,cosmicgenes)
@@ -158,10 +160,8 @@ workflow PGDB {
     }
 
     //Generate proteindb from cosmic cell lines mutations
-    COSMIC_CELLLINES_PROTEINDB(COSMIC_DOWNLOAD.out.cosmic_celllines_genes,COSMIC_DOWNLOAD.out.cosmic_celllines_mutations,cosmic_config,params.cosmic_cellline_name)
-    if (params.cosmic_celllines) {
-        merged_databases = merged_databases.mix(COSMIC_CELLLINES_PROTEINDB.out.cosmic_celllines_proteindbs)
-    }
+    COSMIC_CELLLINES_PROTEINDB(COSMIC_CELLLINES_DOWNLOAD.out.cosmic_celllines_genes,COSMIC_CELLLINES_DOWNLOAD.out.cosmic_celllines_mutations,cosmic_config,params.cosmic_cellline_name)
+    merged_databases = merged_databases.mix(COSMIC_CELLLINES_PROTEINDB.out.cosmic_celllines_proteindbs)
 
     //Generate proteindb from local cosmic cell lines mutations
     if (params.cosmiccelllines_genes&&params.cosmiccelllines_mutations) {

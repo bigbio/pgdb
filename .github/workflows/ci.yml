@@ -48,8 +48,14 @@ jobs:
         #run: |
         #  nextflow run ${GITHUB_WORKSPACE} -profile test,docker --outdir ./results
 
-      - name: Run pipeline with cBioPortal data
+        #- name: Run pipeline with cBioPortal data
+        # For example: adding multiple test runs with different parameters
+        # Remember that you can parallelise this by using strategy.matrix
+        #run: |
+        #  nextflow run ${GITHUB_WORKSPACE} -profile test_cbioportal,docker --outdir ./results
+
+      - name: Run pipeline with COSMIC Cell Lines data
         # For example: adding multiple test runs with different parameters
         # Remember that you can parallelise this by using strategy.matrix
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test_cbioportal,docker --outdir ./results
+          nextflow run ${GITHUB_WORKSPACE} -profile test_cosmic,docker --outdir ./results
