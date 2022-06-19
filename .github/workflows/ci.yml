@@ -55,7 +55,10 @@ jobs:
         #  nextflow run ${GITHUB_WORKSPACE} -profile test_cbioportal,docker --outdir ./results
 
       - name: Run pipeline with COSMIC Cell Lines data
+        env:
+          COSMIC_USERNAME: ${{ secrets.COSMIC_USERNAME }}
+          COSMIC_PASSWORD: ${{ secrets.COSMIC_PASSWORD }}
         # For example: adding multiple test runs with different parameters
         # Remember that you can parallelise this by using strategy.matrix
         run: |
-          nextflow run ${GITHUB_WORKSPACE} -profile test_cosmic,docker --outdir ./results
+          nextflow run ${GITHUB_WORKSPACE} -profile test_cosmic,docker --outdir ./results --cosmic_user_name $COSMIC_USERNAME --cosmic_password $COSMIC_PASSWORD
