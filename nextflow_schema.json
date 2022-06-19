@@ -126,7 +126,7 @@
                     "description": "Download COSMIC mutation files and generate protein database"
                 },
                 "cosmic_celllines": {
-                    "type": "string",
+                    "type": "boolean",
                     "description": "Download COSMIC cell line files and generate protein database"
                 },
                 "cosmic_user_name": {
