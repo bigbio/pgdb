@@ -5,14 +5,12 @@ process DOWNLOAD_ALL_CBIOPORTAL {
     
     conda (params.enable_conda ? "bioconda::pypgatk=0.0.19 conda-forge::git-lfs=2.13.2 conda-forge::git=2.30.0" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/pypgatk_0.0.19--py_0' :
-        'quay.io/biocontainers/pypgatk:0.0.19--py_0' }"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/pypgatk_0.0.19--py_0' 
+        'https://depot.galaxyproject.org/singularity/git-lfs_1.5.2--0'
         'https://containers.biocontainers.pro/s3/singularity/git_1' :
+        'quay.io/biocontainers/pypgatk:0.0.19--py_0'
+        'quay.io/biocontainers/git-lfs:1.5.2--0'
         'bitnami/git:2.30.2' }"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/git-lfs_1.5.2--0' :
-        'quay.io/biocontainers/git-lfs:1.5.2--0' }"
     
     when:
     params.cbioportal
