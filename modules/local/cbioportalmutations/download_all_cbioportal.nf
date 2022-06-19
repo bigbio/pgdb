@@ -10,7 +10,7 @@ process DOWNLOAD_ALL_CBIOPORTAL {
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/git-lfs_1.5.2--0' :
         'quay.io/biocontainers/git-lfs:1.5.2--0' }"
-    container "bitnami/git:2.30.0-debian-10-r27"
+    container "bitnami/git:2.30.2"
 
     when:
     params.cbioportal
@@ -27,12 +27,12 @@ process DOWNLOAD_ALL_CBIOPORTAL {
     script:
     if (cbioportal_study_id == "all")
         """
-        git clone https://github.com/cBioPortal/datahub.git .
+        git clone https://github.com/cBioPortal/datahub.git 
         git lfs install --local --skip-smudge
         git lfs pull -I public --include "data*clinical*sample.txt"
         git lfs pull -I public --include "data_mutations_mskcc.txt"
-        cat public/*/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
-        cat public/*/*data*clinical*sample.txt | \\
+        cat datahub/public/*/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
+        cat datahub/public/*/*data*clinical*sample.txt | \\
             awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | \\
             awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; \\
                 for(i=1;i<=NF;i++){ \\
