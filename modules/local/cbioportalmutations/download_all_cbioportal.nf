@@ -10,7 +10,9 @@ process DOWNLOAD_ALL_CBIOPORTAL {
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/git-lfs_1.5.2--0' :
         'quay.io/biocontainers/git-lfs:1.5.2--0' }"
-    container "bitnami/git:2.30.2"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://containers.biocontainers.pro/s3/singularity/git_1' :
+        'bitnami/git:2.30.2' }"
 
     when:
     params.cbioportal
