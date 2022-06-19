@@ -107,7 +107,7 @@ include { CBIOPORTAL_PROTEINDB } from '../modules/local/cbioportalmutations/cbio
 include { MERGE_PROTEINDBS } from '../modules/local/merge_proteindbs'
 include { CLEAN_PROTEIN_DATABASE } from '../modules/local/clean_protein_database'
 include { DECOY } from '../modules/local/decoy'
-include { OUTPUT_DOCUMENTATION } from '../modules/local/output_documentation'
+//include { OUTPUT_DOCUMENTATION } from '../modules/local/output_documentation'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,7 +139,6 @@ workflow PGDB {
     //Creates the altORFs protein database
     ADD_ALTORFS(ENSEMBL_FASTA_DOWNLOAD.out.ensembl_cdna_database_sub,ensembl_config)
     merged_databases = merged_databases.mix(ADD_ALTORFS.out.optional_altorfs)
-
 
     /* Mutations to proteinDB */
 
@@ -233,8 +232,8 @@ workflow PGDB {
     //Decoy sequences will have "DECOY_" prefix tag to the protein accession
     DECOY(to_protein_decoy_ch,protein_decoy_config,params.decoy_method,params.decoy_enzyme,params.decoy_prefix)
 
-//     //Output Description HTML
-//     OUTPUT_DOCUMENTATION(ch_output_docs,ch_output_docs_images)
+    //Output Description HTML
+    //OUTPUT_DOCUMENTATION(ch_output_docs,ch_output_docs_images)
 
 }
 

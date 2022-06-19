@@ -3,7 +3,6 @@
  */
 process CDS_GRCH37_DOWNLOAD {
 
-    
     when:
     params.cbioportal
 

@@ -11,6 +11,7 @@ process DOWNLOAD_ALL_CBIOPORTAL {
     //     'quay.io/biocontainers/pypgatk:0.0.19--py_0';
     //     'quay.io/biocontainers/git-lfs:1.5.2--0';
     //     'bitnami/git:2.30.2' }"
+    container "nfcore/pgdb:latest"
     
     when:
     params.cbioportal
