@@ -21,7 +21,7 @@ process DOWNLOAD_ALL_CBIOPORTAL {
     val cbioportal_study_id
 
     output:
-    path('cbioportal_allstudies_data_mutations_mskcc.txt') ,emit: cbio_mutations
+    path('cbioportal_allstudies_data_mutations.txt') ,emit: cbio_mutations
     path('cbioportal_allstudies_data_clinical_sample.txt') ,emit: cbio_samples
 
     script:
@@ -30,8 +30,8 @@ process DOWNLOAD_ALL_CBIOPORTAL {
         git clone https://github.com/cBioPortal/datahub.git 
         git lfs install --local --skip-smudge
         git lfs pull -I public --include "data*clinical*sample.txt"
-        git lfs pull -I public --include "data_mutations_mskcc.txt"
-        cat datahub/public/*/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
+        git lfs pull -I public --include "data_mutations.txt"
+        cat datahub/public/*/data_mutations.txt > cbioportal_allstudies_data_mutations.txt
         cat datahub/public/*/*data*clinical*sample.txt | \\
             awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | \\
             awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; \\
@@ -53,7 +53,7 @@ process DOWNLOAD_ALL_CBIOPORTAL {
             -d "$cbioportal_study_id"
 
         tar -xzvf database_cbioportal/${cbioportal_study_id}.tar.gz
-        cat ${cbioportal_study_id}/data_mutations_mskcc.txt > cbioportal_allstudies_data_mutations_mskcc.txt
+        cat ${cbioportal_study_id}/data_mutations.txt > cbioportal_allstudies_data_mutations.txt
         cat ${cbioportal_study_id}/data_clinical_sample.txt | \\
             awk 'BEGIN{FS=OFS="\\t"}{if(\$1!~"#SAMPLE_ID"){gsub("#SAMPLE_ID", "\\nSAMPLE_ID");} print}' | \\
             awk 'BEGIN{FS=OFS="\\t"}{s=0; j=0; \\
