@@ -6,15 +6,23 @@
 
 ## Introduction
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
-
-## Running the pipeline
-
-The typical command for running the pipeline is as follows:
+General usage:
 
 ```bash
-nextflow run nf-core/pgdb --input '*_R{1,2}.fastq.gz' -profile docker
+nextflow run nf-core/pgdb -profile <docker/singularity/podman/conda/institute> --ensembl_name homo_sapiens --decoy
 ```
+
+This command will download the ENSEMBL human proteome and attach the decoy database to it.
+
+## Adding non canonical proteins
+
+The main purpose of the pgdb pipeline is to add non-canonical proteins to the database including variants, ncRNAs, altORFs:
+
+```bash
+nextflow run nf-core/pgdb --ensembl_name homo_sapiens --altorfs --decoy -profile docker
+```
+
+Please see the [https://nf-co.re/pgdb/parameters](parameter documentation) to see which options are available.
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
 
@@ -26,6 +34,10 @@ results         # Finished results (configurable, see below)
 .nextflow_log   # Log file from Nextflow
 # Other nextflow hidden files, eg. history of pipeline runs and old logs.
 ```
+
+## Pipeline full documentation and examples
+
+The full documentation of the pipeline can be found [here](https://pgatk.readthedocs.io/) including examples to generate databases from COSMIC or cBioportal.
 
 ### Updating the pipeline
 
@@ -51,7 +63,7 @@ This version number will be logged in reports when you run the pipeline, so that
 
 Use this parameter to choose a configuration profile. Profiles can give configuration presets for different compute environments.
 
-Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Conda) - see below.
+Several generic profiles are bundled with the pipeline which instruct the pipeline to use software packaged using different methods (Docker, Singularity, Podman, Shifter, Charliecloud, Conda) - see below.
 
 > We highly recommend the use of Docker or Singularity containers for full pipeline reproducibility, however when this is not possible, Conda is also supported.
 
@@ -62,22 +74,28 @@ They are loaded in sequence, so later profiles can overwrite earlier profiles.
 
 If `-profile` is not specified, the pipeline will run locally and expect all software to be installed and available on the `PATH`. This is _not_ recommended.
 
-* `docker`
-  * A generic configuration profile to be used with [Docker](https://docker.com/)
-  * Pulls software from Docker Hub: [`nfcore/pgdb`](https://hub.docker.com/r/nfcore/pgdb/)
-* `singularity`
-  * A generic configuration profile to be used with [Singularity](https://sylabs.io/docs/)
-  * Pulls software from Docker Hub: [`nfcore/pgdb`](https://hub.docker.com/r/nfcore/pgdb/)
-* `podman`
-  * A generic configuration profile to be used with [Podman](https://podman.io/)
-  * Pulls software from Docker Hub: [`nfcore/pgdb`](https://hub.docker.com/r/nfcore/pgdb/)
-* `conda`
-  * Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity or Podman.
-  * A generic configuration profile to be used with [Conda](https://conda.io/docs/)
-  * Pulls most software from [Bioconda](https://bioconda.github.io/)
-* `test`
-  * A profile with a complete configuration for automated testing
-  * Includes links to test data so needs no other parameters
+- `docker`
+  - A generic configuration profile to be used with [Docker](https://docker.com/)
+  - Pulls software from Docker Hub: [`nfcore/pgdb`](https://hub.docker.com/r/nfcore/pgdb/)
+- `singularity`
+  - A generic configuration profile to be used with [Singularity](https://sylabs.io/docs/)
+  - Pulls software from Docker Hub: [`nfcore/pgdb`](https://hub.docker.com/r/nfcore/pgdb/)
+- `podman`
+  - A generic configuration profile to be used with [Podman](https://podman.io/)
+  - Pulls software from Docker Hub: [`nfcore/pgdb`](https://hub.docker.com/r/nfcore/pgdb/)
+- `shifter`
+  - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
+  - Pulls software from Docker Hub: [`nfcore/pgdb`](https://hub.docker.com/r/nfcore/pgdb/)
+- `charliecloud`
+  - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+  - Pulls software from Docker Hub: [`nfcore/pgdb`](https://hub.docker.com/r/nfcore/pgdb/)
+- `conda`
+  - Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter or Charliecloud.
+  - A generic configuration profile to be used with [Conda](https://conda.io/docs/)
+  - Pulls most software from [Bioconda](https://bioconda.github.io/)
+- `test`
+  - A profile with a complete configuration for automated testing
+  - Includes links to test data so needs no other parameters
 
 ### `-resume`
 
@@ -95,21 +113,39 @@ Each step in the pipeline has a default set of requirements for number of CPUs, 
 
 Whilst these default requirements will hopefully work for most people with most data, you may find that you want to customise the compute resources that the pipeline requests. You can do this by creating a custom config file. For example, to give the workflow process `star` 32GB of memory, you could use the following config:
 
-```nextflow
-process {
-  withName: star {
-    memory = 32.GB
-  }
-}
-```
+     ```nextflow
+     process {
+         withName: PANGOLIN {
+             container = 'https://depot.galaxyproject.org/singularity/pangolin:3.0.5--pyhdfd78af_0'
+         }
+     }
+     ```
+
+To find the exact name of a process you wish to modify the compute resources, check the live-status of a nextflow run displayed on your terminal or check the nextflow error for a line like so: `Error executing process > 'bwa'`. In this case the name to specify in the custom config file is `bwa`.
 
 See the main [Nextflow documentation](https://www.nextflow.io/docs/latest/config.html) for more information.
 
-If you are likely to be running `nf-core` pipelines regularly it may be a good idea to request that your custom config file is uploaded to the `nf-core/configs` git repository. Before you do this please can you test that the config file works with your pipeline of choice using the `-c` parameter (see definition above). You can then create a pull request to the `nf-core/configs` repository with the addition of your config file, associated documentation file (see examples in [`nf-core/configs/docs`](https://github.com/nf-core/configs/tree/master/docs)), and amending [`nfcore_custom.config`](https://github.com/nf-core/configs/blob/master/nfcore_custom.config) to include your custom profile.
+- For Conda:
+
+  ```nextflow
+  process {
+      withName: PANGOLIN {
+          conda = 'bioconda::pangolin=3.0.5'
+      }
+  }
+  ```
+
+> **NB:** If you wish to periodically update individual tool-specific results (e.g. Pangolin) generated by the pipeline then you must ensure to keep the `work/` directory otherwise the `-resume` ability of the pipeline will be compromised and it will restart from scratch.
+
+### nf-core/configs
+
+In most cases, you will only need to create a custom config as a one-off but if you and others within your organisation are likely to be running nf-core pipelines regularly and need to use the same settings regularly it may be a good idea to request that your custom config file is uploaded to the `nf-core/configs` git repository. Before you do this please can you test that the config file works with your pipeline of choice using the `-c` parameter. You can then create a pull request to the `nf-core/configs` repository with the addition of your config file, associated documentation file (see examples in [`nf-core/configs/docs`](https://github.com/nf-core/configs/tree/master/docs)), and amending [`nfcore_custom.config`](https://github.com/nf-core/configs/blob/master/nfcore_custom.config) to include your custom profile.
+
+See the main [Nextflow documentation](https://www.nextflow.io/docs/latest/config.html) for more information about creating your own configuration files.
 
 If you have any questions or issues please send us a message on [Slack](https://nf-co.re/join/slack) on the [`#configs` channel](https://nfcore.slack.com/channels/configs).
 
-### Running in the background
+## Running in the background
 
 Nextflow handles job submissions and supervises the running jobs. The Nextflow process must run until the pipeline is finished.
 
@@ -118,11 +154,11 @@ The Nextflow `-bg` flag launches Nextflow in the background, detached from your 
 Alternatively, you can use `screen` / `tmux` or similar tool to create a detached session which you can log back into at a later time.
 Some HPC setups also allow you to run nextflow within a cluster job submitted your job scheduler (from where it submits more jobs).
 
-#### Nextflow memory requirements
+## Nextflow memory requirements
 
 In some cases, the Nextflow Java virtual machines can start to request a large amount of memory.
 We recommend adding the following line to your environment to limit this (typically in `~/.bashrc` or `~./bash_profile`):
 
-```bash
+```console
 NXF_OPTS='-Xms1g -Xmx4g'
 ```
